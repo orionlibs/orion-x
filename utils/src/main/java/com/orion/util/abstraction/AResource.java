@@ -1,8 +1,5 @@
-package com.orion.util.web;
+package com.orion.util.abstraction;
 
-import com.orion.util.abstraction.Describeable;
-import com.orion.util.abstraction.Identifiable;
-import com.orion.util.abstraction.Named;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;

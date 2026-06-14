@@ -1,5 +1,6 @@
 package com.orion.util.web;
 
+import com.orion.util.abstraction.AResource;
 import java.util.UUID;
 import lombok.Data;
 
