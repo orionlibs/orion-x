@@ -139,11 +139,11 @@ multiply** and the primary target for parallelization and GPU offload:
 - Base case (`gates.size()==1`): either `gate.applyOptimize(v)` or a full
   `size×size` dense multiply.
 
-All arithmetic uses `org.redfx.strange.Complex`.
+All arithmetic uses `Complex`.
 
 ### 2.4 Complex representation (hot-path cost)
 
-`org.redfx.strange.Complex` is **not** a record. It is a final class with
+`Complex` is **not** a record. It is a final class with
 mutable `public float r; public float i;` (note: single precision). Constants
 `ZERO`, `ONE`, `I`, `HC`, `HCN`. Methods used in the hot loop:
 

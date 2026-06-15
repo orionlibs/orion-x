@@ -1,6 +1,6 @@
 package org.redfx.javaqc.ch10.groveroracle;
 
-import org.redfx.strange.Complex;
+import Complex;
 import org.redfx.strange.Program;
 import org.redfx.strange.QuantumExecutionEnvironment;
 import org.redfx.strange.Qubit;

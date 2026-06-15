@@ -122,7 +122,7 @@ A `QuantumChannel` is a CPTP map represented by a list of Kraus operators
 ```java
 package org.redfx.strange.noise;
 
-import org.redfx.strange.Complex;
+import Complex;
 import java.util.List;
 
 /** A completely-positive trace-preserving map given by Kraus operators. */

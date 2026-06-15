@@ -31,7 +31,7 @@
  */
 package org.redfx.javaqc.ch05.maryqubit;
 
-import org.redfx.strange.Complex;
+import Complex;
 import org.redfx.strange.Program;
 import org.redfx.strange.QuantumExecutionEnvironment;
 import org.redfx.strange.Qubit;

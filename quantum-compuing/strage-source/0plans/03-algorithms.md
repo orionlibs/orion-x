@@ -96,7 +96,7 @@ all `System.err.println` / `System.out.println` diagnostic output.
 ```java
 package org.redfx.strange.algorithm;
 
-import org.redfx.strange.Complex;
+import Complex;
 import org.redfx.strange.Qubit;
 import java.util.*;
 

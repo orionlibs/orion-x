@@ -1,6 +1,6 @@
 package org.redfx.javaqc.ch09.oracle;
 
-import org.redfx.strange.Complex;
+import Complex;
 import org.redfx.strange.Program;
 import org.redfx.strange.QuantumExecutionEnvironment;
 import org.redfx.strange.Qubit;

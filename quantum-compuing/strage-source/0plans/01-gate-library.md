@@ -120,7 +120,7 @@ Unitaries (diagonal `[[1,0],[0, e^{iφ}]]`):
 ```java
 package org.redfx.strange.gate;
 
-import org.redfx.strange.Complex;
+import Complex;
 
 public class S extends SingleQubitGate {
 
