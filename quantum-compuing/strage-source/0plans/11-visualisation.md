@@ -9,7 +9,7 @@ results exported, **without** requiring the JavaFX `StrangeFX` module.
 Deliverables:
 
 1. **Render model** — an intermediate, backend-agnostic layout (`CircuitDiagram`)
-   describing each gate as a placed cell on a qubit-row × step-column grid, plus
+   describing each gate as a placed cell on a qubit-row × QuantumStep-column grid, plus
    connector spans. ASCII, LaTeX, and SVG/HTML all consume this single model so
    layout logic is written once.
 2. **ASCII backend** — `Program.toAsciiCircuit()` returning a `String`.
@@ -38,13 +38,13 @@ From the files read:
 - `List<Step> getSteps()`
 - `double[] getInitialAlphas()` — initial qubit alphas (for `|0>`/`|1>` start labels)
 - `Result getResult()`
-- existing `void printInfo()` — prints `numberQubits`, step count, and
-  `step.getGates()` per step. This is the only current "renderer"; we keep it and
+- existing `void printInfo()` — prints `numberQubits`, QuantumStep count, and
+  `step.getGates()` per QuantumStep. This is the only current "renderer"; we keep it and
   add the new methods alongside.
 
 **`Step`** (`Step.java`):
 - `List<Gate> getGates()` (unmodifiable)
-- `Step.Type getType()` — `NORMAL` / `PSEUDO` / `PROBABILITY`. PSEUDO steps "do not
+- `Step.Type getType()` — `NORMAL` / `PSEUDO` / `PROBABILITY`. PSEUDO QuantumSteps "do not
   alter the circuit" and are used for visualization; the render model keeps them as
   spacer columns but they carry no compute gate.
 - `String getName()`, `int getIndex()`, `boolean isInformal()`
@@ -87,7 +87,7 @@ From the files read:
   Bit order: `Result.calculateQubitStatesFromVector` uses `qubit i` ↔ bit `i`
   (`p1 = j/(1<<i); bit = p1 % 2`), i.e. **qubit 0 is the least-significant bit** of
   basis index `j`. The histogram exporter must document and follow this convention.
-- `Complex[] getIntermediateProbability(int step)` — state vector after a step.
+- `Complex[] getIntermediateProbability(int QuantumStep)` — state vector after a QuantumStep.
 - `Qubit[] getQubits()`, `Qubit.getProbability()` — per-qubit P(measuring 1).
 - existing `Result.printInfo()` prints `probability[i].abssqr()` per index — the
   current ad-hoc histogram; we generalize it.
@@ -116,12 +116,12 @@ public enum CellKind {
     TARGET_X,   // ⊕ CNOT/Toffoli target
     SWAP_END,   // × swap endpoint
     WIRE,       // pass-through (no gate this row this column)
-    PSEUDO      // spacer for PSEUDO/PROBABILITY steps
+    PSEUDO      // spacer for PSEUDO/PROBABILITY QuantumSteps
 }
 
 public final class GateCell {
     public final int row;          // qubit index (0 = top wire)
-    public final int col;          // step column
+    public final int col;          // QuantumStep column
     public final CellKind kind;
     public final String label;     // caption text, e.g. "H", "Rx(π/2)"; "" for connectors
     public final int spanTopRow;   // min row of the multi-qubit gate it belongs to
@@ -151,14 +151,14 @@ public final class DiagramBuilder {
 
 Algorithm (`build`):
 
-1. `n = p.getNumberQubits()`. Iterate `p.getSteps()`; one **column per step**
-   (column index = position in the step list; do not rely on `step.getIndex()`
-   only, but assert it matches). PSEUDO/PROBABILITY steps still get a column with
+1. `n = p.getNumberQubits()`. Iterate `p.getSteps()`; one **column per QuantumStep**
+   (column index = position in the QuantumStep list; do not rely on `step.getIndex()`
+   only, but assert it matches). PSEUDO/PROBABILITY QuantumSteps still get a column with
    `PSEUDO` cells on every row (keeps alignment with `StrangeFX` semantics).
 2. For each `Step`, start every row as a `WIRE` cell, then overwrite rows touched
-   by its gates. (Step invariant guarantees ≤1 gate per qubit per step, see
+   by its gates. (Step invariant guarantees ≤1 gate per qubit per QuantumStep, see
    `Step.verifyUnique`.)
-3. For each `Gate g` in the step, classify via `classify(g)`:
+3. For each `Gate g` in the QuantumStep, classify via `classify(g)`:
    - **single-qubit** (`g.getSize()==1`): `BOX` at `g.getMainQubitIndex()`,
      `label = captionOf(g)`. `Measurement` → `BOX` with label `"M"` (a backend may
      render it as a meter glyph).
@@ -224,7 +224,7 @@ Provide an `AsciiRenderer.Charset` toggle: `UNICODE` (default, box-drawing) and
 need 7-bit output.
 
 **Sample output — Bell state**
-`new Program(2, new Step(Gate.hadamard(0)), new Step(Gate.cnot(0,1)), new Step(Gate.measurement(0), Gate.measurement(1)))`:
+`new Program(2, new QuantumStep(Gate.hadamard(0)), new QuantumStep(Gate.cnot(0,1)), new QuantumStep(Gate.measurement(0), Gate.measurement(1)))`:
 
 ```
 q0 : |0>──┤ H ├────●────┤ M ├─
@@ -310,7 +310,7 @@ public final class SvgRenderer {
 public final class HistogramExport {
     public static String toCsv(Result r) { ... }
     public static String toJson(Result r) { ... }
-    public static String toCsv(Complex[] stateVector) { ... } // for intermediate steps
+    public static String toCsv(Complex[] stateVector) { ... } // for intermediate QuantumSteps
 }
 ```
 
@@ -431,7 +431,7 @@ state** plus a Toffoli and a Swap circuit.
   `<rect>` (boxes) and `<circle>` (controls), and is well-formed enough to parse.
 - `viz/BlochExportTest` — `|0>` → `(0,0,1)`, `|1>` (init alpha 0) → `(0,0,-1)`,
   `H|0>` → `(1,0,0)` *(this last one requires Section 8; gate behind it)*.
-- Layout unit test on `DiagramBuilder`: assert `numColumns == steps.size()`, cell
+- Layout unit test on `DiagramBuilder`: assert `numColumns == QuantumSteps.size()`, cell
   kinds at known `(row,col)` for the Bell circuit, and `partnerRows`/span correctness
   for the Cnot.
 
@@ -451,7 +451,7 @@ normalization issues in CI.
 - **Qubit bit-ordering**: histogram LSB-of-`j` = qubit 0. Users from Qiskit expect
   the opposite; wrong assumption silently mislabels basis states. Mitigated by an
   explicit flag and a dedicated test asserting the convention.
-- **PSEUDO/PROBABILITY steps**: must become spacer columns, not compute gates, or
+- **PSEUDO/PROBABILITY QuantumSteps**: must become spacer columns, not compute gates, or
   column alignment drifts. Covered by treating them as `PSEUDO` cells.
 - **Wide / nested gates** (`BlockGate`, `ControlledBlockGate`, `Oracle`, QFT,
   arithmetic gates): these can span many qubits and may decompose. v1 renders them as
@@ -467,7 +467,7 @@ normalization issues in CI.
 2. `AsciiRenderer` + `Program.toAsciiCircuit()` + golden tests (highest user value,
    no external deps).
 3. `HistogramExport` (CSV/JSON) + tests — independent of the diagram path, can be done
-   in parallel with step 2.
+   in parallel with QuantumStep 2.
 4. `QuantikzRenderer` + `Program.toQuantikz()` + golden tests.
 5. `SvgRenderer` + `Program.toSvg()` + `CircuitDiagram.toJson()` (expose model).
 6. `getRenderRole` additive accessors on gates; refactor `classify()` to use them.

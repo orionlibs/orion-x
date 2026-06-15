@@ -17,11 +17,11 @@ public class Main {
 
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(1);
-        Step step0 = new Step();
-        step0.addGate(new X(0));
+        QuantumStep QuantumStep0 = new QuantumStep();
+        QuantumStep0.addGate(new X(0));
 
-        Step step1 = new Step();
-        step1.addGate(new X(0));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new X(0));
         program.addStep(step0);
         program.addStep(step1);
         program.initializeQubit(0,.5);

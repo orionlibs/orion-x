@@ -60,7 +60,7 @@ philosophy):
 encodes the exact lifecycle we will generalize:
 
 1. `serializeProgram(Program)` walks `program.getSteps()` → `serializeStep` →
-   `serializeGate`, emitting JSON `{numberQubits, steps:[{gates:[{caption,
+   `serializeGate`, emitting JSON `{numberQubits, QuantumSteps:[{gates:[{caption,
    group, affectedQubitIndex}]}]}`. **Key insight:** it serializes by
    `gate.getCaption()`, `gate.getGroup()`, and `gate.getAffectedQubitIndex()`
    — i.e. there is precedent for a caption-driven Program-walker. Our QASM
@@ -79,7 +79,7 @@ encodes the exact lifecycle we will generalize:
   `getInitialAlphas()`. Initial alphas default to `|0>`; if a backend sees a
   non-default alpha it must error (hardware always starts in `|0>`).
 - `Step`: `getGates()` (unmodifiable `List<Gate>`), `getType()`
-  (`NORMAL`/`PSEUDO`/`PROBABILITY`). **PSEUDO and PROBABILITY steps must be
+  (`NORMAL`/`PSEUDO`/`PROBABILITY`). **PSEUDO and PROBABILITY QuantumSteps must be
   skipped** by exporters and submitters — they do not alter the circuit.
 - `Gate`: `getCaption()`, `getName()` (FQCN), `getGroup()`
   (`SingleQubit`/`TwoQubit`/`ThreeQubit`), `getAffectedQubitIndexes()`,
@@ -232,7 +232,7 @@ Algorithm (mirrors `serializeProgram`'s walk):
    no index reversal on export — **but write a round-trip test to confirm**
    (Section 6).
 
-Determinism: iterate steps and gates in their stored order; no reordering.
+Determinism: iterate QuantumSteps and gates in their stored order; no reordering.
 
 ### WI-3 — OpenQASM 3.0 Exporter
 Extend `QasmExporter` with `exportQasm3(Program p)`. Differences from 2.0:
@@ -270,7 +270,7 @@ Pipeline:
 3. **Program builder** (`QasmImporter`):
    - Allocate `new Program(totalQubits)` from the qreg size(s). If multiple qregs,
      concatenate into a flat index space (record offsets).
-   - **Scheduling into Steps:** Strange forbids two gates on the same qubit in one
+   - **Scheduling into QuantumSteps:** Strange forbids two gates on the same qubit in one
      `Step` (`Step.verifyUnique`). Greedily pack consecutive `GateCall`s into the
      current `Step` until a qubit conflict, then start a new `Step` (a simple
      as-soon-as-possible scheduler). Map each `GateCall` to a Strange gate via
@@ -278,7 +278,7 @@ Pipeline:
      Strange equivalent (`s`, `t`, `sdg`, `tdg`, `cswap`) → either depend on
      Section 1 (new gate classes) or throw with a precise message. Cross-
      reference Section 1 (S/T/Fredkin gates).
-   - `measure q[i] -> c[j]` → `new Measurement(i)` in its own/next step.
+   - `measure q[i] -> c[j]` → `new Measurement(i)` in its own/next QuantumStep.
    - Set the result on `program` via the normal `addStep` flow (respects
      `ensureMeasuresafe`).
 
@@ -490,7 +490,7 @@ All tests JUnit, no network in unit tests.
    `importQasm(exportQasm2(p))` reproduces an equivalent Program. Compare by
    running both through `SimpleQuantumExecutionEnvironment` and asserting the
    probability vectors match within epsilon (use the existing simulator as the
-   oracle — this also validates index/endianness alignment from WI-2 step 4).
+   oracle — this also validates index/endianness alignment from WI-2 QuantumStep 4).
 2. **Golden-file QASM:** assert exact string output for a few canonical circuits
    (Bell, GHZ) for both 2.0 and 3.0, and for Quil. Keep goldens in
    `src/test/resources/qasm/`.
@@ -534,7 +534,7 @@ All tests JUnit, no network in unit tests.
 
 1. **Endianness mismatches** between Strange's state-vector bit ordering, QASM
    `q[i]`, and each provider's returned bitstrings. Highest-likelihood source of
-   silent wrong results. Mitigation: WI-2 step 4 analysis + round-trip and
+   silent wrong results. Mitigation: WI-2 QuantumStep 4 analysis + round-trip and
    `ShotResultBuilder` endianness tests.
 2. **Composite gate export** (Oracle/QFT/Add/Mul/Permutation/BlockGate). True
    arbitrary-unitary → QASM needs a decomposer that does not yet exist.

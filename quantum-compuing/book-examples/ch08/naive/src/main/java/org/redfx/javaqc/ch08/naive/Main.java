@@ -20,11 +20,11 @@ public class Main {
 
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(SIZE);
-        Step step1 = new Step();
-        Step step2 = new Step();
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep QuantumStep2 = new QuantumStep();
         for (int i = 0; i < SIZE; i++) {
-            if (aliceBits[i]) step1.addGate(new X(i));
-            step2.addGate(new Measurement(i));
+            if (aliceBits[i]) QuantumStep1.addGate(new X(i));
+            QuantumStep2.addGate(new Measurement(i));
         }
 
         program.addStep(step1);

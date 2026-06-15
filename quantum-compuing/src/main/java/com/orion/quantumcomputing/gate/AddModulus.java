@@ -10,12 +10,6 @@ import org.redfx.strange.gate.AddInteger;
 import org.redfx.strange.gate.Cnot;
 import org.redfx.strange.gate.X;
 
-/**
- * <p>AddModulus class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class AddModulus extends BlockGate<AddModulus>
 {
     static HashMap<Integer, Block> cache = new HashMap<>();
@@ -52,56 +46,40 @@ public class AddModulus extends BlockGate<AddModulus>
         if(this.block == null)
         {
             this.block = createBlock(x0, x1, y0, y1, N);
-            //     cache.put(hash, block);
-            //            System.err.println("ADDMODULUS CREATED for hash = "+hash+
-            //                    "x0 = "+x0+", x1 = "+x1+", y0 = "+y0+", y1 = "+y1+", N = "+N);
         }
         else
         {
-            //            System.err.println("ADDMODULUS CACHED for hash = "+hash+
-            //                    "x0 = "+x0+", x1 = "+x1+", y0 = "+y0+", y1 = "+y1+", N = "+N);
         }
         setBlock(block);
     }
 
 
-    /**
-     * <p>createBlock.</p>
-     *
-     * @param x0 a int
-     * @param x1 a int
-     * @param y0 a int
-     * @param y1 a int
-     * @param N a int
-     * @return a {@link Block} object
-     */
     public Block createBlock(int x0, int x1, int y0, int y1, int N)
     {
         Block answer = new Block("AddModulus", y1 - x0 + 2);
         int n = x1 - x0;
         int dim = 2 * (n + 1) + 1;
         org.redfx.strange.gate.Add add = new org.redfx.strange.gate.Add(x0, x1, y0, y1);
-        answer.addStep(new Step(add));
+        answer.addStep(new QuantumStep(add));
         org.redfx.strange.gate.AddInteger min = new org.redfx.strange.gate.AddInteger(x0, x1, N).inverse();
-        answer.addStep(new Step(min));
-        answer.addStep(new Step(new Cnot(x1, dim - 1)));
+        answer.addStep(new QuantumStep(min));
+        answer.addStep(new QuantumStep(new Cnot(x1, dim - 1)));
         org.redfx.strange.gate.AddInteger addN = new AddInteger(x0, x1, N);
         ControlledBlockGate cbg = new ControlledBlockGate(addN, x0, dim - 1);
-        answer.addStep(new Step(cbg));
+        answer.addStep(new QuantumStep(cbg));
         org.redfx.strange.gate.Add add2 = new org.redfx.strange.gate.Add(x0, x1, y0, y1).inverse();
-        answer.addStep(new Step(add2));
-        answer.addStep(new Step(new X(dim - 1)));
+        answer.addStep(new QuantumStep(add2));
+        answer.addStep(new QuantumStep(new X(dim - 1)));
         Block block = new Block(1);
-        block.addStep(new Step(new X(0)));
+        block.addStep(new QuantumStep(new X(0)));
         ControlledBlockGate cbg2 = new ControlledBlockGate(block, dim - 1, x1);
-        answer.addStep(new Step(cbg2));
+        answer.addStep(new QuantumStep(cbg2));
         org.redfx.strange.gate.Add add3 = new Add(x0, x1, y0, y1);
-        answer.addStep(new Step(add3));
+        answer.addStep(new QuantumStep(add3));
         return answer;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {

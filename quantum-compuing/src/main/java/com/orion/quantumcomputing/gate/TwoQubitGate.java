@@ -2,16 +2,7 @@ package com.orion.quantumcomputing.gate;
 
 import java.util.Arrays;
 import java.util.List;
-import org.redfx.strange.Gate;
 
-/**
- *
- * This class describe a Gate that operates on two qubits. In a single
- * <code>Step</code>, there should not be two Gates that act on the same qubit.
- *
- * @author johan
- * @version $Id: $Id
- */
 public abstract class TwoQubitGate implements Gate
 {
     private int first;
@@ -20,20 +11,11 @@ public abstract class TwoQubitGate implements Gate
     private boolean inverse;
 
 
-    /**
-     * <p>Constructor for TwoQubitGate.</p>
-     */
     public TwoQubitGate()
     {
     }
 
 
-    /**
-     * <p>Constructor for TwoQubitGate.</p>
-     *
-     * @param first a int
-     * @param second a int
-     */
     public TwoQubitGate(int first, int second)
     {
         this.first = first;
@@ -42,7 +24,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getMainQubitIndex()
     {
@@ -50,7 +31,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setMainQubitIndex(int idx)
     {
@@ -58,7 +38,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setAdditionalQubit(int idx, int cnt)
     {
@@ -66,18 +45,12 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /**
-     * <p>getSecondQubitIndex.</p>
-     *
-     * @return a int
-     */
     public int getSecondQubitIndex()
     {
         return this.second;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public List<Integer> getAffectedQubitIndexes()
     {
@@ -85,7 +58,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getHighestAffectedQubitIndex()
     {
@@ -93,18 +65,12 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /**
-     * <p>setHighestAffectedQubitIndex.</p>
-     *
-     * @param v a int
-     */
     public void setHighestAffectedQubitIndex(int v)
     {
         this.highest = v;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getName()
     {
@@ -112,7 +78,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {
@@ -120,7 +85,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getGroup()
     {
@@ -128,7 +92,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getSize()
     {
@@ -136,7 +99,6 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setInverse(boolean v)
     {
@@ -144,8 +106,8 @@ public abstract class TwoQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return "Gate acting on qubits " + first + " and " + second + " and caption " + getCaption();
     }

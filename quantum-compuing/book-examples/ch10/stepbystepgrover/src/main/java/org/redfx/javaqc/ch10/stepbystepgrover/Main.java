@@ -19,7 +19,7 @@ public class Main {
         int N = 1 << dim;
         double cnt = Math.PI*Math.sqrt(N)/4;
         Program p = new Program(dim);
-        Step s0 = new Step();
+        QuantumStep s0 = new QuantumStep();
         for (int i = 0; i < dim; i++) {
             s0.addGate(new Hadamard(i));
         }
@@ -30,15 +30,15 @@ public class Main {
         Oracle difOracle = new Oracle(dif);
         difOracle.setCaption("D");
         for (int i = 1; i < cnt; i++) {
-            Step s0prob = new Step("Prob "+i);
+            QuantumStep s0prob = new QuantumStep("Prob "+i);
             s0prob.addGate(new ProbabilitiesGate(0));
-            Step s1 = new Step("Oracle "+i);
+            QuantumStep s1 = new QuantumStep("Oracle "+i);
             s1.addGate(oracle);
-            Step s1prob = new Step("Prob "+i);
+            QuantumStep s1prob = new QuantumStep("Prob "+i);
             s1prob.addGate(new ProbabilitiesGate(0));
-            Step s2 = new Step("Diffusion "+i);
+            QuantumStep s2 = new QuantumStep("Diffusion "+i);
             s2.addGate(difOracle);
-            Step s3 = new Step("Prob "+i);
+            QuantumStep s3 = new QuantumStep("Prob "+i);
             s3.addGate(new ProbabilitiesGate(0));
             p.addStep(s0prob);
             p.addStep(s1);
@@ -46,13 +46,13 @@ public class Main {
             p.addStep(s2);
             p.addStep(s3);
         }
-        System.out.println(" n = "+dim+", steps = "+cnt);
+        System.out.println(" n = "+dim+", QuantumSteps = "+cnt);
 
         Result res = sqee.runProgram(p);
         Complex[] probability = res.getProbability();
         for (int i = 1; i < cnt; i++) {
             Complex[] ip0 = res.getIntermediateProbability(3*i);
-            System.out.println("results after step "+i+": "+ip0[solution].abssqr());
+            System.out.println("results after QuantumStep "+i+": "+ip0[solution].abssqr());
 //            Arrays.asList(ip0).forEach(q -> System.out.println("p: "+q.abssqr()));
 
         }

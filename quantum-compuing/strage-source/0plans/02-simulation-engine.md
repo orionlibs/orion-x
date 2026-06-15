@@ -65,10 +65,10 @@ Understanding the exact contract a backend must honor.
   Any backend that does not start from |0…0⟩ must replicate this amplitude rule.
 - Pulls `p.getSteps()` and the cached `p.getDecomposedSteps()`. If the cache is
   null it builds `simpleSteps` by `Computations.decomposeStep(step, nQubits)`
-  per step and stores it via `p.setDecomposedSteps(simpleSteps)`.
-- Creates `Result result = new Result(nQubits, steps.size())` and calls
+  per QuantumStep and stores it via `p.setDecomposedSteps(simpleSteps)`.
+- Creates `Result result = new Result(nQubits, QuantumSteps.size())` and calls
   `result.setIntermediateProbability(0, probs)` for the initial snapshot.
-- Loops decomposed steps; for each non-empty step calls `applyStep`, then if
+- Loops decomposed QuantumSteps; for each non-empty QuantumStep calls `applyStep`, then if
   `step.getComplexStep() > -1` records `result.setIntermediateProbability(idx, probs)`.
 - After the loop: `calculateQubitStatesFromVector(probs)` → per-qubit
   probabilities, set via `qubit[i].setProbability(...)`; then
@@ -81,25 +81,25 @@ both.
 `mmul(Complex[][] a, Complex[][] b)` is a `default` interface method delegating
 to `Complex.mmul`; backends inherit it unchanged.
 
-### 2.2 Step decomposition (reusable by all backends)
+### 2.2 QuantumStep decomposition (reusable by all backends)
 
 `Computations.decomposeStep(Step s, int nqubit)` rewrites a `Step` into a list
-of steps that the dense engine can run without arbitrary permutations:
+of QuantumSteps that the dense engine can run without arbitrary permutations:
 
-- `Step.Type.PSEUDO` steps pass through (sets `complexStep = index`).
-- A step whose gates are all `SingleQubitGate` passes through unchanged
+- `Step.Type.PSEUDO` QuantumSteps pass through (sets `complexStep = index`).
+- A QuantumStep whose gates are all `SingleQubitGate` passes through unchanged
   (`simple` branch).
 - A single `Oracle` or `Swap` passes through.
 - For `TwoQubitGate`/`ThreeQubitGate` whose operands are not already adjacent and
-  descending, it inserts `PermutationGate` pre/post steps (via `new Step(pg)`),
-  juggling `setComplexStep`/`getIndex` so the "real" matrix step is tagged and
+  descending, it inserts `PermutationGate` pre/post QuantumSteps (via `new QuantumStep(pg)`),
+  juggling `setComplexStep`/`getIndex` so the "real" matrix QuantumStep is tagged and
   the wrapping permutations are tagged `-1`.
 - `ControlledBlockGate` is expanded through `processBlockGate`.
 
 The important invariant for backends that reuse this: after decomposition, every
-matrix-bearing step has its operand qubits adjacent and in descending index
-order, and permutations are isolated into their own steps. The
-`getComplexStep()` value identifies which physical step a decomposed step
+matrix-bearing QuantumStep has its operand qubits adjacent and in descending index
+order, and permutations are isolated into their own QuantumSteps. The
+`getComplexStep()` value identifies which physical QuantumStep a decomposed QuantumStep
 corresponds to, for intermediate-probability snapshots.
 
 ### 2.3 The dense hot path
@@ -156,7 +156,7 @@ mutable `public float r; public float i;` (note: single precision). Constants
 
 Consequences for the hot path: the inner `answer[i] = answer[i].add(matrix[i][j].mul(v[j]))`
 allocates two `Complex` objects per scalar multiply-add, producing O(4^k · 2^(n-k))
-short-lived objects per step. This dominates GC and cache behavior and is the
+short-lived objects per QuantumStep. This dominates GC and cache behavior and is the
 single biggest dense-engine performance problem. The pre-existing `addmulr`
 fused method is the in-place primitive that fixes it but is currently unused.
 
@@ -291,7 +291,7 @@ The matrix–vector multiply has two embarrassingly parallel axes:
 Use the `double[]` interleaved buffers from W3.1 to avoid `Complex` allocation
 contention across threads (allocation churn is worse under parallelism). Writes
 are to disjoint indices so no locks are needed; a single barrier (pool `invoke`)
-joins per step.
+joins per QuantumStep.
 
 ### 5.3 Constraints
 
@@ -468,7 +468,7 @@ GPU. This is an accelerator for the dense path, not a new representation.
 
 - **OpenCL** (portable, fits GraalVM/JavaFX/GluonHQ audience): JOCL or Panama
   bindings; kernels for 1- and 2-qubit gate application, plus general k-qubit.
-- **Panama FFI → cuBLAS** (CUDA): represent each step as a batched gemv against
+- **Panama FFI → cuBLAS** (CUDA): represent each QuantumStep as a batched gemv against
   the strided state; best performance on NVIDIA.
 - **Panama FFI → Apple Metal** (macOS, important for GluonHQ): Metal compute
   shaders via Panama downcalls.
@@ -535,7 +535,7 @@ Primary oracle: `SimpleQuantumExecutionEnvironment` on small circuits.
   probability.
 - **Reuse existing decomposition**: tests must include circuits that exercise
   `decomposeStep`'s permutation insertion (non-adjacent CNOT/Toffoli) so backends
-  that consume decomposed steps are validated against the same normal form the
+  that consume decomposed QuantumSteps are validated against the same normal form the
   dense engine uses.
 
 ---
@@ -572,7 +572,7 @@ Primary oracle: `SimpleQuantumExecutionEnvironment` on small circuits.
   comparison at parallelism > 1.
 - **Decomposition coupling.** `decomposeStep` mutates `Step.complexStep` and
   caches into `Program.setDecomposedSteps`. Backends sharing a `Program` instance
-  must not corrupt the cache; treat decomposed steps as read-only and avoid
+  must not corrupt the cache; treat decomposed QuantumSteps as read-only and avoid
   re-decomposing concurrently.
 - **Stabilizer scope creep.** Non-Clifford detection must be exhaustive (angle
   checks on `Rotation*`/`Cr`, plus `Toffoli`/`Oracle`/arithmetic gates) or results
@@ -605,5 +605,5 @@ Primary oracle: `SimpleQuantumExecutionEnvironment` on small circuits.
    Panama.
 7. **Decision-diagram backend** (§8). Most complex; last.
 
-Each step lands behind a new class implementing `QuantumExecutionEnvironment`,
+Each QuantumStep lands behind a new class implementing `QuantumExecutionEnvironment`,
 validated by the §11 cross-validation harness before the next begins.

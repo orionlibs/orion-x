@@ -1,14 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.gate.TwoQubitGate;
-
-/**
- * <p>Cr class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class Cr extends TwoQubitGate
 {
     private Complex[][] matrix = new Complex[][] {
@@ -20,21 +11,11 @@ public class Cr extends TwoQubitGate
     private int pow = -1;
 
 
-    /**
-     * <p>Constructor for Cr.</p>
-     */
     public Cr()
     {
     }
 
 
-    /**
-     * Control-R gate
-     *
-     * @param a target qubit
-     * @param b control qubit
-     * @param exp exp
-     */
     public Cr(int a, int b, double exp)
     {
         super(a, b);
@@ -59,14 +40,6 @@ public class Cr extends TwoQubitGate
     }
 
 
-    /**
-     * <p>Constructor for Cr.</p>
-     *
-     * @param a a int
-     * @param b a int
-     * @param base a int
-     * @param pow a int
-     */
     public Cr(int a, int b, int base, int pow)
     {
         this(a, b, Math.PI * 2 / Math.pow(base, pow));
@@ -74,7 +47,6 @@ public class Cr extends TwoQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -82,7 +54,6 @@ public class Cr extends TwoQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setInverse(boolean inv)
     {
@@ -94,8 +65,8 @@ public class Cr extends TwoQubitGate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String getCaption()
+    @Override
+    public String getCaption()
     {
         return "Cr" + ((pow > -1) ? Integer.toString(pow) : "th");
     }

@@ -1,7 +1,7 @@
 # Section 3 — Quantum Algorithms: Implementation Plan
 
 Package: `org.redfx.strange.algorithm`. All circuits are built from the real Strange
-API: `Program(nQubits, Step...)`, `program.addStep(Step)`, `new Step(name, Gate...)`,
+API: `Program(nQubits, QuantumStep...)`, `program.addStep(Step)`, `new QuantumStep(name, Gate...)`,
 `step.addGate(Gate)`, executed by `QuantumExecutionEnvironment.runProgram(Program)`
 returning a `Result`. Source of truth for existing patterns: `algorithm/Classic.java`.
 
@@ -40,21 +40,21 @@ Everything new must mirror these patterns:
   with `setQuantumExecutionEnvironment(QuantumExecutionEnvironment val)` (lines 51–60).
   All methods call the static `qee.runProgram(program)`.
 - **Trivial single-step program**: `randomBit()` (lines 67–73) —
-  `new Program(1, new Step(new Hadamard(0)))`, run, then `result.getQubits()[0].measure()`.
+  `new Program(1, new QuantumStep(new Hadamard(0)))`, run, then `result.getQubits()[0].measure()`.
 - **Prep by X gates + QFT arithmetic**: `qsum(int a, int b)` (lines 82–126) builds a
-  `prep` Step of `new X(idx)` to load classical integers into qubits, then
-  `new Step(new Fourier(m, 0))`, a ladder of `new Cr(i, cr0, 2, 1+j)` controlled
-  rotations, then `new Step(new InvFourier(m, 0))`. Read-out loops over
+  `prep` QuantumStep of `new X(idx)` to load classical integers into qubits, then
+  `new QuantumStep(new Fourier(m, 0))`, a ladder of `new Cr(i, cr0, 2, 1+j)` controlled
+  rotations, then `new QuantumStep(new InvFourier(m, 0))`. Read-out loops over
   `qubits[i].measure()` and reconstructs the integer with `1<<i`.
 - **Oracle + diffusion (Grover)**: `searchProbabilities` (lines 168–206) builds an
   initial Hadamard layer (`s0.addGate(new Hadamard(i))` for all `i`), an `Oracle`
   matrix from a classical `Function<T,Integer>` via `createGroverOracle` (lines 295–307),
   a diffusion `Oracle` from `createDiffMatrix` (lines 309–333), and repeats
-  `Oracle` / diffusion / `ProbabilitiesGate(0)` steps `~ π√N/4` times. Reads
+  `Oracle` / diffusion / `ProbabilitiesGate(0)` QuantumSteps `~ π√N/4` times. Reads
   `res.getProbability()` and squares amplitudes with `Complex.abssqr()`.
 - **Controlled modular arithmetic + IQFT (Shor)**: `measurePeriod` (lines 265–293)
   uses `MulModulus`, wraps it in `new ControlledBlockGate(mul, offset, i)`, applies
-  `new Step(new InvFourier(offset, 0))`, then reconstructs the measured register.
+  `new QuantumStep(new InvFourier(offset, 0))`, then reconstructs the measured register.
 - **`System.err.println` smell**: `search` line 151, `findPeriod` line 222,
   `qfactor` lines 245, 251, 257 — exactly the output that `AlgorithmResult` replaces.
 
@@ -74,7 +74,7 @@ Building blocks confirmed from source:
 | `Fourier` / `InvFourier` | `new Fourier(dim, idx)` / `new InvFourier(size, idx)` | QFT block over `dim` qubits from `idx` |
 | `Oracle` | `new Oracle(Complex[][] matrix)` | arbitrary unitary on `log2(matrix.length)` qubits, `setCaption`, `setInverse` |
 | `ControlledBlockGate` | `new ControlledBlockGate(BlockGate bg, idx, control)` | controlled application of a block (e.g. for QPE unitary powers) |
-| `ProbabilitiesGate` | `new ProbabilitiesGate(idx)` | snapshots probabilities into the Result (PROBABILITY step) |
+| `ProbabilitiesGate` | `new ProbabilitiesGate(idx)` | snapshots probabilities into the Result (PROBABILITY QuantumStep) |
 | `Measurement` | `new Measurement(idx)` | mid-circuit; `Program.ensureMeasuresafe` forbids re-superposing a measured qubit |
 
 `Result` API used: `getQubits()` → `Qubit[]` (each `.measure()` returns 0/1 from
@@ -110,7 +110,7 @@ public final class AlgorithmResult {
 
     // builder-style mutators are package-private; algorithms populate via a Builder.
 
-    public static final class Iteration {          // one visualisable step
+    public static final class Iteration {          // one visualisable QuantumStep
         public final int index;
         public final String label;                 // e.g. "Grover iteration 3"
         public final double[] probabilities;       // |amplitude|^2 per basis state
@@ -191,7 +191,7 @@ legacy static methods and is documented as deprecated-in-favour-of-`Algorithms`.
 ### 3.3 Iteration exposure for visualisation
 
 Two mechanisms, both already supported by the engine:
-- Insert `new Step(new ProbabilitiesGate(0))` (PROBABILITY step) between algorithm
+- Insert `new QuantumStep(new ProbabilitiesGate(0))` (PROBABILITY QuantumStep) between algorithm
   iterations — exactly as Grover does (`Classic` lines 190–191). After running, read
   `result.getIntermediateProbability(stepIndex)` / `result.getIntermediateQubits()` and
   package each into an `AlgorithmResult.Iteration`.
@@ -223,9 +223,9 @@ post-processing, and what goes into `AlgorithmResult`.
 
 ### A. Deutsch-Jozsa — `Algorithms.deutschJozsa(int n, Function<Integer,Integer> f)`
 - Qubits: `n` input + 1 ancilla → `Program(n+1)`.
-- Steps:
+- QuantumSteps:
   1. `Step prep`: `new X(n)` on ancilla, then `new Hadamard(i)` for `i in 0..n` (all incl. ancilla).
-  2. `new Step(bitOracle(n,1,...))` (or `phaseOracle` on the input register).
+  2. `new QuantumStep(bitOracle(n,1,...))` (or `phaseOracle` on the input register).
   3. `Step post`: `new Hadamard(i)` for `i in 0..n-1`.
 - Run, `result.getQubits()`, measure inputs `q[0..n-1]`.
 - Post: if all measured 0 → **constant**, else **balanced**.
@@ -238,7 +238,7 @@ post-processing, and what goes into `AlgorithmResult`.
 
 ### C. Simon's algorithm — `Algorithms.simon(int n, Function<Integer,Integer> f)`
 - Qubits: `2n` (n input + n output) → `Program(2n)`.
-- Steps: H on `0..n-1`; `bitOracle(n,n,f)` mapping input→output register; H on `0..n-1`;
+- QuantumSteps: H on `0..n-1`; `bitOracle(n,n,f)` mapping input→output register; H on `0..n-1`;
   insert `new Measurement(i)` for output qubits `n..2n-1` (mid-circuit measure allowed,
   output not re-superposed).
 - Run repeatedly (`O(n)` shots via fresh `Program` runs / `result.measureSystem()`):
@@ -251,14 +251,14 @@ post-processing, and what goes into `AlgorithmResult`.
 - Inputs: counting register size `t`, a unitary supplied as `Oracle`/`BlockGate` `U`
   on `m` qubits, eigenstate prep on the target register.
 - Qubits: `Program(t + m)`; counting `0..t-1`, eigenstate `t..t+m-1`.
-- Steps:
-  1. H on all counting qubits; prepare eigenstate on target (caller-supplied prep Step).
+- QuantumSteps:
+  1. H on all counting qubits; prepare eigenstate on target (caller-supplied prep QuantumStep).
   2. For `j in 0..t-1`: apply `U^(2^j)` controlled on counting qubit `j` via
      `new ControlledBlockGate(uPower_j, t /*target start*/, j /*control*/)`
      (same pattern as Shor's `ControlledBlockGate(mul, offset, i)` in
      `Classic.measurePeriod`). `U^(2^j)` is precomputed by repeated `Complex.mmul` of
      `U.getMatrix()`, wrapped in an `Oracle`/`BlockGate`.
-  3. `new Step(new InvFourier(t, 0))` on the counting register (exactly Shor's read-out).
+  3. `new QuantumStep(new InvFourier(t, 0))` on the counting register (exactly Shor's read-out).
 - Post: measure counting register → integer `k`; phase estimate `φ = k / 2^t`.
 - `put("phase", double)`, `put("k", int)`. Expose per-controlled-U `ProbabilitiesGate`
   snapshots as iterations.
@@ -277,16 +277,16 @@ post-processing, and what goes into `AlgorithmResult`.
 
 ### F. Quantum Walk — `algorithm/QuantumWalk.java`
 - Discrete-time coined walk on a line/cycle of `N=2^n` positions + 1 coin qubit.
-- Steps per walk step: coin flip `new Hadamard(coin)`; conditional shift implemented as
+- QuantumSteps per walk QuantumStep: coin flip `new Hadamard(coin)`; conditional shift implemented as
   a permutation/`Oracle` matrix (or controlled increment/decrement built from
   `AddInteger`/`ControlledBlockGate`) that maps `|c,x> -> |c, x±1>`.
-- Loop `T` steps, inserting `ProbabilitiesGate` snapshots → iterations for visualisation.
+- Loop `T` QuantumSteps, inserting `ProbabilitiesGate` snapshots → iterations for visualisation.
 - `put("distribution", double[])` from `result.getProbability()`.
 
 ### G. HHL (linear systems) — `algorithm/HHL.java`
 - Solves `A x = b` for small (2x2 / 4x4) Hermitian `A`.
 - Registers: 1 ancilla (rotation) + `t` clock/phase qubits + `n_b` state qubits holding `b`.
-- Steps:
+- QuantumSteps:
   1. Prepare `|b>` on the state register (amplitude-load via an `Oracle` unitary, or
      `RotationY` for 1-qubit `b`).
   2. **QPE** (D) with `U = e^{iA t0}` (precompute matrix exponential of `A` classically
@@ -312,7 +312,7 @@ post-processing, and what goes into `AlgorithmResult`.
 - Outer classical loop: pick `(γ,β)`, build the `Program`, run, compute
   `⟨H_C⟩` from `result.getProbability()` (or an Estimator), update params.
 - `put("params", double[])`, `put("expectation", double)`, one `Iteration` per
-  optimiser step.
+  optimiser QuantumStep.
 - **Dependencies (flag)**: needs §1 **parametric gates** (a unified `ParametricGate` so
   `γ,β` can be set/reset cheaply) and §7 **Estimator/Sampler + classical optimizer**
   (COBYLA/SPSA). Today only `RotationX/Y/Z` are parametric; the cost-layer two-qubit
@@ -326,7 +326,7 @@ post-processing, and what goes into `AlgorithmResult`.
 - Outer loop: set `θ`, run, estimate `⟨ψ(θ)|H|ψ(θ)⟩` per Pauli term (measure in the
   appropriate basis: append H for X-terms, `RotationX(-π/2)` for Y-terms before
   measuring), sum weighted expectations, minimise.
-- `put("groundEnergy", double)`, `put("params", double[])`, iterations per step.
+- `put("groundEnergy", double)`, `put("params", double[])`, iterations per QuantumStep.
 - **Dependencies (flag)**: §1 parametric gates, §7 **Estimator** (`⟨ψ|H|ψ⟩` without
   collapse) and a classical optimizer. **Schedule after §1 and §7.**
 
@@ -351,7 +351,7 @@ post-processing, and what goes into `AlgorithmResult`.
 ### L. Quantum teleportation — `algorithm/Protocols.teleport(double alpha)` (or `Qubit` state)
 - Qubits: 3 → `Program(3)`. q0 = state to teleport (init via `program.initializeQubit(0, alpha)`
   or a prep gate), q1/q2 = Bell pair.
-- Steps: `new Hadamard(1)`, `new Cnot(1,2)` (Bell pair); `new Cnot(0,1)`,
+- QuantumSteps: `new Hadamard(1)`, `new Cnot(1,2)` (Bell pair); `new Cnot(0,1)`,
   `new Hadamard(0)`; `new Measurement(0)`, `new Measurement(1)`; corrections on q2
   conditioned on the two measured bits — `new X(2)` if q1==1, `new Z(2)` if q0==1.
 - **Dependency (flag)**: classical-controlled corrections need §7 **dynamic circuits**

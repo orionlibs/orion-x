@@ -1,14 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.gate.SingleQubitGate;
-
-/**
- * <p>Rotation class.</p>
- *
- * @author alain
- * @version $Id: $Id
- */
 public class Rotation extends SingleQubitGate
 {
     protected final double thetav;
@@ -16,13 +7,6 @@ public class Rotation extends SingleQubitGate
     protected Complex[][] matrix;
 
 
-    /**
-     * <p>Constructor for Rotation.</p>
-     *
-     * @param theta a double
-     * @param axis a {@link org.redfx.strange.gate.Rotation.Axes} object
-     * @param idx a int
-     */
     public Rotation(double theta, Axes axis, int idx)
     {
         super(idx);
@@ -45,7 +29,6 @@ public class Rotation extends SingleQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -53,7 +36,6 @@ public class Rotation extends SingleQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setInverse(boolean v)
     {
@@ -62,17 +44,9 @@ public class Rotation extends SingleQubitGate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String getCaption()
+    @Override
+    public String getCaption()
     {
         return "Rotation of " + axis.name() + " with angle " + thetav;
-    }
-
-
-    public enum Axes
-    {
-        XAxis,
-        YAxis,
-        ZAxis
     }
 }

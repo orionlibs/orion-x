@@ -47,33 +47,33 @@ public class SimpleQuantumExecutor implements QuantumExecutor
                 }
             }
         }
-        List<QuantumStep> steps = p.getSteps();
+        List<QuantumStep> QuantumSteps = p.getSteps();
         List<QuantumStep> simpleSteps = p.getDecomposedSteps();
         if(simpleSteps == null)
         {
             simpleSteps = new ArrayList<>();
-            for(QuantumStep step : steps)
+            for(QuantumStep QuantumStep : QuantumSteps)
             {
                 simpleSteps.addAll(QuantumComputations.decomposeStep(step, nQubits));
             }
             p.setDecomposedSteps(simpleSteps);
         }
-        QuantumResult result = new QuantumResult(nQubits, steps.size());
+        QuantumResult result = new QuantumResult(nQubits, QuantumSteps.size());
         int cnt = 0;
         result.setIntermediateProbability(0, probs);
-        LOG.fine("START RUN, number of steps = " + simpleSteps.size());
-        for(QuantumStep step : simpleSteps)
+        LOG.fine("START RUN, number of QuantumSteps = " + simpleSteps.size());
+        for(QuantumStep QuantumStep : simpleSteps)
         {
             if(!step.getGates().isEmpty())
             {
-                LOG.finer("RUN STEP " + step + ", cnt = " + cnt);
+                LOG.finer("RUN QuantumStep " + QuantumStep + ", cnt = " + cnt);
                 cnt++;
-                LOG.finest("before this step, probs = ");
+                LOG.finest("before this QuantumStep, probs = ");
                 //      printProbs(probs);
                 probs = applyStep(step, probs, qubit);
-                LOG.info("after this step, probs = " + probs);
+                LOG.info("after this QuantumStep, probs = " + probs);
                 //    printProbs(probs);
-                int idx = step.getComplexStep();
+                int idx = QuantumStep.getComplexStep();
                 // System.err.println("complex? "+idx);
                 if(idx > -1)
                 {
@@ -108,17 +108,17 @@ public class SimpleQuantumExecutor implements QuantumExecutor
     }
 
 
-    private List<QuantumStep> decomposeSteps(List<QuantumStep> steps)
+    private List<QuantumStep> decomposeSteps(List<QuantumStep> QuantumSteps)
     {
-        return steps;
+        return QuantumSteps;
     }
 
 
-    private Complex[] applyStep(QuantumStep step, Complex[] vector, Qubit[] qubits)
+    private Complex[] applyStep(QuantumStep QuantumStep, Complex[] vector, Qubit[] qubits)
     {
         LOG.finer("start applystep, vectorsize = " + vector.length + ", ql = " + qubits.length);
         long s0 = System.currentTimeMillis();
-        List<QuantumGate> gates = step.getGates();
+        List<QuantumGate> gates = QuantumStep.getGates();
         if(!gates.isEmpty() && gates.get(0) instanceof ProbabilitiesGate)
         {
             ProbabilitiesGate probGate = (ProbabilitiesGate)gates.get(0);

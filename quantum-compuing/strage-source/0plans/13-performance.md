@@ -128,7 +128,7 @@ Also relevant:
 List<Step> simpleSteps = p.getDecomposedSteps();
 if (simpleSteps == null) {
     simpleSteps = new ArrayList<>();
-    for (Step step : steps) {
+    for (Step QuantumStep : QuantumSteps) {
         simpleSteps.addAll(Computations.decomposeStep(step, nQubits));
     }
     p.setDecomposedSteps(simpleSteps);
@@ -165,13 +165,13 @@ private List<Step> decomposedSteps = null;
 
 /**
  * Lazily computes (and caches) the permutation-free decomposition of this
- * program's steps. The cache is invalidated by {@link #addStep}.
+ * program's QuantumSteps. The cache is invalidated by {@link #addStep}.
  */
 public List<Step> getDecomposedSteps() {              // de-deprecated
     List<Step> ds = this.decomposedSteps;
     if (ds == null) {
         ds = new ArrayList<>();
-        for (Step step : steps) {
+        for (Step QuantumStep : QuantumSteps) {
             ds.addAll(Computations.decomposeStep(step, numberQubits));
         }
         this.decomposedSteps = Collections.unmodifiableList(ds);
@@ -189,7 +189,7 @@ public List<Step> getDecomposedSteps() {              // de-deprecated
 - Decomposition mutates `Step` state (`decomposeStep` calls
   `s.setComplexStep(...)`, `s.setInformalStep(...)`, and inserts permutation
   `Step`s). Because the result is memoised and the inputs are the same `Step`
-  objects, recomputation must be idempotent. **Verification step:** confirm
+  objects, recomputation must be idempotent. **Verification QuantumStep:** confirm
   `decomposeStep` is idempotent on an already-decomposed `Step`, or guard
   recomputation so the cache is only ever built once per `(steps)` generation.
   If it is *not* idempotent (a real risk given the in-place
@@ -208,7 +208,7 @@ List<Step> simpleSteps = p.getDecomposedSteps(); // now never null, lazily built
 
 **Why this ordering:** it is self-contained, removes a deprecated public mutator
 from normal use, and gives every later work item (pruning, distribution) a clean
-single source of the executable step list.
+single source of the executable QuantumStep list.
 
 ### WI-2 — `Complex` representation benchmark
 
@@ -225,7 +225,7 @@ Candidate representations to benchmark on the inner multiply-add of
    iteration. (Cheapest possible win — measure it before anything exotic.)
 3. **`record Complex(double r, double i)`** — value-semantics record, `double`
    precision. Still heap-allocated under current JVMs but JIT-friendly and a
-   stepping stone to Valhalla.
+   QuantumStepping stone to Valhalla.
 4. **Split primitive `double[]` SoA** — two parallel arrays `double[] re,
    double[] im` for the state vector (and optionally gate matrices). No
    per-amplitude object; sequential memory; auto-vectorisable. Expected winner.
@@ -315,7 +315,7 @@ convert the identity sub-block (498–527); (d) convert the recursive block
 **Files:** `local/Computations.java`, `local/SimpleQuantumExecutionEnvironment.java`,
 new `SimulationOptions` (config carrier).
 
-**Idea:** after each step's state update, zero out amplitudes whose magnitude is
+**Idea:** after each QuantumStep's state update, zero out amplitudes whose magnitude is
 below a configurable threshold `ε`, optionally renormalise. This is an
 *approximate* mode: it trades exactness for the ability to keep effectively
 sparse states small and to skip negligible contributions.
@@ -335,7 +335,7 @@ pruning is strictly opt-in. Thread the options through
 `SimpleQuantumExecutionEnvironment` (constructor or `runProgram` overload) into
 the apply loop.
 
-**Where applied:** once per step, on the freshly computed state, in `applyStep`
+**Where applied:** once per QuantumStep, on the freshly computed state, in `applyStep`
 (after line 161) — *not* inside the inner multiply-add (that would corrupt
 partial sums). On the SoA buffers:
 
@@ -361,9 +361,9 @@ if (opts.pruneThreshold() > 0) {
   Without renormalisation the state norm drops below 1, biasing subsequent
   measurement probabilities. With renormalisation, the surviving distribution is
   rescaled — measurement probabilities stay normalised but are *approximate*.
-- **Error bound:** per step the discarded probability is `< (dim_pruned)·ε²`,
+- **Error bound:** per QuantumStep the discarded probability is `< (dim_pruned)·ε²`,
   loosely bounded by `ε²·2^n`; total-variation error in the final distribution
-  accumulates roughly additively over steps. The Javadoc must state: pruning is
+  accumulates roughly additively over QuantumSteps. The Javadoc must state: pruning is
   only sound when the state is genuinely concentrated (low entanglement); for
   highly entangled states a small ε can still prune many small-but-collectively-
   significant amplitudes.
@@ -371,7 +371,7 @@ if (opts.pruneThreshold() > 0) {
   (`calculateQubitStatesFromVector` 680–695, `doImmediateMeasurement` 707–730):
   those re-derive probabilities from the (now approximate) vector, so the error
   is inherited, not compounded by them.
-- Expose the realised discarded mass per step (e.g. via the existing
+- Expose the realised discarded mass per QuantumStep (e.g. via the existing
   `Result.setIntermediateProbability` channel or a new diagnostic) so users can
   see the approximation error they are accepting.
 
@@ -445,7 +445,7 @@ This is genuinely complex; treat it as the last and largest item.
 
 - **WI-1 (cache):** unit test that `getDecomposedSteps()` returns a non-null,
   stable list; that `addStep` after a read forces recomputation (assert
-  identity changes / content reflects the new step); that two reads without
+  identity changes / content reflects the new QuantumStep); that two reads without
   mutation return the same cached list. **Idempotence test:** decompose a
   program twice via the cache and assert the executed result is unchanged
   (guards the in-place `Step` mutation risk noted in WI-1).
@@ -484,7 +484,7 @@ New `bench/` JMH module/profile (Section 10 "Benchmarking suite"). Benchmarks:
 4. `DecompositionCacheBench` — cold (compute) vs warm (cached)
    `getDecomposedSteps()` on a deep program; confirms the lazy cache pays off.
 5. `DistributedScalingBench` — wall time vs node count (1/2/4) and comms-bytes
-   per step for local-heavy vs global-heavy circuits.
+   per QuantumStep for local-heavy vs global-heavy circuits.
 
 Section 10's "scalability chart generator" (time vs n_qubits) consumes #2/#3/#5.
 
@@ -502,8 +502,8 @@ Section 10's "scalability chart generator" (time vs n_qubits) consumes #2/#3/#5.
   bandwidth, document the precision change explicitly and gate it. Pruning
   introduces controlled, documented error (WI-4 caveats).
 - **Decomposition idempotence.** `decomposeStep` mutates `Step` in place
-  (`setComplexStep`, `addGate`, inserted permutation steps). The lazy cache must
-  guarantee decompose-once semantics; re-decomposing already-decomposed steps is
+  (`setComplexStep`, `addGate`, inserted permutation QuantumSteps). The lazy cache must
+  guarantee decompose-once semantics; re-decomposing already-decomposed QuantumSteps is
   the main correctness hazard of WI-1.
 - **Deprecation churn.** `setDecomposedSteps` (185–188) is public; remove only
   after a deprecation cycle. Same for the dead
@@ -526,4 +526,4 @@ Section 10's "scalability chart generator" (time vs n_qubits) consumes #2/#3/#5.
 4. **WI-4** amplitude pruning — builds on the SoA buffers from WI-3; opt-in,
    default-exact.
 5. **WI-5** distributed simulation — last and largest; reuses SoA shards (WI-3),
-   pruning all-reduce (WI-4), and the clean step list (WI-1).
+   pruning all-reduce (WI-4), and the clean QuantumStep list (WI-1).

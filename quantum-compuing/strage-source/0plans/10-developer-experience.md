@@ -17,7 +17,7 @@ QASM import/export is explicitly **out of scope** here — it lives in Section 6
 | Structured logging | All `System.err`/`System.out` diagnostics replaced by SLF4J (`slf4j-api` facade only — no binding shipped). |
 | Observability | A `StepListener` hook fires per-step / per-gate / per-measurement so callers can watch execution without parsing logs. |
 | Test ergonomics | `QuantumAssert` (state + unitary assertions) and `CircuitValidator` (bounds, measure-safety, causality) usable from JUnit. |
-| Confidence | Property-based harness generates random circuits and asserts the composed step matrices are unitary. |
+| Confidence | Property-based harness generates random circuits and asserts the composed QuantumStep matrices are unitary. |
 | Performance baselines | JMH microbenchmarks + a scalability chart generator (time vs n_qubits). |
 
 Design constraints (carry the library's existing philosophy):
@@ -36,20 +36,20 @@ Design constraints (carry the library's existing philosophy):
 
 ### 2.1 Program model (what the serializer must capture)
 `Program.java`:
-- `private final int numberQubits;` (ctor `Program(int nQubits, Step... moreSteps)`).
+- `private final int numberQubits;` (ctor `Program(int nQubits, QuantumStep... moreSteps)`).
 - `private double[] initAlpha;` — per-qubit initial alpha, defaulted to `1d` for all qubits in the
   ctor (`Arrays.fill(initAlpha, 1d)`), settable via `initializeQubit(int idx, double alpha)`,
   readable via `getInitialAlphas()`. **Must be serialised** to faithfully reproduce non-`|0>`
   starts.
-- `private final ArrayList<Step> steps;` exposed via `getSteps()`.
+- `private final ArrayList<Step> QuantumSteps;` exposed via `getSteps()`.
 - `getNumberQubits()`, `getResult()/setResult()` (result is runtime output — **not** serialised).
 - `decomposedSteps` is a `@Deprecated` cache (`getDecomposedSteps()/setDecomposedSteps()`) — a
   derived artifact populated by the simulator; **not** serialised.
 - `addStep(Step)` runs `ensureMeasuresafe(step)` (private, lines 140–158) and throws
-  `IllegalArgumentException("Adding a superposition step to a measured qubit")` on violation. The
+  `IllegalArgumentException("Adding a superposition QuantumStep to a measured qubit")` on violation. The
   deserializer must funnel through `addStep`/`addSteps` so this invariant is enforced on load.
 
-### 2.2 Step model
+### 2.2 QuantumStep model
 `Step.java`:
 - `enum Type { NORMAL, PSEUDO, PROBABILITY }`; `private final Type type;`
 - `private final ArrayList<Gate> gates;` via `getGates()` (unmodifiable).
@@ -80,15 +80,15 @@ Gate parameter shapes observed:
 - `BlockGate`/`ControlledBlockGate`/Fourier/Add*/Mul* — see §3.5 for the registry strategy and
   the v1 fallback (serialise composite/opaque gates by their explicit matrix).
 
-### 2.4 Execution loop (where StepListener hooks go)
+### 2.4 Execution loop (where QuantumStepListener hooks go)
 `local/SimpleQuantumExecutionEnvironment.java`:
-- `runProgram(Program p)` builds the initial `probs` vector from `initAlpha`, decomposes steps
+- `runProgram(Program p)` builds the initial `probs` vector from `initAlpha`, decomposes QuantumSteps
   (`Computations.decomposeStep`), then the main loop (lines 102–117):
   ```java
-  for (Step step : simpleSteps) {
+  for (Step QuantumStep : simpleSteps) {
       if (!step.getGates().isEmpty()) {
           probs = applyStep(step, probs, qubit);
-          int idx = step.getComplexStep();
+          int idx = QuantumStep.getComplexStep();
           if (idx > -1) result.setIntermediateProbability(idx, probs);
       }
   }
@@ -96,7 +96,7 @@ Gate parameter shapes observed:
   This loop is the single insertion point for `StepListener.beforeStep/afterStep` and
   probability-snapshot events.
 - Already uses `java.util.logging.Logger LOG` for trace (`LOG.info/fine/finer/finest`). Line 109
-  `LOG.info("after this step, probs = "+probs)` and line 119 `printProbs(probs)` are noisy
+  `LOG.info("after this QuantumStep, probs = "+probs)` and line 119 `printProbs(probs)` are noisy
   diagnostics to route through the listener / SLF4J.
 
 ### 2.5 println inventory (logging migration target)
@@ -158,9 +158,9 @@ Package `org.redfx.strange.serialize`.
   "initialAlphas": [1.0, 1.0, 1.0],          // length == numberQubits; from getInitialAlphas()
   "steps": [
     {
-      "name": "unknown",                      // Step.getName()
-      "type": "NORMAL",                       // Step.Type: NORMAL | PSEUDO | PROBABILITY
-      "informal": false,                      // Step.isInformal()
+      "name": "unknown",                      // QuantumStep.getName()
+      "type": "NORMAL",                       // QuantumStep.Type: NORMAL | PSEUDO | PROBABILITY
+      "informal": false,                      // QuantumStep.isInformal()
       "gates": [
         { "type": "hadamard", "qubit": 0 },
         { "type": "cnot", "control": 0, "target": 1 },
@@ -218,7 +218,7 @@ public final class ProgramDeserializer {
 }
 ```
 Deserialization flow: parse JSON → validate `format`/`version` → `new Program(numberQubits)` →
-apply `initializeQubit(idx, alpha)` for each non-default alpha → for each step JSON, build `Step`
+apply `initializeQubit(idx, alpha)` for each non-default alpha → for each QuantumStep JSON, build `Step`
 (choosing the `Type`/name ctor, set `informal`), decode gates via `GateCodec`, `addGates(...)`,
 then `program.addStep(step)` (so `ensureMeasuresafe` enforces invariants on load). Malformed input
 throws `SerializationException` with the offending path.
@@ -250,8 +250,8 @@ Replace:
 - existing `java.util.logging` (`SimpleQuantumExecutionEnvironment`, `Computations`) → SLF4J
   equivalents (`info→info`, `fine→debug`, `finer/finest→trace`).
 - Use SLF4J `{}` parameterised messages — never string concatenation — to avoid eager cost at
-  suppressed levels (the per-step `LOG.info("after this step, probs = "+probs)` at line 109 is a
-  prime offender; downgrade to `LOG.trace("after step probs={}", (Object) probs)`).
+  suppressed levels (the per-step `LOG.info("after this QuantumStep, probs = "+probs)` at line 109 is a
+  prime offender; downgrade to `LOG.trace("after QuantumStep probs={}", (Object) probs)`).
 
 ### 4.3 Files to change (from §2.5)
 Migrate: `algorithm/Classic.java`, `local/Computations.java`, `gate/AddModulus.java`,
@@ -269,23 +269,23 @@ but for this section a faithful SLF4J swap is sufficient.
 
 ---
 
-## 5. Work Item: StepListener Hooks
+## 5. Work Item: QuantumStepListener Hooks
 
 ### 5.1 Interface (default methods so adoption is opt-in)
 ```java
 package org.redfx.strange.observe;
 
-public interface StepListener {
+public interface QuantumStepListener {
     default void onProgramStart(Program program, int dimension) {}
-    default void beforeStep(int stepIndex, Step step) {}
-    default void onGateApplied(int stepIndex, Gate gate) {}
-    default void onQubitMeasured(int stepIndex, int qubitIndex, boolean value) {}
-    default void onProbabilitySnapshot(int stepIndex, Complex[] amplitudes) {}
-    default void afterStep(int stepIndex, Step step, Complex[] amplitudes) {}
+    default void beforeStep(int QuantumStepIndex, QuantumStep QuantumStep) {}
+    default void onGateApplied(int QuantumStepIndex, Gate gate) {}
+    default void onQubitMeasured(int QuantumStepIndex, int qubitIndex, boolean value) {}
+    default void onProbabilitySnapshot(int QuantumStepIndex, Complex[] amplitudes) {}
+    default void afterStep(int QuantumStepIndex, QuantumStep QuantumStep, Complex[] amplitudes) {}
     default void onProgramEnd(Result result) {}
 }
 ```
-A `LoggingStepListener implements StepListener` that forwards every event to SLF4J `debug` ships as
+A `LoggingStepListener implements QuantumStepListener` that forwards every event to SLF4J `debug` ships as
 the reference implementation — this is how the verbose per-step probability logging (currently
 inline in `runProgram`) is delivered without coupling the engine to a logger.
 
@@ -298,10 +298,10 @@ inline in `runProgram`) is delivered without coupling the engine to a logger.
 - `SimpleQuantumExecutionEnvironment` holds `private final List<StepListener> listeners = new CopyOnWriteArrayList<>();`
   and implements add/remove. In `runProgram`:
   - after building `probs`: fire `onProgramStart(p, dim)` and `onProbabilitySnapshot(0, probs)`.
-  - inside the loop (lines 102–117), wrap the body: `beforeStep(cnt, step)` → for each
+  - inside the loop (lines 102–117), wrap the body: `beforeStep(cnt, QuantumStep)` → for each
     `gate` in `step.getGates()` fire `onGateApplied(cnt, gate)`; if a gate `instanceof Measurement`
     fire `onQubitMeasured` after `applyStep` using the measured qubit index → `applyStep` →
-    `afterStep(cnt, step, probs)` and `onProbabilitySnapshot(idx, probs)` when `idx > -1`.
+    `afterStep(cnt, QuantumStep, probs)` and `onProbabilitySnapshot(idx, probs)` when `idx > -1`.
   - after the loop: `onProgramEnd(result)`.
 - Listener exceptions are caught and logged (one bad listener must not abort a run).
 
@@ -360,7 +360,7 @@ public final class CircuitValidator {
     public static List<ValidationIssue> validate(Program program);
     public static void requireValid(Program program); // throws IllegalArgumentException if any ERROR issues
 }
-public record ValidationIssue(Severity severity, int stepIndex, String message) {
+public record ValidationIssue(Severity severity, int QuantumStepIndex, String message) {
     public enum Severity { ERROR, WARNING }
 }
 ```
@@ -370,24 +370,24 @@ Checks:
    `gate.getAffectedQubitIndexes()` (and `getHighestAffectedQubitIndex()`), assert
    `0 <= idx < program.getNumberQubits()`. Out-of-range ⇒ ERROR.
 2. **Measure-safety** — generalise the private `Program.ensureMeasuresafe` (currently only inspects
-   `Hadamard` and `Cnot`'s second qubit) into a reusable static pass: walk steps in order, track the
-   set of measured qubits (any `Measurement` gate's main qubit). If a *later* step applies a
+   `Hadamard` and `Cnot`'s second qubit) into a reusable static pass: walk QuantumSteps in order, track the
+   set of measured qubits (any `Measurement` gate's main qubit). If a *later* QuantumStep applies a
    superposition-creating gate to an already-measured qubit, emit ERROR. v1 keeps parity with the
    existing logic (Hadamard main qubit, Cnot target) and is structured so additional
    superposition-introducing gates can be added centrally. This is the canonical home; `Program`
    can later delegate to it.
 3. **Causality / ordering** — within a single `Step`, no two gates may touch the same qubit (mirrors
-   `Step.verifyUnique`, but validated at program level as a defensive WARNING in case a step was
+   `Step.verifyUnique`, but validated at program level as a defensive WARNING in case a QuantumStep was
    built bypassing `addGate`); flag a measurement followed by a controlled gate whose *control* is
    the measured qubit as a WARNING (semantically a classically-controlled op — informational).
-4. **Empty / pseudo** steps are skipped (consistent with the engine ignoring empty steps).
+4. **Empty / pseudo** QuantumSteps are skipped (consistent with the engine ignoring empty QuantumSteps).
 
 ---
 
 ## 8. Work Item: Property-Based Unitarity Harness
 
 Package `org.redfx.strange.test`. Goal: random circuits ⇒ the composed per-step operation is
-unitary (sanity-checks the gate library + step matrix construction).
+unitary (sanity-checks the gate library + QuantumStep matrix construction).
 
 ```java
 public final class RandomCircuits {
@@ -462,11 +462,11 @@ public static void renderSvg(Path csvIn, Path svgOut);
   `Gate` static factories (and direct ctors for the rest) and assert `QuantumAssert.assertUnitary`.
   Exclude the non-unitary observation gates (`Measurement`, `ImmediateMeasurement`,
   `ProbabilitiesGate`) explicitly with a comment on why.
-- **Property-based** (§8): seeded random circuits, step-matrix unitarity + norm preservation.
+- **Property-based** (§8): seeded random circuits, QuantumStep-matrix unitarity + norm preservation.
 - **CircuitValidator tests**: out-of-bounds index ⇒ ERROR; measure-then-Hadamard-same-qubit ⇒ ERROR
   (parity with `ensureMeasuresafe`); valid circuit ⇒ empty issue list.
 - **StepListener test**: register a recording listener, run a 2-step program, assert the event
-  sequence (`onProgramStart`, `beforeStep`/`onGateApplied`×g/`afterStep` per step, `onProgramEnd`)
+  sequence (`onProgramStart`, `beforeStep`/`onGateApplied`×g/`afterStep` per QuantumStep, `onProgramEnd`)
   and that listener exceptions don't abort the run.
 - **SLF4J**: tests run with `slf4j-simple` (test scope) and assert no `System.err`/`System.out`
   writes leak from migrated classes (capture streams in a focused test, or rely on review +

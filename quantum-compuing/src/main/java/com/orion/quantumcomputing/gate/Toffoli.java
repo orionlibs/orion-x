@@ -1,17 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import static Complex.ONE;
-import static Complex.ZERO;
-
-import Complex;
-import org.redfx.strange.gate.ThreeQubitGate;
-
-/**
- * <p>Toffoli class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class Toffoli extends ThreeQubitGate
 {
     Complex[][] matrix = new Complex[][] {
@@ -26,20 +14,12 @@ public class Toffoli extends ThreeQubitGate
     };
 
 
-    /**
-     * <p>Constructor for Toffoli.</p>
-     *
-     * @param a a int
-     * @param b a int
-     * @param c a int
-     */
     public Toffoli(int a, int b, int c)
     {
         super(a, b, c);
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -47,7 +27,6 @@ public class Toffoli extends ThreeQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getSize()
     {
@@ -55,15 +34,15 @@ public class Toffoli extends ThreeQubitGate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public void setInverse(boolean v)
+    @Override
+    public void setInverse(boolean v)
     {
         // NOP
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String getCaption()
+    @Override
+    public String getCaption()
     {
         return "CCnot";
     }

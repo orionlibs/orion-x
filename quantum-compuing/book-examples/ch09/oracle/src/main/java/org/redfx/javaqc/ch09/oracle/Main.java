@@ -22,8 +22,8 @@ public class Main {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Random random = new Random();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new Hadamard(1));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new Hadamard(1));
 
 
         Complex[][] matrix =  new Complex[][]{
@@ -35,8 +35,8 @@ public class Main {
 
         Oracle oracle = new Oracle(matrix);
 
-        Step step2 = new Step();
-        step2.addGate(oracle);
+        QuantumStep QuantumStep2 = new QuantumStep();
+        QuantumStep2.addGate(oracle);
 
         program.addStep(step1);
         program.addStep(step2);

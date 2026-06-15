@@ -22,7 +22,7 @@ Goal: deliver (1) fully (it is cheap, exact, and feeds Section 11 visualisation)
 - Available linear algebra on `Complex` (`Complex.java`): `mul`, `add`, `min`, `mul(double)`, `abssqr`, `identityMatrix(dim)`, `tensor(a,b)` (Kronecker product, line 201), `mmul`/`slowmmul` (matrix multiply, line 230), `conjugateTranspose` (line 269). `Computations` adds `createIdentity`, `permutateVector`, `gcd`, `getInverseModulus`, `calculateQubitStatesFromVector`.
 - **Missing** (must be added): conjugate of a single `Complex`; trace; partial trace; partial transpose; eigenvalues/eigenvectors of a Hermitian matrix; matrix `x·log(x)` (for entropy) and sqrt (for concurrence). None of these exist anywhere in the codebase.
 - Single-qubit gates extend `SingleQubitGate` (abstract, `getMatrix()` at `gate/SingleQubitGate.java:123`); `Hadamard`, `X`, `Y`, `Z`, `R` (phase gate, `gate/R.java:55` `R(double exp,int idx)`), `RotationX/Y/Z` exist. A general single-qubit basis-change gate can be built from these or from a new `SingleQubitMatrixGate` (already present, `gate/SingleQubitMatrixGate.java`).
-- Circuits are built as `Program(nQubits, Step...)`, steps as `Step(Gate...)`, gates added with `step.addGate(...)` / `program.addStep(...)` (`Program.java:73,117`; `Step.java:85,136`).
+- Circuits are built as `Program(nQubits, QuantumStep...)`, QuantumSteps as `Step(Gate...)`, gates added with `step.addGate(...)` / `program.addStep(...)` (`Program.java:73,117`; `Step.java:85,136`).
 
 ---
 
@@ -167,7 +167,7 @@ Pre-measurement rotations that map an X/Y eigenbasis onto the computational (Z) 
 ```java
 public enum Pauli { X, Y, Z }
 public final class MeasurementBasis {
-    // Append the rotation that diagonalises `basis` on `qubit` to a fresh Step.
+    // Append the rotation that diagonalises `basis` on `qubit` to a fresh QuantumStep.
     public static void appendRotation(Program p, int qubit, Pauli basis);
 }
 ```
@@ -176,7 +176,7 @@ public final class MeasurementBasis {
 
 Reconstruct ρ of an `n`-qubit register prepared by a (prefix) `Program`.
 
-1. **Build measurement circuits.** For every assignment of a Pauli basis ∈ {X,Y,Z} to each of the `n` qubits (3ⁿ settings), clone the preparation program, append the corresponding `MeasurementBasis` rotations, and add a final measurement Step.
+1. **Build measurement circuits.** For every assignment of a Pauli basis ∈ {X,Y,Z} to each of the `n` qubits (3ⁿ settings), clone the preparation program, append the corresponding `MeasurementBasis` rotations, and add a final measurement QuantumStep.
 2. **Collect counts** via `Sampler.run` (S shots per setting). Convert counts → expectation values of each Pauli string `⟨P⟩` (P ∈ {I,X,Y,Z}ⁿ): for a setting, the ⟨P⟩ for any P obtained by replacing some measured axes with I is the parity expectation over the measured bits.
 3. **Reconstruct.**
    - **Linear inversion:** `ρ = (1/2ⁿ) Σ_P ⟨P⟩ · P` (Pauli expansion). Cheap, exact in the infinite-shot limit, but can yield non-physical (negative-eigenvalue) ρ at finite shots.

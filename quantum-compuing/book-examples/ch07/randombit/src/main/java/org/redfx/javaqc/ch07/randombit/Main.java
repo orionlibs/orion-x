@@ -19,10 +19,10 @@ public class Main {
     public static void main (String[] args) {
         
         Program program = new Program(dim);
-        Step step0 = new Step(new Hadamard(0), new X(3));
-        Step step1 = new Step(new Cnot(0,1));
+        QuantumStep QuantumStep0 = new QuantumStep(new Hadamard(0), new X(3));
+        QuantumStep QuantumStep1 = new QuantumStep(new Cnot(0,1));
 
-        program.addSteps(step0, step1);
+        program.addSteps(step0, QuantumStep1);
         
         QuantumExecutionEnvironment qee = new SimpleQuantumExecutionEnvironment();
         Result result = qee.runProgram(program);

@@ -1,18 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.redfx.strange.Gate;
 
-/**
- * <p>PermutationGate class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
-public class PermutationGate implements Gate
+public class PermutationGate implements QuantumGate
 {
     private int a;
     private int b;
@@ -21,13 +13,6 @@ public class PermutationGate implements Gate
     private List<Integer> affected = new LinkedList<>();
 
 
-    /**
-     * <p>Constructor for PermutationGate.</p>
-     *
-     * @param a a int
-     * @param b a int
-     * @param n a int
-     */
     public PermutationGate(int a, int b, int n)
     {
         assert (a < n);
@@ -42,7 +27,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getMainQubitIndex()
     {
@@ -50,7 +34,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setMainQubitIndex(int idx)
     {
@@ -58,29 +41,18 @@ public class PermutationGate implements Gate
     }
 
 
-    /**
-     * <p>getIndex1.</p>
-     *
-     * @return a int
-     */
     public int getIndex1()
     {
         return a;
     }
 
 
-    /**
-     * <p>getIndex2.</p>
-     *
-     * @return a int
-     */
     public int getIndex2()
     {
         return b;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setAdditionalQubit(int idx, int cnt)
     {
@@ -88,7 +60,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public List<Integer> getAffectedQubitIndexes()
     {
@@ -96,7 +67,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getHighestAffectedQubitIndex()
     {
@@ -104,7 +74,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {
@@ -112,7 +81,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getName()
     {
@@ -120,7 +88,6 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getGroup()
     {
@@ -128,16 +95,13 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
         throw new RuntimeException("No matrix required for Permutation");
-        //        return m;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getSize()
     {
@@ -145,14 +109,13 @@ public class PermutationGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public void setInverse(boolean v)
+    @Override
+    public void setInverse(boolean v)
     {
         // NOP
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String toString()
     {

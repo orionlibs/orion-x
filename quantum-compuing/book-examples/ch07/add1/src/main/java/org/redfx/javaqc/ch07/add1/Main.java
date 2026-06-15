@@ -15,7 +15,7 @@ public class Main {
     public static void main (String[] args) {
         
         Program program = new Program(2);
-        Step step0 = new Step(new Cnot(0,1));
+        QuantumStep QuantumStep0 = new QuantumStep(new Cnot(0,1));
 
         program.addSteps(step0);
         
@@ -36,11 +36,11 @@ public class Main {
     
     static int add(int a, int b) {
         Program program = new Program(2);
-        Step prep = new Step();
+        QuantumStep prep = new QuantumStep();
         if (a > 0) prep.addGate(new X(0));
         if (b > 0) prep.addGate(new X(1));
-        Step step0 = new Step(new Cnot(0,1));
-        program.addSteps(prep, step0);
+        QuantumStep QuantumStep0 = new QuantumStep(new Cnot(0,1));
+        program.addSteps(prep, QuantumStep0);
         QuantumExecutionEnvironment qee = new SimpleQuantumExecutionEnvironment();
         Result result = qee.runProgram(program);
         Qubit[] qubits = result.getQubits();

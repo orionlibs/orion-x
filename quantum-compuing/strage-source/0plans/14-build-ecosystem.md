@@ -236,7 +236,7 @@ hardware backends (Section 6) plug in without re-exporting internals.
 module org.redfx.strange {
 
     // --- exported API (current packages) ---
-    exports org.redfx.strange;            // Program, Step, Gate, Complex, Result, Qubit(s)
+    exports org.redfx.strange;            // Program, QuantumStep, Gate, Complex, Result, Qubit(s)
     exports org.redfx.strange.gate;       // all standard gates
     exports org.redfx.strange.local;      // SimpleQuantumExecutionEnvironment
     exports org.redfx.strange.cloud;      // Cloudlink* (stub today)
@@ -475,7 +475,7 @@ jobs:
       fail-fast: false
       matrix:
         jdk: [ '17', '21', '25-ea' ]
-    steps:
+    QuantumSteps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -489,7 +489,7 @@ jobs:
     name: Native image (GraalVM)
     runs-on: ubuntu-latest
     needs: build-test
-    steps:
+    QuantumSteps:
       - uses: actions/checkout@v4
       - uses: graalvm/setup-graalvm@v1
         with:
@@ -509,7 +509,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build-test, native-image ]
     if: startsWith(github.ref, 'refs/tags/v')
-    steps:
+    QuantumSteps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
@@ -531,7 +531,7 @@ jobs:
 
 Notes:
 - `25-ea` may be absent from Temurin until GA; allow it to fail without sinking
-  the build via `fail-fast: false` plus (optionally) a `continue-on-error` step,
+  the build via `fail-fast: false` plus (optionally) a `continue-on-error` QuantumStep,
   or source it from the `oracle-actions/setup-java` EA channel.
 - The native smoke-test must invoke `Demo` in a **non-interactive** way and exit
   0; if `Demo.main` currently blocks or prints to stderr, add a `--smoke` arg
@@ -601,7 +601,7 @@ registered in the Portal.
 4. **OSGi resolution check.** Add `bnd`'s `resolve`/`verify` (or a small
    `felix`/`Equinox` smoke) to confirm the bundle resolves with only JDK
    imports. At minimum, assert `Export-Package` ⊇ the JPMS `exports` set in a CI
-   step.
+   QuantumStep.
 5. **Cross-JDK matrix green.** 17 and 21 must be green; 25-ea allowed to be
    advisory until GA.
 6. **Dry-run release.** `mvn -Prelease -DskipTests verify` locally (or in a PR
@@ -670,5 +670,5 @@ registered in the Portal.
    tags. Do a dry-run before the first real tag.
 
 Land 1–4 as one PR (a working, tested, CI-covered classpath build), then 5–7 as
-the "modular + native" PR, then 8–9 as the "publish" PR. This keeps each step
+the "modular + native" PR, then 8–9 as the "publish" PR. This keeps each QuantumStep
 independently green and isolates the risky split-package/native work.

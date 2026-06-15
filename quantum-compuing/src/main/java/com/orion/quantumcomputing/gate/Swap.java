@@ -1,14 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.gate.TwoQubitGate;
-
-/**
- * <p>Swap class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class Swap extends TwoQubitGate
 {
     Complex[][] matrix = new Complex[][] {
@@ -19,27 +10,17 @@ public class Swap extends TwoQubitGate
     };
 
 
-    /**
-     * <p>Constructor for Swap.</p>
-     */
     public Swap()
     {
     }
 
 
-    /**
-     * <p>Constructor for Swap.</p>
-     *
-     * @param a a int
-     * @param b a int
-     */
     public Swap(int a, int b)
     {
         super(a, b);
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -47,8 +28,8 @@ public class Swap extends TwoQubitGate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String getCaption()
+    @Override
+    public String getCaption()
     {
         return "S";
     }

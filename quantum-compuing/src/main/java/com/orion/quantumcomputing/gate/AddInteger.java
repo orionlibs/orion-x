@@ -51,7 +51,7 @@ public class AddInteger extends BlockGate<AddInteger>
                     mat = Complex.mmul(mat, new R(2, 1 + j, i).getMatrix());
                     if(old)
                     {
-                        Step s = new Step(new R(2, 1 + j, i));
+                        QuantumStep s = new QuantumStep(new R(2, 1 + j, i));
                         answer.addStep(s);
                     }
                 }
@@ -65,12 +65,11 @@ public class AddInteger extends BlockGate<AddInteger>
         {
             answer.addStep(pstep);
         }
-        answer.addStep(new Step(new InvFourier(m, 0)));
+        answer.addStep(new QuantumStep(new InvFourier(m, 0)));
         return answer;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {

@@ -25,23 +25,23 @@ public class Main {
         Program program = null;
         for (int i = 0; i < 10; i++) {
             program = new Program(N+1);
-            Step step0 = new Step();
-            step0.addGate(new X(N));
+            QuantumStep QuantumStep0 = new QuantumStep();
+            QuantumStep0.addGate(new X(N));
 
-            Step step1 = new Step();
+            QuantumStep QuantumStep1 = new QuantumStep();
             for (int j = 0; j < N+1; j++) {
-                step1.addGate(new Hadamard(j));
+                QuantumStep1.addGate(new Hadamard(j));
             }
 
-            Step step2 = new Step();
+            QuantumStep QuantumStep2 = new QuantumStep();
             int choice = random.nextInt(2);
             choice = 1;
             Oracle oracle = createOracle(choice);
-            step2.addGate(oracle);
+            QuantumStep2.addGate(oracle);
 
-            Step step3 = new Step();
+            QuantumStep QuantumStep3 = new QuantumStep();
             for (int j = 0; j < N; j++) {
-                step3.addGate(new Hadamard(j));
+                QuantumStep3.addGate(new Hadamard(j));
             }
             
             program.addStep(step0);

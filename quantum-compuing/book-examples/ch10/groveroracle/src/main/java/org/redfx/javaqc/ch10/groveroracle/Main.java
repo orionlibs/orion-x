@@ -29,12 +29,12 @@ public class Main {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
 
-        Step oracleStep = new Step();
+        QuantumStep oracleStep = new QuantumStep();
         Oracle oracle = createOracle();
         oracleStep.addGate(oracle);
 
         program.addStep(oracleStep);
-        Step probStep = new Step();
+        QuantumStep probStep = new QuantumStep();
         probStep.addGate(new ProbabilitiesGate(0));
         program.addStep(probStep);
 
@@ -51,11 +51,11 @@ public class Main {
         Program program = null;
         program = new Program(2);
 
-        Step prepareStep = new Step();
+        QuantumStep prepareStep = new QuantumStep();
         prepareStep.addGate(new X(0));
         program.addStep(prepareStep);
 
-        Step oracleStep = new Step();
+        QuantumStep oracleStep = new QuantumStep();
         Oracle oracle = createOracle();
         oracleStep.addGate(oracle);
         program.addStep(oracleStep);
@@ -73,11 +73,11 @@ public class Main {
         Program program = null;
         program = new Program(2);
 
-        Step prepareStep = new Step();
+        QuantumStep prepareStep = new QuantumStep();
         prepareStep.addGate(new X(1));
         program.addStep(prepareStep);
 
-        Step oracleStep = new Step();
+        QuantumStep oracleStep = new QuantumStep();
         Oracle oracle = createOracle();
         oracleStep.addGate(oracle);
         program.addStep(oracleStep);
@@ -93,12 +93,12 @@ public class Main {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
 
-        Step prepareStep = new Step();
+        QuantumStep prepareStep = new QuantumStep();
         prepareStep.addGate(new X(0));
         prepareStep.addGate(new X(1));
         program.addStep(prepareStep);
 
-        Step oracleStep = new Step();
+        QuantumStep oracleStep = new QuantumStep();
         Oracle oracle = createOracle();
         oracleStep.addGate(oracle);
         program.addStep(oracleStep);

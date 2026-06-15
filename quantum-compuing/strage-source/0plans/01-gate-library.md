@@ -410,7 +410,7 @@ Reference existing simulator test patterns by reading any current test that driv
 
 ## 7. Suggested Sequencing
 
-| Step | Items | Why first |
+| QuantumStep | Items | Why first |
 |---|---|---|
 | 1 | `ParametricGate` interface (3.0) | Unblocks every parametric retrofit/new gate; pure addition. |
 | 2 | Phase family `S,T,Sdg,Tdg` + `P` (3.1); `SX,SXdg` (3.2) | Simplest, highest value (universal set, IBM native); no base-class work. |
@@ -421,6 +421,6 @@ Reference existing simulator test patterns by reading any current test that driv
 | 7 | Three-qubit: `Fredkin` (3.7), `Deutsch` (3.8), `RC3X` (3.10a) | Reuse `ThreeQubitGate`; follow `Toffoli` template. |
 | 8 | `Gate` factories (4.1) for all shipped gates | Wire up public API incrementally as each gate lands. |
 | 9 | `FourQubitGate` + `C3X` (4.3, 3.10b) | Only after simulator 4-qubit support is verified; otherwise defer. |
-| 10 | Test suite (Section 5) | Authored alongside each step; full unitarity sweep at the end. |
+| 10 | Test suite (Section 5) | Authored alongside each QuantumStep; full unitarity sweep at the end. |
 
-Each step is independently mergeable and leaves the build green.
+Each QuantumStep is independently mergeable and leaves the build green.

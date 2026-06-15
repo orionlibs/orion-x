@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Block
 {
-    List<QuantumStep> steps = new ArrayList<>();
+    List<QuantumStep> QuantumSteps = new ArrayList<>();
     private final int numberOfQubits;
     private Complex[][] matrix = null;
     private final String name;
@@ -25,7 +25,7 @@ public class Block
     }
 
 
-    public void addStep(QuantumStep step)
+    public void addStep(QuantumStep QuantumStep)
     {
         this.steps.add(step);
         matrix = null;
@@ -65,14 +65,14 @@ public class Block
         {
             matrix = Complex.identityMatrix(1 << numberOfQubits);
             List<QuantumStep> simpleSteps = new ArrayList<>();
-            for(QuantumStep step : steps)
+            for(QuantumStep QuantumStep : QuantumSteps)
             {
                 simpleSteps.addAll(Computations.decomposeStep(step, numberOfQubits));
             }
             Collections.reverse(simpleSteps);
-            for(QuantumStep step : simpleSteps)
+            for(QuantumStep QuantumStep : simpleSteps)
             {
-                List<QuantumGate> gates = step.getGates();
+                List<QuantumGate> gates = QuantumStep.getGates();
                 if((matrix != null) && (gates.size() == 1) && (gates.get(0) instanceof PermutationGate))
                 {
                     matrix = Complex.permutate((PermutationGate)gates.get(0), matrix);
@@ -105,19 +105,19 @@ public class Block
     public Complex[] applyOptimize(Complex[] probs, boolean inverse)
     {
         List<QuantumStep> simpleSteps = new ArrayList<>();
-        for(QuantumStep step : steps)
+        for(QuantumStep QuantumStep : QuantumSteps)
         {
             simpleSteps.addAll(Computations.decomposeStep(step, numberOfQubits));
         }
         if(inverse)
         {
             Collections.reverse(simpleSteps);
-            for(QuantumStep step : simpleSteps)
+            for(QuantumStep QuantumStep : simpleSteps)
             {
-                step.setInverse(true);
+                QuantumStep.setInverse(true);
             }
         }
-        for(QuantumStep step : simpleSteps)
+        for(QuantumStep QuantumStep : simpleSteps)
         {
             if(!step.getGates().isEmpty())
             {
@@ -126,19 +126,19 @@ public class Block
         }
         if(inverse)
         {
-            for(QuantumStep step : simpleSteps)
+            for(QuantumStep QuantumStep : simpleSteps)
             {
-                step.setInverse(true);
+                QuantumStep.setInverse(true);
             }
         }
         return probs;
     }
 
 
-    private Complex[] applyStep(QuantumStep step, Complex[] vector)
+    private Complex[] applyStep(QuantumStep QuantumStep, Complex[] vector)
     {
         long s0 = System.currentTimeMillis();
-        List<QuantumGate> gates = step.getGates();
+        List<QuantumGate> gates = QuantumStep.getGates();
         if(!gates.isEmpty() && gates.get(0) instanceof ProbabilitiesGate)
         {
             return vector;

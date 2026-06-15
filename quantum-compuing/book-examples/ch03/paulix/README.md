@@ -18,8 +18,8 @@ Value = 1
 # What it is doing
 
 This sample first create a quantum `Program` and a `Step`.
-A `X` Gate (short for Pauli-X gate) is added to the step,
-and the step is added to the program.
+A `X` Gate (short for Pauli-X gate) is added to the QuantumStep,
+and the QuantumStep is added to the program.
 The program is executed on the built-in quantum simulator,
 and the result is obtained. The value of the single qubit
 is measured and printed. Since initially, the value of the

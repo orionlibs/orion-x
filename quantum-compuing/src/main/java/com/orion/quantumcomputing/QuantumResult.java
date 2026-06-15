@@ -14,12 +14,12 @@ public class QuantumResult
     private int measuredProbability = -1;
 
 
-    public QuantumResult(int numberOfQubits, int steps)
+    public QuantumResult(int numberOfQubits, int QuantumSteps)
     {
         assert (steps >= 0);
         this.numberOfQubits = numberOfQubits;
-        this.numberOfSteps = steps;
-        intermediateProps = new Complex[steps > 0 ? steps : 1][];
+        this.numberOfSteps = QuantumSteps;
+        intermediateProps = new Complex[steps > 0 ? QuantumSteps : 1][];
         intermediateQubits = new HashMap<>();
     }
 
@@ -114,7 +114,7 @@ public class QuantumResult
     }
 
 
-    public void setIntermediateProbability(int step, Complex[] p)
+    public void setIntermediateProbability(int QuantumStep, Complex[] p)
     {
         this.intermediateProps[step] = p;
         this.intermediateQubits.put(step, calculateQubitsFromVector(p));
@@ -122,9 +122,9 @@ public class QuantumResult
     }
 
 
-    public Complex[] getIntermediateProbability(int step)
+    public Complex[] getIntermediateProbability(int QuantumStep)
     {
-        int ret = step;
+        int ret = QuantumStep;
         while(ret > 0 && intermediateProps[ret] == null)
         {
             ret--;
@@ -175,7 +175,7 @@ public class QuantumResult
     {
         System.out.println("Info about Quantum Result");
         System.out.println("==========================");
-        System.out.println("Number of qubits = " + numberOfQubits + ", number of steps = " + numberOfSteps);
+        System.out.println("Number of qubits = " + numberOfQubits + ", number of QuantumSteps = " + numberOfSteps);
         for(int i = 0; i < probability.length; i++)
         {
             System.out.println("Probability on " + i + ":" + probability[i].abssqr());

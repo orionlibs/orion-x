@@ -10,34 +10,34 @@ To run this application, simply run
 The expected outcome on the console looks similar to this
 
 ```
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 2 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 Result of function Search = Albert
 winner = 3 with prob 0.9453116655349731
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 0 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 6 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 3 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 3 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 5 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 0 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 5 with prob 0.9453116655349731
 Result of function Search = Albert
- n = 3, steps = 2.221441469079183
+ n = 3, QuantumSteps = 2.221441469079183
 winner = 7 with prob 0.9453116655349731
 Result of function Search = Albert
 ```

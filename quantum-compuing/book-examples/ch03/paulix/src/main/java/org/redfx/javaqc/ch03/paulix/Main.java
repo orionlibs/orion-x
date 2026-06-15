@@ -9,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(1);
-        Step step = new Step();
-        step.addGate(new X(0));
+        QuantumStep QuantumStep = new QuantumStep();
+        QuantumStep.addGate(new X(0));
         program.addStep(step);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();

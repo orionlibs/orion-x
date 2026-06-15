@@ -15,9 +15,9 @@ public class Main {
         int results[] = new int[4];
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new Hadamard(0));
-        step1.addGate(new Hadamard(1));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new Hadamard(0));
+        QuantumStep1.addGate(new Hadamard(1));
         program.addStep(step1);
         for (int i = 0; i < COUNT; i++) {
             Result result = simulator.runProgram(program);

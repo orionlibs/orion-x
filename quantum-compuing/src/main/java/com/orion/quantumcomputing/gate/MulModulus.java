@@ -1,24 +1,8 @@
 package com.orion.quantumcomputing.gate;
 
-import org.redfx.strange.Block;
-import org.redfx.strange.BlockGate;
-import org.redfx.strange.ControlledBlockGate;
-import org.redfx.strange.Step;
-import org.redfx.strange.gate.AddIntegerModulus;
-import org.redfx.strange.gate.Swap;
-import org.redfx.strange.local.Computations;
-
-/**
- * <p>MulModulus class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class MulModulus extends BlockGate<MulModulus>
 {
     Block block;
-    // disable cache for now
-    // static HashMap<Integer, Block> cache = new HashMap<>();
 
 
     /**
@@ -44,15 +28,6 @@ public class MulModulus extends BlockGate<MulModulus>
     }
 
 
-    /**
-     * <p>createBlock.</p>
-     *
-     * @param y0 a int
-     * @param y1 a int
-     * @param mul a int
-     * @param mod a int
-     * @return a {@link Block} object
-     */
     public Block createBlock(int y0, int y1, int mul, int mod)
     {
         int hash = 1000000 * y0 + 10000 * y1 + 100 * mul + mod;
@@ -66,20 +41,20 @@ public class MulModulus extends BlockGate<MulModulus>
             int m = (mul * (1 << i)) % mod;
             org.redfx.strange.gate.AddIntegerModulus add = new org.redfx.strange.gate.AddIntegerModulus(x0, x1 + 1, m, mod);
             ControlledBlockGate cbg = new ControlledBlockGate(add, n, i);
-            answer.addStep(new Step(cbg));
+            answer.addStep(new QuantumStep(cbg));
         }
         for(int i = x0; i < x1 + 1; i++)
         {
-            answer.addStep(new Step(new Swap(i, i + size)));
+            answer.addStep(new QuantumStep(new Swap(i, i + size)));
         }
-        int invmul = Computations.getInverseModulus(mul, mod);
+        int invmul = QuantumComputations.getInverseModulus(mul, mod);
         for(int i = 0; i < n; i++)
         {
             int m = (invmul * (1 << i)) % mod;
             org.redfx.strange.gate.AddIntegerModulus add = new AddIntegerModulus(x0, x1 + 1, m, mod);
             ControlledBlockGate cbg = new ControlledBlockGate(add, n, i);
             cbg.setInverse(true);
-            answer.addStep(new Step(cbg));
+            answer.addStep(new QuantumStep(cbg));
         }
         return answer;
     }

@@ -74,7 +74,7 @@ public class QuantumComputations
 
 
     /**
-     * decompose a Step into steps that can be processed without permutations
+     * decompose a QuantumStep into QuantumSteps that can be processed without permutations
      */
     public static List<QuantumStep> decomposeStep(QuantumStep s, int nqubit)
     {
@@ -394,7 +394,7 @@ public class QuantumComputations
     }
 
 
-    static int nested = 0; // allows us to e.g. show only 2 nested steps
+    static int nested = 0; // allows us to e.g. show only 2 nested QuantumSteps
 
 
     public static Complex[] calculateNewState(List<QuantumGate> gates, Complex[] vector, int length)
@@ -661,7 +661,7 @@ public class QuantumComputations
             }
             else
             {
-                // the complex step should be the last part of the step
+                // the complex QuantumStep should be the last part of the QuantumStep
                 lpg.setComplexStep(master.getComplexStep());
                 master.setComplexStep(-1);
             }

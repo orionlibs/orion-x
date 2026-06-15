@@ -63,13 +63,13 @@ that variational algorithms (VQE, QAOA — Section 3) become first-class:
 
 | Concern | Where | Behaviour we rely on |
 |---|---|---|
-| Program structure | `Program.java:53-138` | `Program(int nQubits, Step...)`, `addStep`, `getSteps()`, `getNumberQubits()`, `getInitialAlphas()`. `addStep` runs `ensureMeasuresafe` (`Program.java:140-158`) which forbids re-superposing a measured qubit. |
-| Step structure | `Step.java:50-99` | `Step(Gate...)` / `Step(String, Gate...)`, `addGate`, `getGates()` (unmodifiable). `Step.Type` enum has `NORMAL, PSEUDO, PROBABILITY`. `verifyUnique` (`Step.java:263-268`) forbids two gates on the same qubit in one step. |
-| Run + result | `SimpleQuantumExecutionEnvironment.java:65-127` | builds init vector (`:73-88`), decomposes steps (cached on `Program`, `:90-97`), applies each step (`applyStep`, `:145-166`), stores intermediate probabilities, finally `measureSystem()`. |
+| Program structure | `Program.java:53-138` | `Program(int nQubits, QuantumStep...)`, `addStep`, `getSteps()`, `getNumberQubits()`, `getInitialAlphas()`. `addStep` runs `ensureMeasuresafe` (`Program.java:140-158`) which forbids re-superposing a measured qubit. |
+| QuantumStep structure | `Step.java:50-99` | `Step(Gate...)` / `Step(String, Gate...)`, `addGate`, `getGates()` (unmodifiable). `Step.Type` enum has `NORMAL, PSEUDO, PROBABILITY`. `verifyUnique` (`Step.java:263-268`) forbids two gates on the same qubit in one QuantumStep. |
+| Run + result | `SimpleQuantumExecutionEnvironment.java:65-127` | builds init vector (`:73-88`), decomposes QuantumSteps (cached on `Program`, `:90-97`), applies each QuantumStep (`applyStep`, `:145-166`), stores intermediate probabilities, finally `measureSystem()`. |
 | Final state vector | `Result.getProbability()` (`Result.java:134-136`) | returns `Complex[]` of length `2^n` = the final **amplitudes**. Set via `setIntermediateProbability` (`Result.java:144-150`) which also keeps `this.probability = p`. |
 | Probability extraction (existing pattern) | `algorithm/Classic.java:198-204` | `Complex[] prob = res.getProbability(); answer[i] = prob[i].abssqr();` — the canonical way to get `|amplitude|^2` per basis state. Estimator/Sampler reuse this. |
 | Per-qubit marginal | `Result.calculateQubitStatesFromVector` (`Result.java:164-179`) | marginal P(qubit i = 1); useful for single-qubit `⟨Z⟩` sanity but NOT general (correlated Z⊗Z needs the full vector). |
-| Mid-circuit probe | `gate/ProbabilitiesGate.java` + `SimpleQuantumExecutionEnvironment.applyStep:149-153` | a `ProbabilitiesGate` in a step captures the live state vector (`setProbabilites(vector)`) without altering it — model for the Estimator's "read state without collapse". |
+| Mid-circuit probe | `gate/ProbabilitiesGate.java` + `SimpleQuantumExecutionEnvironment.applyStep:149-153` | a `ProbabilitiesGate` in a QuantumStep captures the live state vector (`setProbabilites(vector)`) without altering it — model for the Estimator's "read state without collapse". |
 | Mid-circuit measurement | `gate/ImmediateMeasurement.java` | carries a `Consumer<Boolean>` callback invoked when the qubit is measured. This is the only existing hook for classical feedback and is the basis for dynamic circuits. **Note:** the current `SimpleQuantumExecutionEnvironment` does not appear to actually fire this consumer (no reference to `ImmediateMeasurement` in `applyStep`); wiring it is part of the dynamic-circuit work item. |
 | Measurement gate | `gate/Measurement.java` | identity matrix + `applyOptimize` returns `v` unchanged (`Measurement.java:71-79`); collapse is handled at the `Result` level, not per-gate. |
 
@@ -77,7 +77,7 @@ that variational algorithms (VQE, QAOA — Section 3) become first-class:
 vector. The Estimator computes `⟨ψ|H|ψ⟩` analytically from that vector; the Sampler
 draws from `|amplitude|^2`. Neither needs to modify the simulator core. Dynamic circuits
 *do* need executor changes because they require interleaving classical decisions between
-quantum steps.
+quantum QuantumSteps.
 
 ---
 
@@ -107,15 +107,15 @@ public final class Parameter {
 ```
 
 **`ParametricProgram`** — a template that records the number of qubits, declared
-parameters, and a list of *step factories*. A step factory is a function
-`Map<String,Double> → Step` so that any gate angle can be a function of the bound
+parameters, and a list of *step factories*. A QuantumStep factory is a function
+`Map<String,Double> → QuantumStep` so that any gate angle can be a function of the bound
 parameters. Binding produces a concrete `Program`.
 
 ```java
 public final class ParametricProgram {
     private final int nQubits;
     private final List<Parameter> parameters = new ArrayList<>();
-    private final List<Function<Map<String,Double>, Step>> stepFactories = new ArrayList<>();
+    private final List<Function<Map<String,Double>, QuantumStep>> QuantumStepFactories = new ArrayList<>();
 
     public ParametricProgram(int nQubits) { this.nQubits = nQubits; }
 
@@ -125,13 +125,13 @@ public final class ParametricProgram {
         return p;
     }
 
-    /** Add a step whose gates may depend on bound parameter values. */
-    public ParametricProgram addStep(Function<Map<String,Double>, Step> factory) {
-        stepFactories.add(factory);
+    /** Add a QuantumStep whose gates may depend on bound parameter values. */
+    public ParametricProgram addStep(Function<Map<String,Double>, QuantumStep> factory) {
+        QuantumStepFactories.add(factory);
         return this;
     }
 
-    /** Convenience: a fixed (non-parametric) step. */
+    /** Convenience: a fixed (non-parametric) QuantumStep. */
     public ParametricProgram addStep(Step fixed) {
         return addStep(binding -> fixed);
     }
@@ -142,7 +142,7 @@ public final class ParametricProgram {
     public Program bind(Map<String,Double> values) {
         validateBinding(values);
         Program p = new Program(nQubits);
-        for (var f : stepFactories) p.addStep(f.apply(values));
+        for (var f : QuantumStepFactories) p.addStep(f.apply(values));
         return p;
     }
 
@@ -163,14 +163,14 @@ cache-invalidation issue.
 **Dependency on Section 1:** the ergonomic form, where a single gate object is built
 with a *bound* angle, relies on the Section-1 `ParametricGate` interface
 (`getParameter()/setParameter()`) so that an angle-bearing gate can be cloned with a new
-angle without rebuilding. Until Section 1 lands, the step-factory form above is
+angle without rebuilding. Until Section 1 lands, the QuantumStep-factory form above is
 self-sufficient: the factory simply does `new RotationY(values.get("theta"), q)`
 (`gate/RotationY.java` constructor `RotationY(double theta, int idx)`). **Flag:** when
 Section 1 ships `ParametricGate`, refactor factories to `gate.bind(name → value)` to
 avoid reconstructing whole `Step`s.
 
 **Tests:** `ParametricProgramTest` — declare two params, bind, assert the produced
-`Program` has the expected gate angles and number of steps; assert missing-binding
+`Program` has the expected gate angles and number of QuantumSteps; assert missing-binding
 throws.
 
 ---
@@ -383,9 +383,9 @@ public final class OptimizerResult {
 
 The objective passed in by VQE/QAOA is `theta -> estimator.expectation(parametric.bind(theta), H)`.
 
-**`GradientDescent`** — finite-difference gradient (central difference, step `eps`),
+**`GradientDescent`** — finite-difference gradient (central difference, QuantumStep `eps`),
 fixed learning rate `lr`, `maxIter` iterations or `|Δvalue| < tol` early stop.
-Gradient costs `2·d` circuit evaluations per step (d = #params); document this cost.
+Gradient costs `2·d` circuit evaluations per QuantumStep (d = #params); document this cost.
 (When Section 1 parametric gates land, this can be upgraded to the analytic
 **parameter-shift rule** — note as a follow-up.)
 
@@ -473,8 +473,8 @@ public final class ClassicalControlledGate implements Gate {   // delegates to w
 The executor checks `isActive()` at apply time (after any preceding mid-circuit
 measurement in the same run has updated `creg`) and applies either `inner` or identity.
 Because the active/inactive decision is data-dependent, **a dynamic program cannot be
-fully decomposed up-front** — the executor must evaluate steps sequentially and consult
-the register between steps. This is why a dedicated `DynamicExecutionEnvironment` that
+fully decomposed up-front** — the executor must evaluate QuantumSteps sequentially and consult
+the register between QuantumSteps. This is why a dedicated `DynamicExecutionEnvironment` that
 loops over `program.getSteps()` directly (resolving conditionals just before
 `applyStep`) is cleaner than retrofitting the cached-decomposition path.
 
@@ -510,7 +510,7 @@ what that guard exists to prevent.
 
 - **Depends on Section 1 (parametric gates).** `ParametricProgram` is *ergonomic* with a
   `ParametricGate` interface (`setParameter`/`getParameter`) and analytic parameter-shift
-  gradients. Until then, WI-1 uses step factories that reconstruct gates via existing
+  gradients. Until then, WI-1 uses QuantumStep factories that reconstruct gates via existing
   constructors (`RotationY(theta, idx)` etc., `gate/RotationY.java`). **Flagged in WI-1.**
 - **Consumed by Section 3 (VQE / QAOA).** Those algorithms in `algorithm/` are thin
   drivers: build a `ParametricProgram` ansatz, define a `Hamiltonian`, then
@@ -547,7 +547,7 @@ what that guard exists to prevent.
 
 Mirror existing test conventions in the module; verify gate constructor signatures
 against the real files before writing tests (e.g. `RotationY(double, int)`,
-`Program(int, Step...)`, `Step(Gate...)`). Tolerances ~1e-4 due to `Complex` being
+`Program(int, QuantumStep...)`, `Step(Gate...)`). Tolerances ~1e-4 due to `Complex` being
 `float`-backed (`Complex.java:69-70`).
 
 **H2 toy Hamiltonian** for the VQE smoke test (standard minimal example, 2 qubits):
@@ -577,7 +577,7 @@ eigenvalue (compute the exact eigenvalue independently in the test by diagonalis
 4. **`ensureMeasuresafe` blocks legitimate RUS re-use** of measured qubits
    (`Program.java:140-158`). Decide explicitly whether dynamic programs bypass or relax
    this guard (WI-6).
-5. **Decomposition cache vs. data-dependent steps.** Conditional gates cannot be
+5. **Decomposition cache vs. data-dependent QuantumSteps.** Conditional gates cannot be
    pre-decomposed; do not route dynamic programs through the cached-decomposition path.
    Use a sequential `DynamicExecutionEnvironment`.
 6. **Commons Math has no true COBYLA.** Substituting Nelder–Mead simplex changes

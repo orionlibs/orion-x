@@ -1,18 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import org.redfx.strange.Block;
-import org.redfx.strange.BlockGate;
-import org.redfx.strange.Step;
-import org.redfx.strange.gate.Add;
-import org.redfx.strange.gate.Swap;
-import org.redfx.strange.local.Computations;
-
-/**
- * <p>Mul class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class Mul extends BlockGate<Mul>
 {
     final Block block;
@@ -39,14 +26,6 @@ public class Mul extends BlockGate<Mul>
     }
 
 
-    /**
-     * <p>createBlock.</p>
-     *
-     * @param y0 a int
-     * @param y1 a int
-     * @param mul a int
-     * @return a {@link Block} object
-     */
     public Block createBlock(int y0, int y1, int mul)
     {
         int x0 = 0;
@@ -57,17 +36,17 @@ public class Mul extends BlockGate<Mul>
         for(int i = 0; i < mul; i++)
         {
             org.redfx.strange.gate.Add add = new org.redfx.strange.gate.Add(x0, x1, x1 + 1, x1 + size);
-            answer.addStep(new Step(add));
+            answer.addStep(new QuantumStep(add));
         }
         for(int i = x0; i < x1 + 1; i++)
         {
-            answer.addStep(new Step(new Swap(i, i + size)));
+            answer.addStep(new QuantumStep(new Swap(i, i + size)));
         }
         int invsteps = Computations.getInverseModulus(mul, dim);
         for(int i = 0; i < invsteps; i++)
         {
             org.redfx.strange.gate.Add add = new Add(x0, x1, x1 + 1, x1 + size).inverse();
-            answer.addStep(new Step(add));
+            answer.addStep(new QuantumStep(add));
         }
         return answer;
     }

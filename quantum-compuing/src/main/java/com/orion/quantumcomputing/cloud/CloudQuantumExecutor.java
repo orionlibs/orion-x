@@ -75,9 +75,9 @@ public class CloudQuantumExecutor
     //                .build();
     //    }
     //
-    //    private JsonObject serializeStep(Step step) {
+    //    private JsonObject serializeStep(Step QuantumStep) {
     //        JsonArrayBuilder jsonGates = Json.createArrayBuilder();
-    //        step.getGates().stream()
+    //        QuantumStep.getGates().stream()
     //                .map(this::serializeGate)
     //                .forEach(jsonGates::add);
     //

@@ -3,38 +3,19 @@ package com.orion.quantumcomputing.gate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.redfx.strange.Gate;
 
-/**
- *
- * This class describe a Gate that operates on three qubits. In a single
- * <code>Step</code>, there should not be two Gates that act on the same qubit.
- *
- * @author johan
- * @version $Id: $Id
- */
-public abstract class ThreeQubitGate implements Gate
+public abstract class ThreeQubitGate implements QuantumGate
 {
     private int first;
     private int second;
     private int third;
 
 
-    /**
-     * <p>Constructor for ThreeQubitGate.</p>
-     */
     public ThreeQubitGate()
     {
     }
 
 
-    /**
-     * <p>Constructor for ThreeQubitGate.</p>
-     *
-     * @param first a int
-     * @param second a int
-     * @param third a int
-     */
     public ThreeQubitGate(int first, int second, int third)
     {
         this.first = first;
@@ -43,7 +24,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getMainQubitIndex()
     {
@@ -51,7 +31,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setMainQubitIndex(int idx)
     {
@@ -59,7 +38,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setAdditionalQubit(int idx, int cnt)
     {
@@ -78,40 +56,24 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /**
-     * <p>getMainQubit.</p>
-     *
-     * @return a int
-     */
     public int getMainQubit()
     {
         return this.first;
     }
 
 
-    /**
-     * <p>getSecondQubit.</p>
-     *
-     * @return a int
-     */
     public int getSecondQubit()
     {
         return this.second;
     }
 
 
-    /**
-     * <p>getThirdQubit.</p>
-     *
-     * @return a int
-     */
     public int getThirdQubit()
     {
         return this.third;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public List<Integer> getAffectedQubitIndexes()
     {
@@ -119,7 +81,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getHighestAffectedQubitIndex()
     {
@@ -127,7 +88,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getName()
     {
@@ -135,7 +95,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {
@@ -143,7 +102,6 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getGroup()
     {
@@ -151,8 +109,8 @@ public abstract class ThreeQubitGate implements Gate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return "Gate acting on qubits " + first + ", " + second + " and " + third + " and caption " + getCaption();
     }

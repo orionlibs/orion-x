@@ -21,13 +21,13 @@ adds:
    - **`DensityMatrixQuantumExecutionEnvironment`** — evolves the full density
      matrix `ρ` (`2^n × 2^n`). Applies each Kraus channel exactly as
      `ρ → Σ_k E_k ρ E_k†`. Exact (deterministic) but `O(2^{2n})` memory and
-     `O(2^{3n})` per dense step → practical to ~10–12 qubits.
+     `O(2^{3n})` per dense QuantumStep → practical to ~10–12 qubits.
 4. **Readout (SPAM) error**: a per-qubit `2×2` mis-classification matrix applied
    at measurement / sampling time.
 5. **T1/T2 relaxation** during idle qubits, mapped to amplitude-damping +
    phase-damping channels parameterised by idle duration.
 6. **Crosstalk**: always-on nearest-neighbour ZZ coupling applied as a coherent
-   correction per step.
+   correction per QuantumStep.
 7. **Error-mitigation post-processors**: zero-noise extrapolation (ZNE),
    probabilistic error cancellation (PEC), and symmetry verification /
    post-selection — all implemented as wrappers around a noisy
@@ -40,7 +40,7 @@ Design constraints that the plan respects:
   drop-in replacements (consistent with the `ideas.md` §6 promise).
 - Reuse `Complex` arithmetic (`add`, `mul`, `abssqr`, `conjugateTranspose`,
   `mmul`, `tensor`, `identityMatrix`) — no new linear-algebra library.
-- Reuse the existing step engine in the trajectory path so we inherit all gate
+- Reuse the existing QuantumStep engine in the trajectory path so we inherit all gate
   handling (single/two/three-qubit, blocks, swaps, oracles, permutations).
 
 All new files live under `org/redfx/strange/noise/` (the package
@@ -58,7 +58,7 @@ State representation and evolution, from the real code:
   (`local/SimpleQuantumExecutionEnvironment.java:65`) builds
   `int dim = 1 << nQubits; Complex[] probs = new Complex[dim];`
   (lines 72–74), seeds it from `p.getInitialAlphas()`, then for each decomposed
-  step calls `probs = applyStep(step, probs, qubit)` (line 108). The variable is
+  QuantumStep calls `probs = applyStep(step, probs, qubit)` (line 108). The variable is
   misleadingly named `probs` but it is the **amplitude vector** (entries are
   complex amplitudes; probabilities are `abssqr()`).
 - **Step application** — `applyStep` (line 145) special-cases
@@ -69,7 +69,7 @@ State representation and evolution, from the real code:
   `getNextProbability2` (line 479). For a single full-width gate it does the
   dense multiply
   `answer[i] = Σ_j matrix[i][j] · v[j]` (lines 560–564). For partial gates it
-  tensor-blocks recursively. `getAllGates` (line 585) pads a step to full width
+  tensor-blocks recursively. `getAllGates` (line 585) pads a QuantumStep to full width
   with `Identity` gates per qubit lane.
 - **Measurement / sampling** — `Result.measureSystem()` (`Result.java:188`)
   samples one basis state by walking the cumulative distribution of
@@ -80,7 +80,7 @@ State representation and evolution, from the real code:
 - **Mid-circuit measurement** — `Computations.doImmediateMeasurement`
   (line 707) already does a stochastic projective collapse with renormalisation
   (`vector[i].mul(1/Math.sqrt(p[pick]))`). This is the **exact pattern** the
-  trajectory Kraus-application step will mimic.
+  trajectory Kraus-application QuantumStep will mimic.
 - **Complex utilities available** (`Complex.java`):
   `mul`, `add`, `min`, `mul(double)`, `abssqr()` (line 170),
   `Complex.identityMatrix(dim)` (180), `tensor` (201), `mmul`/`slowmmul`
@@ -90,15 +90,15 @@ State representation and evolution, from the real code:
 Implications:
 
 - The **trajectory** environment can literally re-run `runProgram` logic per
-  shot, interleaving a stochastic Kraus step after each gate step — no new
+  shot, interleaving a stochastic Kraus QuantumStep after each gate QuantumStep — no new
   linear-algebra. It reuses `calculateNewState` for unitaries and a
   `doImmediateMeasurement`-style collapse for the chosen Kraus branch.
 - The **density-matrix** environment cannot reuse the vector engine directly; it
-  needs ρ as `Complex[][]` and applies a step's full unitary `U` as
-  `ρ → U ρ U†` plus channels `ρ → Σ E_k ρ E_k†`. We can still obtain a step's
+  needs ρ as `Complex[][]` and applies a QuantumStep's full unitary `U` as
+  `ρ → U ρ U†` plus channels `ρ → Σ E_k ρ E_k†`. We can still obtain a QuantumStep's
   full `U` from `Computations.calculateStepMatrix(gates, nQubits, qee)`
-  (`Computations.java:68`), which already tensors a step into a full
-  `2^n × 2^n` matrix. (Permutation-containing decomposed steps must be handled;
+  (`Computations.java:68`), which already tensors a QuantumStep into a full
+  `2^n × 2^n` matrix. (Permutation-containing decomposed QuantumSteps must be handled;
   see §6 caveat.)
 
 ---
@@ -271,7 +271,7 @@ public interface NoiseModel {
     /** Per-qubit readout (SPAM) confusion matrix; 2x2 row-stochastic, P(measured|prepared). */
     double[][] readoutMatrix(int qubit);     // {{P(0|0),P(0|1)},{P(1|0),P(1|1)}}
 
-    /** Optional coherent crosstalk on a step (e.g. ZZ). Return null/empty if none. */
+    /** Optional coherent crosstalk on a QuantumStep (e.g. ZZ). Return null/empty if none. */
     List<CrosstalkTerm> crosstalk();
 
     /** Gate durations (ns), used to derive idle windows for T1/T2. */
@@ -337,27 +337,27 @@ public class TrajectoryQuantumExecutionEnvironment implements QuantumExecutionEn
 
 Algorithm:
 
-1. Decompose steps exactly as the simple env does (reuse the same code path:
+1. Decompose QuantumSteps exactly as the simple env does (reuse the same code path:
    `p.getDecomposedSteps()` / `Computations.decomposeStep`,
    `SimpleQuantumExecutionEnvironment.java:89–97`).
 2. For each shot `s` in `[0, shots)`:
    a. Build the initial amplitude vector identically to
       `SimpleQuantumExecutionEnvironment.runProgram` (lines 72–88).
-   b. For each decomposed step:
-      - Apply the unitary step via the **existing** engine. Factor the body of
+   b. For each decomposed QuantumStep:
+      - Apply the unitary QuantumStep via the **existing** engine. Factor the body of
         `applyStep` into a reusable static helper or call
         `Computations.calculateNewState(step.getGates(), vector, nQubits)`
         directly (handling the `ProbabilitiesGate` / `PermutationGate`
         special-cases the same way `applyStep` does,
         `SimpleQuantumExecutionEnvironment.java:148–161`).
-      - For each gate `g` in the step and each affected qubit `q`, for each
+      - For each gate `g` in the QuantumStep and each affected qubit `q`, for each
         `TargetedChannel tc : noise.afterGate(g, q)`:
         `vector = KrausApplication.sampleKrausBranch(vector, tc.channel(), tc.qubit(), nQubits, rng);`
-      - For each **idle** qubit in this step (qubits not touched by any gate),
+      - For each **idle** qubit in this QuantumStep (qubits not touched by any gate),
         apply `noise.idle(q, noise.gateDurationNs(stepWidthGate))` channels the
         same way (see §6 for idle-duration derivation).
-      - Apply crosstalk (§6.3) as a coherent ZZ step if present.
-   c. After the last step, **sample one bitstring** from `|vector|²` exactly as
+      - Apply crosstalk (§6.3) as a coherent ZZ QuantumStep if present.
+   c. After the last QuantumStep, **sample one bitstring** from `|vector|²` exactly as
       `Result.measureSystem` does (`Result.java:188`), then apply **readout
       error** (§5) to flip bits per the confusion matrix. Accumulate the
       bitstring into a histogram `long[] counts` of length `2^n`.
@@ -374,7 +374,7 @@ Algorithm:
    > snapshots reflect the ensemble average, not a single trajectory.
 
 Tradeoffs: memory `O(2^n)` (one trajectory at a time); cost
-`O(shots · steps · 2^n)` for the gate multiplies (same constant as the simple
+`O(shots · QuantumSteps · 2^n)` for the gate multiplies (same constant as the simple
 env, ×shots). Statistical error `~1/√shots`. No off-diagonal coherence stored,
 but ensemble-averaged observables and bitstring statistics are correct.
 
@@ -396,24 +396,24 @@ State: `Complex[][] rho` of size `2^n × 2^n`. Init: from the initial amplitude
 vector `|ψ0⟩` (same construction as the simple env), set
 `rho = |ψ0⟩⟨ψ0|`, i.e. `rho[i][j] = ψ0[i] · conj(ψ0[j])`.
 
-Per decomposed step:
+Per decomposed QuantumStep:
 
-1. Compute the step's full unitary
+1. Compute the QuantumStep's full unitary
    `Complex[][] U = Computations.calculateStepMatrix(step.getGates(), nQubits, this)`
    (`Computations.java:68`). Apply coherently:
    `rho = U · rho · U†` using `Complex.mmul` and `Complex.conjugateTranspose`
    (`Complex.java:230, 269`).
-   - **Permutation/swap caveat:** decomposed steps may contain a
+   - **Permutation/swap caveat:** decomposed QuantumSteps may contain a
      `PermutationGate` (which `calculateStepMatrix` rejects,
      `Computations.java:104`). For the density env, prefer to iterate over the
-     **original** (non-decomposed) steps and build `U` from a
+     **original** (non-decomposed) QuantumSteps and build `U` from a
      permutation-tolerant matrix builder, OR handle a lone `PermutationGate`
-     step by permuting `rho`'s rows and columns directly via
+     QuantumStep by permuting `rho`'s rows and columns directly via
      `Computations.permutateVector`-style index swaps applied to both indices.
-     Concretely: for a `PermutationGate(a,b)` step,
+     Concretely: for a `PermutationGate(a,b)` QuantumStep,
      `rho'[i][j] = rho[perm(i)][perm(j)]` where `perm` swaps bits a,b
      (`Computations.swapBits`, line 750). Lone `Swap` similarly.
-2. Apply noise channels for the step: for each gate `g`, affected qubit `q`, and
+2. Apply noise channels for the QuantumStep: for each gate `g`, affected qubit `q`, and
    `tc : noise.afterGate(g, q)`:
    `rho = KrausApplication.applyToDensity(rho, tc.channel(), tc.qubit(), nQubits);`
 3. Apply idle relaxation channels on idle qubits and crosstalk ZZ (as a unitary
@@ -438,7 +438,7 @@ readout error to the diagonal before sampling.
 
 Tradeoffs: **exact** for arbitrary mixed states and coherences; memory
 `O(2^{2n})` `Complex` objects (each is two floats + object header → enforce a
-guard, e.g. refuse `nQubits > 12` unless overridden); per dense unitary step
+guard, e.g. refuse `nQubits > 12` unless overridden); per dense unitary QuantumStep
 `O(2^{3n})` via `mmul`. Use sparse/lane-wise application for channels and
 permutations to keep the common case tractable.
 
@@ -463,9 +463,9 @@ Per-qubit confusion matrix `M_q = [[P(0|0), P(0|1)], [P(1|0), P(1|1)]]`
 
 ### 3.6 T1/T2 relaxation and crosstalk
 
-**Idle window derivation.** A qubit is *idle* during a step if no gate in that
-step touches it. The idle duration is the step's wall-clock duration, taken as
-the max gate duration in the step: `Δt = max_g noise.gateDurationNs(g)`. (If a
+**Idle window derivation.** A qubit is *idle* during a QuantumStep if no gate in that
+step touches it. The idle duration is the QuantumStep's wall-clock duration, taken as
+the max gate duration in the QuantumStep: `Δt = max_g noise.gateDurationNs(g)`. (If a
 step is all-idle, use the configured default 1q duration.)
 
 **T1 → amplitude damping.** Over idle time `Δt` with relaxation time `T1`:
@@ -484,11 +484,11 @@ single CPTP map. Guard `T_φ > 0` (i.e. `T2 ≤ 2 T1`); if violated, clamp and w
 computed from `t1(q)`, `t2(q)`, `Δt`.
 
 **Crosstalk (nearest-neighbour ZZ).** For each `CrosstalkTerm(a,b,ξ)` in
-`noise.crosstalk()`, the always-on coupling over a step of duration `Δt`
+`noise.crosstalk()`, the always-on coupling over a QuantumStep of duration `Δt`
 contributes the coherent unitary `U_zz = exp(-i ξ Δt Z_a Z_b / 2)`, which is
 diagonal in the computational basis:
 `U_zz[i][i] = exp(-i ξ Δt/2 · s_a s_b)` where `s = +1` for bit 0 and `-1` for
-bit 1 (eigenvalue of Z). Apply per step:
+bit 1 (eigenvalue of Z). Apply per QuantumStep:
 - Trajectory env: multiply each amplitude `vector[i]` by the diagonal phase.
 - Density env: `rho[i][j] *= phase(i) · conj(phase(j))`.
 Implement as `Crosstalk.applyVector(...)` / `Crosstalk.applyDensity(...)`.
@@ -613,7 +613,7 @@ Trajectory vs density agreement:
   diagonal distribution within `~3/√shots`. Drive `rng` with a fixed seed.
 
 Fidelity-decay curves (integration):
-- Single qubit, repeated identity/idle steps under amplitude damping: measured
+- Single qubit, repeated identity/idle QuantumSteps under amplitude damping: measured
   `P(|1⟩)` must follow `exp(-t/T1)`; fit decay constant and assert ≈ `T1`.
 - Under phase damping, `⟨X⟩` of `|+⟩` decays as `exp(-t/T_φ)`; assert fitted
   constant ≈ configured `T_φ`.
@@ -659,9 +659,9 @@ Regression / non-interference:
   long idle chains accumulate error. Mitigation: loose epsilons in tests;
   optionally accumulate in `double` inside hot loops; flag a possible future
   `double`-backed Complex (tracked in `ideas.md` §13).
-- **Permutation gates in decomposed steps** break `calculateStepMatrix`
+- **Permutation gates in decomposed QuantumSteps** break `calculateStepMatrix`
   (`Computations.java:104` throws). Mitigation: density env handles lone
-  `PermutationGate`/`Swap` steps by direct index-bit row/column swaps on ρ
+  `PermutationGate`/`Swap` QuantumSteps by direct index-bit row/column swaps on ρ
   (§3.4); add explicit tests for circuits that decompose into permutations
   (non-adjacent two-qubit gates, Toffoli).
 - **Trajectory statistical noise.** Observables converge as `1/√shots`; document
@@ -692,7 +692,7 @@ Regression / non-interference:
 5. **T1/T2 idle + crosstalk** in the trajectory path; fidelity-decay tests.
    (§3.6)
 6. **Density-matrix simulator** — exact reference; cross-validate trajectory
-   against it; handle permutation/swap steps; regression vs simple env. (§3.4)
+   against it; handle permutation/swap QuantumSteps; regression vs simple env. (§3.4)
 7. **Symmetry verification / post-selection** — small, builds on trajectory
    bitstrings. (§3.9)
 8. **ZNE** — folding + extrapolation; needs only a noisy env + observable. (§3.7)

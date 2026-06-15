@@ -17,8 +17,8 @@ public class Main {
     private static void run00() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new Cnot(0,1));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new Cnot(0,1));
         program.addStep(step1);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();
@@ -34,11 +34,11 @@ public class Main {
     private static void run01() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new X(0));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new X(0));
         program.addStep(step1);
-        Step step2 = new Step();
-        step2.addGate(new Cnot(0,1));
+        QuantumStep QuantumStep2 = new QuantumStep();
+        QuantumStep2.addGate(new Cnot(0,1));
         program.addStep(step2);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();
@@ -54,11 +54,11 @@ public class Main {
     private static void run10() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new X(1));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new X(1));
         program.addStep(step1);
-        Step step2 = new Step();
-        step2.addGate(new Cnot(0,1));
+        QuantumStep QuantumStep2 = new QuantumStep();
+        QuantumStep2.addGate(new Cnot(0,1));
         program.addStep(step2);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();
@@ -74,12 +74,12 @@ public class Main {
     private static void run11() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(2);
-        Step step1 = new Step();
-        step1.addGate(new X(0));
-        step1.addGate(new X(1));
+        QuantumStep QuantumStep1 = new QuantumStep();
+        QuantumStep1.addGate(new X(0));
+        QuantumStep1.addGate(new X(1));
         program.addStep(step1);
-        Step step2 = new Step();
-        step2.addGate(new Cnot(0,1));
+        QuantumStep QuantumStep2 = new QuantumStep();
+        QuantumStep2.addGate(new Cnot(0,1));
         program.addStep(step2);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();

@@ -17,7 +17,7 @@ Qubit[3]: 1
 ```
 
 Apart from this, the quantum circuit is shown and it now includes the
-probability vector after each step.
+probability vector after each QuantumStep.
 ![randombit](/resources/ch7-randombitdebug.png)
 
 # What it is doing

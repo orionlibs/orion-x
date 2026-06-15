@@ -23,8 +23,8 @@ public class Main {
     public static void singleExecution() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(1);
-        Step step = new Step();
-        step.addGate(new Hadamard(0));
+        QuantumStep QuantumStep = new QuantumStep();
+        QuantumStep.addGate(new Hadamard(0));
         program.addStep(step);
         Result result = simulator.runProgram(program);
         Qubit[] qubits = result.getQubits();
@@ -37,8 +37,8 @@ public class Main {
     public static void manyExecution() {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(1);
-        Step step = new Step();
-        step.addGate(new Hadamard(0));
+        QuantumStep QuantumStep = new QuantumStep();
+        QuantumStep.addGate(new Hadamard(0));
         program.addStep(step);
         int cntZero = 0;
         int cntOne = 0;

@@ -3,7 +3,7 @@
 This application demonstrates the concepts explained in <a href="https://www.manning.com/books/quantum-computing-for-java-developers?a_aid=quantumjava&a_bid=e5166ab9">Quantum Computing for Java Developers</a>.
 It leverages the Java-based <a href="https://github.com/redfx-quantum/strange">Strange</a> Quantum Simulator and toolkit.
 
-This game builds on the original "Mary had a little Lambda" game, created by Stephen Chin, which explains the concepts of 
+This game builds on the original "Mary had a little Lambda" game, created by QuantumStephen Chin, which explains the concepts of 
 Lambdas and Streams to Java developers.
 
 We extended the game to "Mary had a little Qubit", as it can be useful to explain the concept of quantum computing,

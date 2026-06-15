@@ -57,7 +57,7 @@ From the existing source, confirmed by reading:
 
 - **`org.redfx.strange.algorithm.Classic.randomBit()`** (`algorithm/Classic.java:67`):
   ```java
-  Program program = new Program(1, new Step(new Hadamard(0)));
+  Program program = new Program(1, new QuantumStep(new Hadamard(0)));
   Result result = qee.runProgram(program);
   int answer = result.getQubits()[0].measure();
   ```
@@ -65,13 +65,13 @@ From the existing source, confirmed by reading:
   shows the `setQuantumExecutionEnvironment(QuantumExecutionEnvironment)` hook
   (`Classic.java:58`) for swapping the QEE — reuse the same pattern in crypto classes.
 
-- **`Program(int nQubits, Step... steps)`** + `addStep(Step)` / `addSteps(Step...)`
+- **`Program(int nQubits, QuantumStep... QuantumSteps)`** + `addStep(Step)` / `addSteps(Step...)`
   (`Program.java:73`, `:117`). Note `Program.ensureMeasuresafe` forbids putting a
   *superposition* gate (Hadamard/Cnot) after a `Measurement` on the same qubit
-  (`Program.java:140`) — so always order steps as prepare → rotate → measure, never the
+  (`Program.java:140`) — so always order QuantumSteps as prepare → rotate → measure, never the
   reverse.
 - **`Step(Gate... gates)`** and `Step(String name, Gate...)` (`Step.java:85`, `:95`);
-  one gate per qubit per step.
+  one gate per qubit per QuantumStep.
 - **`Result.getQubits()` → `Qubit[]`**, `Qubit.measure()` returns `0|1`
   (`Qubit.java:96`).
 - **Gates** (all in `org.redfx.strange.gate`):
@@ -175,7 +175,7 @@ public final class QuantumChannel {
     public int measure(QubitDescriptor sent, Basis measureBasis) {
         QubitDescriptor delivered = (eve == null) ? sent : eve.intercept(this, sent);
         Program p = prepareProgram(delivered);          // re-prepare state
-        if (measureBasis == Basis.DIAGONAL) p.addStep(new Step(new Hadamard(0)));
+        if (measureBasis == Basis.DIAGONAL) p.addStep(new QuantumStep(new Hadamard(0)));
         int outcome = qee.runProgram(p).getQubits()[0].measure();
         return outcome;
     }
@@ -270,7 +270,7 @@ public class Bob extends Party {
 }
 ```
 
-### 5.3 Protocol steps (`BB84Protocol.run(int nRaw, double sampleFraction)`)
+### 5.3 Protocol QuantumSteps (`BB84Protocol.run(int nRaw, double sampleFraction)`)
 1. **Preparation/transmission.** For `i in [0,nRaw)`: `QubitDescriptor d = alice.prepare()`
    (random bit `a_i`, random basis `Ba_i`). Alice "sends" `d` over the `QuantumChannel`.
 2. **Measurement.** Bob picks `Bb_i = bob.chooseBasis()` and
@@ -325,7 +325,7 @@ public final class InterceptResendEve implements Eavesdropper {
 - Eve records her own basis/bit lists for analysis/demo of partial information gained.
 
 ### 6.3 Detection (statistical)
-- Detection is purely the QBER step in BB84 (§5.3 step 4–5). Expected sifted-key QBER:
+- Detection is purely the QBER QuantumStep in BB84 (§5.3 QuantumStep 4–5). Expected sifted-key QBER:
   - clean channel: ≈ 0 (exactly 0 with the deterministic simulator on matching bases).
   - full intercept-resend: ≈ **0.25**.
 - The test asserts `qber` is near 0 without Eve and near 0.25 (within statistical
@@ -381,8 +381,8 @@ Bob measures qubit 1, each along an independently chosen angle.
 Bell-pair preparation (Φ+ = (|00>+|11>)/√2) on qubits {0,1}:
 ```java
 Program p = new Program(2,
-    new Step(new Hadamard(0)),
-    new Step(new Cnot(0, 1)));
+    new QuantumStep(new Hadamard(0)),
+    new QuantumStep(new Cnot(0, 1)));
 ```
 (Use Φ+ and account for correlation signs in the analysis, or apply an `X`/`Z` to make
 the anti-correlated singlet — pick one and keep the CHSH sign bookkeeping consistent.)
@@ -390,8 +390,8 @@ the anti-correlated singlet — pick one and keep the CHSH sign bookkeeping cons
 Per-party measurement angle is applied with `RotationY(theta, idx)` *before* measuring,
 which rotates the chosen measurement axis into the computational basis:
 ```java
-if (aliceAngle != 0) p.addStep(new Step(new RotationY(-2*aliceAngle, 0)));
-if (bobAngle   != 0) p.addStep(new Step(new RotationY(-2*bobAngle,   1)));
+if (aliceAngle != 0) p.addStep(new QuantumStep(new RotationY(-2*aliceAngle, 0)));
+if (bobAngle   != 0) p.addStep(new QuantumStep(new RotationY(-2*bobAngle,   1)));
 Result r = qee.runProgram(p);
 int a = r.getQubits()[0].measure();
 int b = r.getQubits()[1].measure();
@@ -433,10 +433,10 @@ drives `S` toward ≤ 2.
 - Dealer prepares an `n`-qubit GHZ state `(|0…0> + |1…1>)/√2`:
   ```java
   Program p = new Program(n,
-      new Step(new Hadamard(0)),
-      new Step(new Cnot(0,1)), new Step(new Cnot(1,2)), ...);  // chain CNOTs
+      new QuantumStep(new Hadamard(0)),
+      new QuantumStep(new Cnot(0,1)), new QuantumStep(new Cnot(1,2)), ...);  // chain CNOTs
   ```
-  (Strange CNOTs are pairwise; chain `Cnot(i,i+1)` across steps to spread the GHZ
+  (Strange CNOTs are pairwise; chain `Cnot(i,i+1)` across QuantumSteps to spread the GHZ
   correlation — verify the resulting state in a unit test.)
 - Each of `n` players receives one qubit. Each randomly measures in `X` (apply
   `Hadamard` then measure) or `Y` (apply `RotationX`/phase then `Hadamard`) basis.
@@ -543,7 +543,7 @@ statistics with generous tolerances and retries.
 - **Simulator cost** of wide batched QRNG (`2^n`). Mitigation: cap batch width (≤16),
   default to the 1-qubit loop.
 - **`Program.ensureMeasuresafe`** forbids superposition gates after a measurement on the
-  same qubit. Mitigation: always order steps prepare → rotate → measure.
+  same qubit. Mitigation: always order QuantumSteps prepare → rotate → measure.
 - **`igamc`/`erfc` numerical accuracy** affects p-values. Mitigation: use the standard
   series+continued-fraction `igamc` and AS 7.1.26 `erfc`; cover with reference-value unit
   tests.
@@ -570,5 +570,5 @@ statistics with generous tolerances and retries.
 9. **Demos** under `crypto/demo/` for each primitive; wire into any existing demo runner
    if present.
 
-Each step is independently compilable and testable; steps 5–8 reuse the infra and Eve
-from steps 1–4, so they can be parallelized once the channel API is frozen after step 4.
+Each QuantumStep is independently compilable and testable; QuantumSteps 5–8 reuse the infra and Eve
+from QuantumSteps 1–4, so they can be parallelized once the channel API is frozen after QuantumStep 4.

@@ -1,7 +1,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2019, Johan Vos and Stephen Chin
+ * Copyright (c) 2019, Johan Vos and QuantumStephen Chin
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ public class StrangeBridge extends Group {
             newProgram.addStep(s);
         }
         this.program = newProgram;
-        Step s1 = new Step();
+        QuantumStep s1 = new QuantumStep();
         double rnd =  Math.random();
         s1.addGate(new Identity(nc-1));
         this.program.addStep(s1);
@@ -85,7 +85,7 @@ public class StrangeBridge extends Group {
 
     public void addH(int nr) {
         System.err.println("add H to "+nr);
-        Step s = new Step();
+        QuantumStep s = new QuantumStep();
         s.addGate(new Hadamard(nr));
         this.program.addStep(s);
         renderProgram();
@@ -93,7 +93,7 @@ public class StrangeBridge extends Group {
 
     public void addX(int nr) {
         System.err.println("add X to "+nr);
-        Step s = new Step();
+        QuantumStep s = new QuantumStep();
         s.addGate(new X(nr));
         this.program.addStep(s);
         renderProgram();
@@ -101,9 +101,9 @@ public class StrangeBridge extends Group {
 
     public void addCNot (int q1, int q2) {
         System.err.println("Add CNot for "+q1+", "+q2);
-        Step s = new Step();
+        QuantumStep s = new QuantumStep();
         s.addGate(new Cnot(q1, q2));
-        System.err.println("created step has gates "+s.getGates());
+        System.err.println("created QuantumStep has gates "+s.getGates());
         this.program.addStep(s);
         renderProgram();
     }

@@ -52,9 +52,9 @@ public class Qubits<T>
     }
 
 
-    public QuantumProgram programOf(QuantumStep... steps)
+    public QuantumProgram programOf(QuantumStep... QuantumSteps)
     {
-        return new QuantumProgram(this.numberOfQubits(), steps);
+        return new QuantumProgram(this.numberOfQubits(), QuantumSteps);
     }
 
 

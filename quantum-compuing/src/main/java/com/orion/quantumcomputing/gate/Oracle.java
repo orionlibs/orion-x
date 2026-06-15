@@ -1,18 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.redfx.strange.Gate;
 
-/**
- * <p>Oracle class.</p>
- *
- * @author alain
- * @version $Id: $Id
- */
-public class Oracle implements Gate
+public class Oracle implements QuantumGate
 {
     private int mainQubit = 0;
     private List<Integer> affected = new LinkedList<>();
@@ -21,22 +13,12 @@ public class Oracle implements Gate
     private int span = 1;
 
 
-    /**
-     * <p>Constructor for Oracle.</p>
-     *
-     * @param i a int
-     */
     public Oracle(int i)
     {
         this.mainQubit = i;
     }
 
 
-    /**
-     * <p>Constructor for Oracle.</p>
-     *
-     * @param matrix an array of {@link Complex} objects
-     */
     public Oracle(Complex[][] matrix)
     {
         this.matrix = matrix;
@@ -49,7 +31,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getSize()
     {
@@ -57,7 +38,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getMainQubitIndex()
     {
@@ -65,7 +45,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setMainQubitIndex(int idx)
     {
@@ -73,7 +52,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setAdditionalQubit(int idx, int cnt)
     {
@@ -81,18 +59,12 @@ public class Oracle implements Gate
     }
 
 
-    /**
-     * <p>getQubits.</p>
-     *
-     * @return a int
-     */
     public int getQubits()
     {
         return span;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public List<Integer> getAffectedQubitIndexes()
     {
@@ -100,7 +72,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getHighestAffectedQubitIndex()
     {
@@ -108,7 +79,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getCaption()
     {
@@ -116,18 +86,12 @@ public class Oracle implements Gate
     }
 
 
-    /**
-     * <p>Setter for the field <code>caption</code>.</p>
-     *
-     * @param c a {@link String} object
-     */
     public void setCaption(String c)
     {
         this.caption = c;
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getName()
     {
@@ -135,7 +99,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public String getGroup()
     {
@@ -143,7 +106,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -151,7 +113,6 @@ public class Oracle implements Gate
     }
 
 
-    // replace null with Complex.ZERO
     private void sanitizeMatrix()
     {
         int rows = matrix.length;
@@ -169,7 +130,6 @@ public class Oracle implements Gate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setInverse(boolean inv)
     {

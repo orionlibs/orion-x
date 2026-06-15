@@ -1,4 +1,4 @@
-# Grover step by step
+# Grover QuantumStep by QuantumStep
 
 In this sample, Grover's search algorithm is explained with a very limited number of qubits
 
@@ -11,23 +11,23 @@ The expected outcome on the console looks similar to this
 
 ```
 dim = 2 hence N = 4
- n = 2, steps = 1.5707963267948966
-results after step 1: 0.2499999701976776
+ n = 2, QuantumSteps = 1.5707963267948966
+results after QuantumStep 1: 0.2499999701976776
 
 
 JavaFX Platform initialized
-Create BO, s = Step with gates [org.redfx.strange.gate.ProbabilitiesGate@3b084709]
-Prob for step 1
+Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@3b084709]
+Prob for QuantumStep 1
  = 0.2499999701976776
 n = 2 and N = 4, dY = 40.0
-Create BO, s = Step with gates [org.redfx.strange.gate.Oracle@3224f60b]
-Create BO, s = Step with gates [org.redfx.strange.gate.ProbabilitiesGate@6737fd8f]
-Prob for step 3
+Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3224f60b]
+Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@6737fd8f]
+Prob for QuantumStep 3
  = 0.2499999701976776
 n = 2 and N = 4, dY = 40.0
-Create BO, s = Step with gates [org.redfx.strange.gate.Oracle@72b6cbcc]
-Create BO, s = Step with gates [org.redfx.strange.gate.ProbabilitiesGate@68bbe345]
-Prob for step 5
+Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@72b6cbcc]
+Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@68bbe345]
+Prob for QuantumStep 5
  = 8.881784197001252E-16
 n = 2 and N = 4, dY = 40.0
 

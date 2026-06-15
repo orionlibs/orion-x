@@ -35,15 +35,15 @@ transpiled `Program`).
 Understanding the existing machinery is load-bearing because every pass must emit
 objects the simulator already understands.
 
-### 2.1 Program / Step / Gate
+### 2.1 Program / QuantumStep / Gate
 
-- `Program(int nQubits, Step... steps)` holds an `ArrayList<Step> steps`; `addStep`
+- `Program(int nQubits, QuantumStep... QuantumSteps)` holds an `ArrayList<Step> QuantumSteps`; `addStep`
   calls `ensureMeasuresafe` then `step.setIndex(steps.size())` and
   `step.setProgram(this)`. It caches `List<Step> decomposedSteps` (invalidated to
   `null` on every `addStep`). `getNumberQubits()`, `getSteps()`, `getInitialAlphas()`,
   `initializeQubit(idx, alpha)` are the public surface a builder must drive.
 - `Step` holds `ArrayList<Gate> gates`; `addGate` calls `verifyUnique` which rejects
-  two gates whose `getAffectedQubitIndexes()` overlap **within the same step** — this
+  two gates whose `getAffectedQubitIndexes()` overlap **within the same QuantumStep** — this
   is exactly the data-hazard check a scheduler needs (Section 8). `Step.Type`
   is `{NORMAL, PSEUDO, PROBABILITY}`. `setInverse(boolean)` reverses each gate, and
   for `BlockGate` it calls `((BlockGate)g).inverse()` rather than `setInverse`.
@@ -61,12 +61,12 @@ objects the simulator already understands.
 
 ### 2.2 How blocks / controlled blocks already work
 
-- `Block(String name, int size)` holds `List<Step> steps` and lazily builds a
-  `Complex[][] matrix` of dimension `1<<nqubits`: it `decomposeStep`s each step
+- `Block(String name, int size)` holds `List<Step> QuantumSteps` and lazily builds a
+  `Complex[][] matrix` of dimension `1<<nqubits`: it `decomposeStep`s each QuantumStep
   (`Computations.decomposeStep`), **reverses** the list (matrix-multiply order), then
   folds via `Complex.mmul` / `Complex.permutate`. `applyOptimize(probs, inverse)`
   applies the block to a state vector directly (used by the simulator hot path);
-  when `inverse` it reverses steps and flips `setInverse(true)` on each.
+  when `inverse` it reverses QuantumSteps and flips `setInverse(true)` on each.
 - `BlockGate<T>` *is a* `Gate` that places a `Block` at offset `idx`.
   `getAffectedQubitIndexes()` = `[idx, idx+block.getNQubits())`. `getMatrix(qee)`
   returns the block matrix, conjugate-transposed when `inverse`. `inverse()` flips the
@@ -80,7 +80,7 @@ objects the simulator already understands.
   (`Computations.createIdentity(2*dim)`), inserting `PermutationGate`s to bring the
   control adjacent. `applyOptimize` applies the block only to the half of the state
   where the control bit is set. `Computations.decomposeStep` already special-cases
-  `ControlledBlockGate` via `processBlockGate(...)`, injecting the permutation steps.
+  `ControlledBlockGate` via `processBlockGate(...)`, injecting the permutation QuantumSteps.
   **`controlled(ctrl)` therefore needs only to construct a `ControlledBlockGate` — the
   simulator already runs it.**
 
@@ -89,7 +89,7 @@ objects the simulator already understands.
 `SimpleQuantumExecutionEnvironment.runProgram` reads `p.getSteps()`, lazily builds
 `simpleSteps` via `Computations.decomposeStep(step, nQubits)` (caching on the program),
 then `applyStep` each. `decomposeStep` is the engine that lowers a multi-qubit gate on
-non-adjacent qubits into `PermutationGate` + adjacent-gate + inverse-permutation steps.
+non-adjacent qubits into `PermutationGate` + adjacent-gate + inverse-permutation QuantumSteps.
 Matrix utilities live in `Complex`: `identityMatrix(dim)`, `tensor(a,b)`, `mmul(a,b)`,
 `conjugateTranspose(src)`, `permutate(pg, matrix)`; and `Computations.createIdentity`,
 `calculateStepMatrix`. **The transpiler reuses these for matrix-level reasoning; it does
@@ -119,8 +119,8 @@ A fluent, immutable-style builder that accumulates `Step`s and emits a `Program`
 
 **Design rule:** each fluent method appends **one new `Step`** containing one gate
 (simple, predictable, always measure-safe ordering), *except* the explicit
-`step(Gate...)` and `barrier()` escape hatches that pack a parallel step. A later
-`SchedulePass` (WI-8) re-packs single-gate steps into parallel steps; the DSL stays
+`step(Gate...)` and `barrier()` escape hatches that pack a parallel QuantumStep. A later
+`SchedulePass` (WI-8) re-packs single-gate QuantumSteps into parallel QuantumSteps; the DSL stays
 dumb on purpose so semantics are obvious.
 
 ```java
@@ -128,7 +128,7 @@ package org.redfx.strange.circuit;
 
 public final class Circuit {
     private final int nQubits;
-    private final List<Step> steps = new ArrayList<>();
+    private final List<Step> QuantumSteps = new ArrayList<>();
     private final double[] initAlpha;          // mirrors Program.initAlpha
 
     private Circuit(int n) { this.nQubits = n; this.initAlpha = ... ; }
@@ -168,17 +168,17 @@ public final class Circuit {
     public Circuit apply(Subcircuit sub, Map<String,Integer> binding);  // named remap
 
     // --- measurement & structure ---
-    public Circuit measure(int... qs);        // one Measurement gate per q, all in one Step
+    public Circuit measure(int... qs);        // one Measurement gate per q, all in one QuantumStep
     public Circuit probability(int q)         { return add(new ProbabilitiesGate(q)); }
-    public Circuit barrier();                  // PSEUDO step; scheduling boundary
-    public Circuit step(Gate... parallel);     // explicit parallel step (verifyUnique applies)
+    public Circuit barrier();                  // PSEUDO QuantumStep; scheduling boundary
+    public Circuit QuantumStep(Gate... parallel);     // explicit parallel QuantumStep (verifyUnique applies)
     public Circuit initQubit(int q, double alpha); // mirrors Program.initializeQubit
 
     // --- terminal ---
     public Program build();                    // constructs Program, addStep()s, applies initAlpha
     public Program buildTranspiled(Transpiler t); // build() then t.run(program)
 
-    private Circuit add(Gate g) { steps.add(new Step(g)); return this; }
+    private Circuit add(Gate g) { QuantumSteps.add(new QuantumStep(g)); return this; }
 }
 ```
 
@@ -188,7 +188,7 @@ public final class Circuit {
 public Program build() {
     Program p = new Program(nQubits);
     for (int q = 0; q < nQubits; q++) p.initializeQubit(q, initAlpha[q]);
-    for (Step s : steps) p.addStep(s);   // reuses ensureMeasuresafe + setIndex
+    for (Step s : QuantumSteps) p.addStep(s);   // reuses ensureMeasuresafe + setIndex
     return p;
 }
 ```
@@ -253,7 +253,7 @@ public final class Subcircuit {
      `new BlockGate(block, k)` directly — `BlockGate.getAffectedQubitIndexes()` already
      yields `[k, k+arity)`.
    - **Non-contiguous / permuted**: emit a *relabelling permutation envelope*. Build
-     `PermutationGate` steps (the same primitive `Computations.decomposeStep` and
+     `PermutationGate` QuantumSteps (the same primitive `Computations.decomposeStep` and
      `ControlledBlockGate` use) that move `wire[i] → k+i`, place the `BlockGate`, then
      undo. In the DSL/transpiler this is realised as: pre-`Step`(perm) +
      `Step`(BlockGate at base `k`) + post-`Step`(perm). This reuses the **exact**
@@ -261,7 +261,7 @@ public final class Subcircuit {
      simulator support is needed. (Implementation detail: compute `k = min(wire)` and a
      permutation sequence sorting `wire`.)
 3. **`inverse()`** — reuse `BlockGate.inverse()` / `Block.applyOptimize(probs, true)`,
-   which already reverses steps and conjugate-transposes. `Subcircuit.inverse()` at the
+   which already reverses QuantumSteps and conjugate-transposes. `Subcircuit.inverse()` at the
    *definition* level reverses `body` and marks `inverse`; at instantiation it sets the
    resulting `BlockGate.inverse = true`. Matrix path: `BlockGate.getMatrix` already
    returns `Complex.conjugateTranspose(answer)` when `inverse`. **Auto-inverse is thus
@@ -278,7 +278,7 @@ public final class Subcircuit {
 5. **Nesting / composition.** A subcircuit's `Builder.apply(other, "a","b")` records a
    nested-instantiation instruction. At `instantiate` time the inner subcircuit's body
    is *inlined* into the outer `Block` with remapped indices (flatten), OR added as a
-   nested `BlockGate` step inside the block (the simulator handles `BlockGate` inside a
+   nested `BlockGate` QuantumStep inside the block (the simulator handles `BlockGate` inside a
    `Block` because `Block.getMatrix` / `applyOptimize` call `decomposeStep`/
    `calculateNewState`, both of which dispatch on `BlockGate`). Default: **inline** for
    matrix simplicity; keep nested-BlockGate as an option for large reusable blocks.
@@ -351,10 +351,10 @@ public final class Transpiler {
 Design choices:
 - Passes communicate side-band data (e.g. final qubit mapping, gate-count deltas)
   through `TranspileContext`, **not** through the `Program` (which stays a clean IR).
-- Every pass constructs a *new* `Program(nQubits)` and re-`addStep`s rewritten steps;
+- Every pass constructs a *new* `Program(nQubits)` and re-`addStep`s rewritten QuantumSteps;
   it never mutates the input in place, so the verifier can compare in↔out. (Note: a
   fresh `Program` re-runs `ensureMeasuresafe`; passes that legitimately reorder around
-  measurements set steps appropriately or operate pre-measurement.)
+  measurements set QuantumSteps appropriately or operate pre-measurement.)
 - Helper `ProgramRewriter` (new, `transpile/ProgramRewriter.java`) provides
   `mapEachGate(Program, Function<Gate,List<Gate>>)` and `mapSteps(...)` so individual
   passes stay short.
@@ -387,7 +387,7 @@ class (cite existing classes):
      when the basis lacks it).
    - `Cz` ↔ `Cnot` conjugated by `Hadamard` on target.
    - `Fourier`/`InvFourier` (`BlockGate`s) → expand the block: each is already a `Block`
-     of `Hadamard` + controlled-phase (`Cr`) + `Swap` steps; emit those steps with the
+     of `Hadamard` + controlled-phase (`Cr`) + `Swap` QuantumSteps; emit those QuantumSteps with the
      block offset applied. Use `Block.getSteps()` to read them out, re-index by `+idx`.
 3. **Arbitrary 1-qubit unitary** (any `SingleQubitGate` with a 2×2 `getMatrix()` not in
    basis): **ZYZ / Euler decomposition** → `Rz(α)·Ry(β)·Rz(γ)` (global phase dropped).
@@ -422,7 +422,7 @@ public final class Decompositions {
 ### WI-5 — OptimisePass  (`transpile/OptimisePass.java`)
 
 A peephole/algebraic optimiser composed of independent **rewrite rules** so it is
-extensible. Operates on the linear gate stream (one gate per logical step after the DSL,
+extensible. Operates on the linear gate stream (one gate per logical QuantumStep after the DSL,
 or per-step-flattened). Rules:
 
 1. **Adjacent inverse cancellation.** Two consecutive gates on the same qubit(s) whose
@@ -492,7 +492,7 @@ Pipeline inside the pass:
 1. **Initial mapping.** Start with identity `logical→physical`, or a greedy mapping
    that places the most-interacting logical pairs on adjacent physical qubits (from a
    gate-interaction graph). Stored in `ctx.logicalToPhysical`.
-2. **Front-layer traversal.** Walk steps in order. Maintain a *front layer* of gates
+2. **Front-layer traversal.** Walk QuantumSteps in order. Maintain a *front layer* of gates
    whose predecessors are resolved. For each gate:
    - 1-qubit gate: emit, remapping its index through the current mapping.
    - 2-qubit gate on physical `(p,q)`: if `topology.connected(p,q)`, emit; else it is
@@ -529,12 +529,12 @@ that touch disjoint qubits.
 ```java
 public Program run(Program in, TranspileContext ctx) {
     int[] free = new int[in.getNumberQubits()]; // earliest free time-slot per qubit
-    List<Step> slots = new ArrayList<>();        // one Step per time-slot
+    List<Step> slots = new ArrayList<>();        // one QuantumStep per time-slot
     for (Step s : in.getSteps())
       for (Gate g : s.getGates()) {
         List<Integer> qs = g.getAffectedQubitIndexes();
         int t = qs.stream().mapToInt(q -> free[q]).max().orElse(0); // earliest slot
-        ensureSlot(slots, t).addGate(g);          // Step.verifyUnique guarantees no conflict
+        ensureSlot(slots, t).addGate(g);          // QuantumStep.verifyUnique guarantees no conflict
         for (int q : qs) free[q] = t + 1;
       }
     Program out = new Program(in.getNumberQubits());
@@ -543,11 +543,11 @@ public Program run(Program in, TranspileContext ctx) {
 }
 ```
 
-- A `barrier()`/PSEUDO step resets all `free[q]` to the barrier slot (hard scheduling
+- A `barrier()`/PSEUDO QuantumStep resets all `free[q]` to the barrier slot (hard scheduling
   boundary), preserving the user's intended ordering across barriers.
 - Measurements pin to their slot and bump `free` so nothing reorders past a measure
   on the same wire (consistent with `Program.ensureMeasuresafe`).
-- Output step count = circuit depth; expose `ctx.attr("depth", slots.size())` for
+- Output QuantumStep count = circuit depth; expose `ctx.attr("depth", slots.size())` for
   reporting. This is purely a regrouping — gate *order on each wire* is preserved, so it
   is trivially semantics-preserving.
 
@@ -600,7 +600,7 @@ static boolean equivalent(Program a, Program b, TranspileContext ctx) {
 - **RoutePass:** on a `linear(n)` topology with a circuit full of long-range `Cnot`s,
   assert every output 2-qubit gate is `topology.connected(...)`, and statevector matches
   after `undoMapping`. Include an all-to-all case asserting zero SWAPs inserted.
-- **SchedulePass:** assert output depth ≤ input step count, every `Step` passes
+- **SchedulePass:** assert output depth ≤ input QuantumStep count, every `Step` passes
   `verifyUnique`, and statevector unchanged.
 
 ### 4.3 Property-based fuzzing

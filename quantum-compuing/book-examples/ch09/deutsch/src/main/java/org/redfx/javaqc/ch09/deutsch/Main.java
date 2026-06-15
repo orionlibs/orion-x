@@ -24,21 +24,21 @@ public class Main {
         Program program = null;
         for (int i = 0; i < 10; i++) {
             program = new Program(2);
-            Step step0 = new Step();
-            step0.addGate(new X(1));
+            QuantumStep QuantumStep0 = new QuantumStep();
+            QuantumStep0.addGate(new X(1));
 
-            Step step1 = new Step();
-            step1.addGate(new Hadamard(0));
-            step1.addGate(new Hadamard(1));
+            QuantumStep QuantumStep1 = new QuantumStep();
+            QuantumStep1.addGate(new Hadamard(0));
+            QuantumStep1.addGate(new Hadamard(1));
 
-            Step step2 = new Step();
+            QuantumStep QuantumStep2 = new QuantumStep();
             int choice = random.nextInt(4);
 
             Oracle oracle = createOracle(choice);
-            step2.addGate(oracle);
+            QuantumStep2.addGate(oracle);
 
-            Step step3 = new Step();
-            step3.addGate(new Hadamard(0));
+            QuantumStep QuantumStep3 = new QuantumStep();
+            QuantumStep3.addGate(new Hadamard(0));
             
             program.addStep(step0);
             program.addStep(step1);

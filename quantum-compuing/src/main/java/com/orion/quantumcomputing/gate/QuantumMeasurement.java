@@ -1,39 +1,21 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.gate.SingleQubitGate;
-
-/**
- * <p>Measurement class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
-public class Measurement extends SingleQubitGate
+public class QuantumMeasurement extends SingleQubitGate
 {
     Complex[][] matrix = new Complex[][] {{Complex.ONE, Complex.ZERO}, {Complex.ZERO, Complex.ONE}};
 
 
-    /**
-     * <p>Constructor for Measurement.</p>
-     */
-    public Measurement()
+    public QuantumMeasurement()
     {
     }
 
 
-    /**
-     * <p>Constructor for Measurement.</p>
-     *
-     * @param idx a int
-     */
-    public Measurement(int idx)
+    public QuantumMeasurement(int idx)
     {
         super(idx);
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -41,7 +23,6 @@ public class Measurement extends SingleQubitGate
     }
 
 
-    /** {@inheritDoc} */
     @Override public String getCaption()
     {
         return "M";

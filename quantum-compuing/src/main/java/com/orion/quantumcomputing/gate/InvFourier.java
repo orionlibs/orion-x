@@ -1,15 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.QuantumExecutionEnvironment;
-import org.redfx.strange.gate.Fourier;
-
-/**
- * <p>InvFourier class.</p>
- *
- * @author alain
- * @version $Id: $Id
- */
 public class InvFourier extends Fourier
 {
     /**
@@ -24,7 +14,6 @@ public class InvFourier extends Fourier
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -32,9 +21,8 @@ public class InvFourier extends Fourier
     }
 
 
-    /** {@inheritDoc} */
     @Override
-    public Complex[][] getMatrix(QuantumExecutionEnvironment eqq)
+    public Complex[][] getMatrix(QuantumExecutor eqq)
     {
         if(matrix == null)
         {
@@ -85,7 +73,6 @@ public class InvFourier extends Fourier
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public boolean hasOptimization()
     {

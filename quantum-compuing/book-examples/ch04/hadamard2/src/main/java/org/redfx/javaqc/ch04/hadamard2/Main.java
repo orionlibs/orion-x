@@ -9,11 +9,11 @@ public class Main {
     public static void main(String[] args) {
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(1);
-        Step step = new Step();
-        step.addGate(new Hadamard(0));
+        QuantumStep QuantumStep = new QuantumStep();
+        QuantumStep.addGate(new Hadamard(0));
         program.addStep(step);
-        Step step2 = new Step();
-        step2.addGate(new Hadamard(0));
+        QuantumStep QuantumStep2 = new QuantumStep();
+        QuantumStep2.addGate(new Hadamard(0));
         program.addStep(step2);
         int cntZero = 0;
         int cntOne = 0;

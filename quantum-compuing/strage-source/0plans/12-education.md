@@ -61,8 +61,8 @@ Verified entry points and their real signatures:
 
 Key API facts the examples must respect (verified, not assumed):
 
-- `new Program(int nQubits, Step... moreSteps)` — qubits default to `|0⟩`.
-- `new Step(Gate... gates)` and `new Step(String name, Gate... gates)`;
+- `new Program(int nQubits, QuantumStep... moreSteps)` — qubits default to `|0⟩`.
+- `new QuantumStep(Gate... gates)` and `new QuantumStep(String name, Gate... gates)`;
   `step.addGate(Gate)` / `step.addGates(Gate...)`.
 - `program.addStep(Step)` / `program.addSteps(Step...)`.
 - Execute via `QuantumExecutionEnvironment qee = new SimpleQuantumExecutionEnvironment();`
@@ -71,7 +71,7 @@ Key API facts the examples must respect (verified, not assumed):
   `qubit.getProbability()` → `double`.
 - `res.getProbability()` → `Complex[]` (full state-vector amplitudes);
   `complex.abssqr()` → `double` probability.
-- `res.getIntermediateProbability(int step)` and `res.getIntermediateQubits()`
+- `res.getIntermediateProbability(int QuantumStep)` and `res.getIntermediateQubits()`
   expose per-step state — useful for Grover-iteration visualisation tutorials.
 - `Classic.setQuantumExecutionEnvironment(qee)` swaps the backend (the algorithms
   use a static `qee` field) — tutorials should mention this for backend swapping.
@@ -157,7 +157,7 @@ import org.redfx.strange.*;
 import org.redfx.strange.gate.*;
 import org.redfx.strange.local.SimpleQuantumExecutionEnvironment;
 
-Program program = new Program(1, new Step(new Hadamard(0)));
+Program program = new Program(1, new QuantumStep(new Hadamard(0)));
 QuantumExecutionEnvironment qee = new SimpleQuantumExecutionEnvironment();
 Result result = qee.runProgram(program);
 Qubit q0 = result.getQubits()[0];
@@ -181,7 +181,7 @@ silent breakage.
 Concept: a single Hadamard creates an equal superposition; measurement is
 probabilistic. Built directly from `Classic.randomBit`'s circuit.
 ```java
-Program p = new Program(1, new Step(new Hadamard(0)));
+Program p = new Program(1, new QuantumStep(new Hadamard(0)));
 Result r = new SimpleQuantumExecutionEnvironment().runProgram(p);
 double pOne = r.getQubits()[0].getProbability();          // expect ~0.5
 assert Math.abs(pOne - 0.5) < 1e-9 : "not in superposition";
@@ -194,8 +194,8 @@ Concept: H then CNOT produces |Φ+⟩ = (|00⟩+|11⟩)/√2; the two qubits' ou
 perfectly correlated. Uses `Hadamard` + `Cnot` (both exist).
 ```java
 Program p = new Program(2);
-p.addStep(new Step(new Hadamard(0)));
-p.addStep(new Step(new Cnot(0, 1)));
+p.addStep(new QuantumStep(new Hadamard(0)));
+p.addStep(new QuantumStep(new Cnot(0, 1)));
 Result r = new SimpleQuantumExecutionEnvironment().runProgram(p);
 Complex[] amp = r.getProbability();        // length 4: [|00>,|01>,|10>,|11>]
 // assert amp[0].abssqr()≈0.5, amp[3].abssqr()≈0.5, amp[1]≈amp[2]≈0
@@ -214,10 +214,10 @@ bits. Requires mid-circuit measurement and classically-conditioned corrections.
 // 3 qubits: q0 = message, (q1,q2) = Bell pair
 Program p = new Program(3);
 p.initializeQubit(0, alpha);                 // prepare message state on q0
-p.addStep(new Step(new Hadamard(1)));
-p.addStep(new Step(new Cnot(1, 2)));         // entangle q1,q2
-p.addStep(new Step(new Cnot(0, 1)));
-p.addStep(new Step(new Hadamard(0)));
+p.addStep(new QuantumStep(new Hadamard(1)));
+p.addStep(new QuantumStep(new Cnot(1, 2)));         // entangle q1,q2
+p.addStep(new QuantumStep(new Cnot(0, 1)));
+p.addStep(new QuantumStep(new Hadamard(0)));
 // measure q0,q1 -> classical bits, then conditionally apply X/Z on q2
 ```
 **Dependency (Section 7 — dynamic circuits / classical control):** Strange today
@@ -239,12 +239,12 @@ existing `Oracle` gate (constructed from a permutation/phase matrix, exactly as
 ```java
 int n = 2;                                   // 2 input qubits + 1 ancilla
 Program p = new Program(n + 1);
-p.addStep(new Step(new X(n)));               // ancilla -> |1>
-Step h = new Step();
+p.addStep(new QuantumStep(new X(n)));               // ancilla -> |1>
+Step h = new QuantumStep();
 for (int i=0;i<=n;i++) h.addGate(new Hadamard(i));
 p.addStep(h);
-p.addStep(new Step(new Oracle(balancedOrConstantMatrix)));  // Uf
-Step h2 = new Step();
+p.addStep(new QuantumStep(new Oracle(balancedOrConstantMatrix)));  // Uf
+Step h2 = new QuantumStep();
 for (int i=0;i<n;i++) h2.addGate(new Hadamard(i));
 p.addStep(h2);
 // measure inputs: all-zero => constant, else balanced
@@ -279,7 +279,7 @@ assert 15 % factor == 0 && factor != 1 && factor != 15;
 Notebook narrates the pipeline: `gcd(a,N)` shortcut, the `measurePeriod`
 register layout (`2*length+2+offset` qubits, Hadamard prep, `MulModulus` inside
 `ControlledBlockGate`, `InvFourier`), continued-fraction recovery
-(`Computations.fraction`), and the classical even-period / `a^(p/2)±1` step.
+(`Computations.fraction`), and the classical even-period / `a^(p/2)±1` QuantumStep.
 Because `qfactor` is randomised (`Math.random()` pick of `a`) and may recurse,
 the CI assertion must use a fixed small `N` and only assert "found a nontrivial
 factor", not a specific value.
@@ -363,7 +363,7 @@ Wiring into Javadoc:
 ### 3.6 README / getting-started
 
 - `docs/getting-started.md`: clone → `mvn compile` → run
-  `examples/jshell/00-quickstart.jsh` → expected output → next step pointers to
+  `examples/jshell/00-quickstart.jsh` → expected output → next QuantumStep pointers to
   each tutorial in progression order.
 - `examples/notebooks/README.md`: install JDK 11+, install the **IJava** kernel
   (`python -m jupyter` is only the launcher; the kernel itself is Java), point
@@ -434,7 +434,7 @@ Everything for Tutorials 01, 02, 05, 06 and their complexity docs is buildable
   `ideas.md`.
 - **Glossary/Javadoc maintenance drift.** Two copies (md + html). Mitigation:
   generate `doc-files/glossary.html` from `docs/glossary.md` in the build, or
-  document the regeneration step.
+  document the regeneration QuantumStep.
 
 ---
 
@@ -457,4 +457,4 @@ Everything for Tutorials 01, 02, 05, 06 and their complexity docs is buildable
    tags.
 
 This ordering delivers a complete, CI-verified learning path using only today's
-API by step 3, and lights up the dependent tutorials as the other sections land.
+API by QuantumStep 3, and lights up the dependent tutorials as the other sections land.

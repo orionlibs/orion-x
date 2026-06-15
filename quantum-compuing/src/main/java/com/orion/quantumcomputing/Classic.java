@@ -153,7 +153,7 @@ public class Classic
             p.addStep(s2);
             p.addStep(s3);
         }
-        System.out.println(" n = " + n + ", steps = " + cnt);
+        System.out.println(" n = " + n + ", QuantumSteps = " + cnt);
         QuantumResult res = qee.runProgram(p);
         Complex[] probability = res.getProbability();
         double[] answer = new double[probability.length];

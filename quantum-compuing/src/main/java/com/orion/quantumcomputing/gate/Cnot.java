@@ -1,14 +1,5 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
-import org.redfx.strange.gate.TwoQubitGate;
-
-/**
- * <p>Cnot class.</p>
- *
- * @author johan
- * @version $Id: $Id
- */
 public class Cnot extends TwoQubitGate
 {
     Complex[][] matrix = new Complex[][] {
@@ -19,27 +10,17 @@ public class Cnot extends TwoQubitGate
     };
 
 
-    /**
-     * <p>Constructor for Cnot.</p>
-     */
     public Cnot()
     {
     }
 
 
-    /**
-     * <p>Constructor for Cnot.</p>
-     *
-     * @param a a int
-     * @param b a int
-     */
     public Cnot(int a, int b)
     {
         super(a, b);
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -47,8 +28,8 @@ public class Cnot extends TwoQubitGate
     }
 
 
-    /** {@inheritDoc} */
-    @Override public String getCaption()
+    @Override
+    public String getCaption()
     {
         return "Cnot";
     }

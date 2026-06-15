@@ -1,19 +1,9 @@
 package com.orion.quantumcomputing.gate;
 
-import Complex;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.redfx.strange.Block;
-import org.redfx.strange.BlockGate;
-import org.redfx.strange.QuantumExecutionEnvironment;
 
-/**
- * <p>Fourier class.</p>
- *
- * @author alain
- * @version $Id: $Id
- */
 public class Fourier extends BlockGate
 {
     protected Complex[][] matrix = null;
@@ -33,13 +23,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /**
-     * <p>Constructor for Fourier.</p>
-     *
-     * @param name a {@link String} object
-     * @param dim a int
-     * @param idx a int
-     */
     public Fourier(String name, int dim, int idx)
     {
         super(new Block(name, dim), idx);
@@ -48,7 +31,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Complex[][] getMatrix()
     {
@@ -56,9 +38,8 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
-    public Complex[][] getMatrix(QuantumExecutionEnvironment eqq)
+    public Complex[][] getMatrix(QuantumExecutor eqq)
     {
         if(matrix == null)
         {
@@ -82,7 +63,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public void setInverse(boolean v)
     {
@@ -94,7 +74,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public Fourier inverse()
     {
@@ -104,7 +83,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public List<Integer> getAffectedQubitIndexes()
     {
@@ -112,7 +90,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public int getHighestAffectedQubitIndex()
     {
@@ -120,7 +97,6 @@ public class Fourier extends BlockGate
     }
 
 
-    /** {@inheritDoc} */
     @Override
     public boolean hasOptimization()
     {

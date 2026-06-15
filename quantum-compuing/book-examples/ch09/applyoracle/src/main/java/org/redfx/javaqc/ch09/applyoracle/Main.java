@@ -30,7 +30,7 @@ public class Main {
         for (int choice = 0; choice < 4; choice++) {
             program = new Program(2);
 
-            Step oracleStep = new Step();
+            QuantumStep oracleStep = new QuantumStep();
             Oracle oracle = createOracle(choice);
             oracleStep.addGate(oracle);
 
@@ -54,11 +54,11 @@ public class Main {
         for (int choice = 0; choice < 4; choice++) {
             program = new Program(2);
 
-            Step prepareStep = new Step();
+            QuantumStep prepareStep = new QuantumStep();
             prepareStep.addGate(new X(0));
             program.addStep(prepareStep);
             
-            Step oracleStep = new Step();
+            QuantumStep oracleStep = new QuantumStep();
             Oracle oracle = createOracle(choice);
             oracleStep.addGate(oracle);
             program.addStep(oracleStep);
@@ -79,11 +79,11 @@ public class Main {
         for (int choice = 0; choice < 4; choice++) {
             program = new Program(2);
 
-            Step prepareStep = new Step();
+            QuantumStep prepareStep = new QuantumStep();
             prepareStep.addGate(new X(1));
             program.addStep(prepareStep);
             
-            Step oracleStep = new Step();
+            QuantumStep oracleStep = new QuantumStep();
             Oracle oracle = createOracle(choice);
             oracleStep.addGate(oracle);
             program.addStep(oracleStep);
@@ -104,12 +104,12 @@ public class Main {
         for (int choice = 0; choice < 4; choice++) {
             program = new Program(2);
 
-            Step prepareStep = new Step();
+            QuantumStep prepareStep = new QuantumStep();
             prepareStep.addGate(new X(0));
             prepareStep.addGate(new X(1));
             program.addStep(prepareStep);
             
-            Step oracleStep = new Step();
+            QuantumStep oracleStep = new QuantumStep();
             Oracle oracle = createOracle(choice);
             oracleStep.addGate(oracle);
             program.addStep(oracleStep);

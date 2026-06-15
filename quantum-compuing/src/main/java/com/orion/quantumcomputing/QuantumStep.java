@@ -12,8 +12,8 @@ public class QuantumStep
     private final String name;
     private int index;
     private QuantumProgram program;
-    private int complexStep = -1; // if a complex step needs to be broken into
-    // simple steps, only one simple step can have this value to be the index of the complex step
+    private int complexStep = -1; // if a complex QuantumStep needs to be broken into
+    // simple QuantumSteps, only one simple QuantumStep can have this value to be the index of the complex QuantumStep
     private boolean informal = false;
 
 
@@ -153,7 +153,7 @@ public class QuantumStep
                             .count();
             if(overlap > 0)
             {
-                throw new IllegalArgumentException("Adding gate that affects a qubit already involved in this step");
+                throw new IllegalArgumentException("Adding gate that affects a qubit already involved in this QuantumStep");
             }
         }
     }

@@ -17,10 +17,10 @@ public class Main {
 
         QuantumExecutionEnvironment simulator = new SimpleQuantumExecutionEnvironment();
         Program program = new Program(SIZE);
-        Step prepareStep = new Step();
-        Step superPositionStep = new Step();
-        Step superPositionStep2 = new Step();
-        Step measureStep = new Step();
+        QuantumStep prepareStep = new QuantumStep();
+        QuantumStep superPositionStep = new QuantumStep();
+        QuantumStep superPositionStep2 = new QuantumStep();
+        QuantumStep measureStep = new QuantumStep();
         for (int i = 0; i < SIZE; i++) {
             if (i > (SIZE/2-1)) prepareStep.addGate(new X(i));
             if ( (i/2) % 2 == 1) superPositionStep.addGate(new Hadamard(i));

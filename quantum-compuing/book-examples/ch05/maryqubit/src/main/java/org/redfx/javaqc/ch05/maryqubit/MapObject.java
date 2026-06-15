@@ -1,7 +1,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2019, Johan Vos and Stephen Chin
+ * Copyright (c) 2019, Johan Vos and QuantumStephen Chin
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
