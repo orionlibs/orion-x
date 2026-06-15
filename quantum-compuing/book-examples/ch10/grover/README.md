@@ -21,39 +21,39 @@ results after QuantumStep 6: 0.9965861439704895
 
 
 JavaFX Platform initialized
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@72b6cbcc]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@72b6cbcc]
 Prob for QuantumStep 3
  = 0.01373291201889515
 n = 6 and N = 64, dY = 6.625
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@30b8a058]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@30b8a058]
 Prob for QuantumStep 6
  = 0.010414360091090202
 n = 6 and N = 64, dY = 6.625
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@7c29daf3]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@7c29daf3]
 Prob for QuantumStep 9
  = 0.006486030761152506
 n = 6 and N = 64, dY = 6.625
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@6c49835d]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@6c49835d]
 Prob for QuantumStep 12
  = 0.0029146496672183275
 n = 6 and N = 64, dY = 6.625
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@7d0587f1]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@7d0587f1]
 Prob for QuantumStep 15
  = 5.791197181679308E-4
 n = 6 and N = 64, dY = 6.625
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3b084709]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@1efed156]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@4f063c0a]
+Create BO, s = QuantumStep with gates [Oracle@3b084709]
+Create BO, s = QuantumStep with gates [Oracle@1efed156]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@4f063c0a]
 Prob for QuantumStep 18
  = 5.419565422926098E-5
 n = 6 and N = 64, dY = 6.625

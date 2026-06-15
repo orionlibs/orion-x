@@ -2,7 +2,7 @@ package org.redfx.javaqc.ch10.grover;
 
 import org.redfx.strange.*;
 import org.redfx.strange.algorithm.Classic;
-import org.redfx.strange.gate.*;
+import *;
 import org.redfx.strange.local.*;
 import org.redfx.strangefx.render.Renderer;
 

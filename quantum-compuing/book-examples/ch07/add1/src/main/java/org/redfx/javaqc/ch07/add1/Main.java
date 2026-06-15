@@ -5,8 +5,8 @@ import org.redfx.strange.QuantumExecutionEnvironment;
 import org.redfx.strange.Qubit;
 import org.redfx.strange.Result;
 import org.redfx.strange.Step;
-import org.redfx.strange.gate.Cnot;
-import org.redfx.strange.gate.X;
+import Cnot;
+import X;
 import org.redfx.strange.local.SimpleQuantumExecutionEnvironment;
 import org.redfx.strangefx.render.Renderer;
 

@@ -1,5 +1,9 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.Identity;
+import com.orion.quantumcomputing.gate.PermutationGate;
+import com.orion.quantumcomputing.gate.ProbabilitiesGate;
+import com.orion.quantumcomputing.gate.Swap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -47,33 +51,33 @@ public class SimpleQuantumExecutor implements QuantumExecutor
                 }
             }
         }
-        List<QuantumStep> QuantumSteps = p.getSteps();
+        List<QuantumStep> steps = p.getSteps();
         List<QuantumStep> simpleSteps = p.getDecomposedSteps();
         if(simpleSteps == null)
         {
             simpleSteps = new ArrayList<>();
-            for(QuantumStep QuantumStep : QuantumSteps)
+            for(QuantumStep step : steps)
             {
                 simpleSteps.addAll(QuantumComputations.decomposeStep(step, nQubits));
             }
             p.setDecomposedSteps(simpleSteps);
         }
-        QuantumResult result = new QuantumResult(nQubits, QuantumSteps.size());
+        QuantumResult result = new QuantumResult(nQubits, steps.size());
         int cnt = 0;
         result.setIntermediateProbability(0, probs);
         LOG.fine("START RUN, number of QuantumSteps = " + simpleSteps.size());
-        for(QuantumStep QuantumStep : simpleSteps)
+        for(QuantumStep step : simpleSteps)
         {
             if(!step.getGates().isEmpty())
             {
-                LOG.finer("RUN QuantumStep " + QuantumStep + ", cnt = " + cnt);
+                LOG.finer("RUN QuantumStep " + step + ", cnt = " + cnt);
                 cnt++;
                 LOG.finest("before this QuantumStep, probs = ");
                 //      printProbs(probs);
                 probs = applyStep(step, probs, qubit);
                 LOG.info("after this QuantumStep, probs = " + probs);
                 //    printProbs(probs);
-                int idx = QuantumStep.getComplexStep();
+                int idx = step.getComplexStep();
                 // System.err.println("complex? "+idx);
                 if(idx > -1)
                 {

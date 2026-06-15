@@ -352,11 +352,11 @@ class name) and the backend impls:
 [
   { "name": "org.redfx.strange.local.SimpleQuantumExecutionEnvironment",
     "allDeclaredConstructors": true, "allPublicMethods": true },
-  { "name": "org.redfx.strange.gate.SingleQubitGate", "allDeclaredConstructors": true },
-  { "name": "org.redfx.strange.gate.TwoQubitGate",    "allDeclaredConstructors": true },
-  { "name": "org.redfx.strange.gate.ThreeQubitGate",  "allDeclaredConstructors": true },
-  { "name": "org.redfx.strange.gate.Hadamard", "allDeclaredConstructors": true },
-  { "name": "org.redfx.strange.gate.Cnot",     "allDeclaredConstructors": true }
+  { "name": "SingleQubitGate", "allDeclaredConstructors": true },
+  { "name": "TwoQubitGate",    "allDeclaredConstructors": true },
+  { "name": "ThreeQubitGate",  "allDeclaredConstructors": true },
+  { "name": "Hadamard", "allDeclaredConstructors": true },
+  { "name": "Cnot",     "allDeclaredConstructors": true }
   /* ... enumerate all concrete gates, or generate via the tracing agent (below) ... */
 ]
 ```

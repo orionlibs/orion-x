@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class Y extends SingleQubitGate
 {
     Complex[][] matrix = new Complex[][] {{Complex.ZERO, Complex.I.mul(-1)}, {Complex.I, Complex.ZERO}};

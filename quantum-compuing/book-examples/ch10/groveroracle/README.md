@@ -22,8 +22,8 @@ Use 10 as input
 
 Use 11 as input
 , measured = 1, 1
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@25bbe1b6]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@57536d79]
+Create BO, s = QuantumStep with gates [Oracle@25bbe1b6]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@57536d79]
 Prob for QuantumStep 1
  = 0.0
 n = 2 and N = 4, dY = 40.0

@@ -1,12 +1,14 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.PermutationGate;
+import com.orion.quantumcomputing.gate.ProbabilitiesGate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Block
 {
-    List<QuantumStep> QuantumSteps = new ArrayList<>();
+    List<QuantumStep> steps = new ArrayList<>();
     private final int numberOfQubits;
     private Complex[][] matrix = null;
     private final String name;
@@ -25,7 +27,7 @@ public class Block
     }
 
 
-    public void addStep(QuantumStep QuantumStep)
+    public void addStep(QuantumStep step)
     {
         this.steps.add(step);
         matrix = null;
@@ -65,21 +67,21 @@ public class Block
         {
             matrix = Complex.identityMatrix(1 << numberOfQubits);
             List<QuantumStep> simpleSteps = new ArrayList<>();
-            for(QuantumStep QuantumStep : QuantumSteps)
+            for(QuantumStep step : steps)
             {
-                simpleSteps.addAll(Computations.decomposeStep(step, numberOfQubits));
+                simpleSteps.addAll(QuantumComputations.decomposeStep(step, numberOfQubits));
             }
             Collections.reverse(simpleSteps);
-            for(QuantumStep QuantumStep : simpleSteps)
+            for(QuantumStep step : simpleSteps)
             {
-                List<QuantumGate> gates = QuantumStep.getGates();
+                List<QuantumGate> gates = step.getGates();
                 if((matrix != null) && (gates.size() == 1) && (gates.get(0) instanceof PermutationGate))
                 {
                     matrix = Complex.permutate((PermutationGate)gates.get(0), matrix);
                 }
                 else
                 {
-                    Complex[][] m = Computations.calculateStepMatrix(step.getGates(), numberOfQubits, qee);
+                    Complex[][] m = QuantumComputations.calculateStepMatrix(step.getGates(), numberOfQubits, qee);
                     if(matrix == null)
                     {
                         matrix = m;
@@ -105,9 +107,9 @@ public class Block
     public Complex[] applyOptimize(Complex[] probs, boolean inverse)
     {
         List<QuantumStep> simpleSteps = new ArrayList<>();
-        for(QuantumStep QuantumStep : QuantumSteps)
+        for(QuantumStep step : steps)
         {
-            simpleSteps.addAll(Computations.decomposeStep(step, numberOfQubits));
+            simpleSteps.addAll(QuantumComputations.decomposeStep(step, numberOfQubits));
         }
         if(inverse)
         {
@@ -117,7 +119,7 @@ public class Block
                 QuantumStep.setInverse(true);
             }
         }
-        for(QuantumStep QuantumStep : simpleSteps)
+        for(QuantumStep step : simpleSteps)
         {
             if(!step.getGates().isEmpty())
             {
@@ -126,9 +128,9 @@ public class Block
         }
         if(inverse)
         {
-            for(QuantumStep QuantumStep : simpleSteps)
+            for(QuantumStep step : simpleSteps)
             {
-                QuantumStep.setInverse(true);
+                step.setInverse(true);
             }
         }
         return probs;
@@ -146,10 +148,10 @@ public class Block
         if(gates.size() == 1 && gates.get(0) instanceof PermutationGate)
         {
             PermutationGate pg = (PermutationGate)gates.get(0);
-            return Computations.permutateVector(vector, pg.getIndex1(), pg.getIndex2());
+            return QuantumComputations.permutateVector(vector, pg.getIndex1(), pg.getIndex2());
         }
         Complex[] result = new Complex[vector.length];
-        result = Computations.calculateNewState(gates, vector, numberOfQubits);
+        result = QuantumComputations.calculateNewState(gates, vector, numberOfQubits);
         long s1 = System.currentTimeMillis();
         return result;
     }

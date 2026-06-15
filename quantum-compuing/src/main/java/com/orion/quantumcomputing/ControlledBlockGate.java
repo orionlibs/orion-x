@@ -1,5 +1,6 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.PermutationGate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -172,7 +173,7 @@ public class ControlledBlockGate<T> extends BlockGate
             }
             Complex[][] part = block.getMatrix(qee);
             int dim = part.length;
-            matrix = Computations.createIdentity(2 * dim);
+            matrix = QuantumComputations.createIdentity(2 * dim);
             for(int i = 0; i < dim; i++)
             {
                 for(int j = 0; j < dim; j++)

@@ -16,17 +16,17 @@ results after QuantumStep 1: 0.2499999701976776
 
 
 JavaFX Platform initialized
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@3b084709]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@3b084709]
 Prob for QuantumStep 1
  = 0.2499999701976776
 n = 2 and N = 4, dY = 40.0
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@3224f60b]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@6737fd8f]
+Create BO, s = QuantumStep with gates [Oracle@3224f60b]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@6737fd8f]
 Prob for QuantumStep 3
  = 0.2499999701976776
 n = 2 and N = 4, dY = 40.0
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.Oracle@72b6cbcc]
-Create BO, s = QuantumStep with gates [org.redfx.strange.gate.ProbabilitiesGate@68bbe345]
+Create BO, s = QuantumStep with gates [Oracle@72b6cbcc]
+Create BO, s = QuantumStep with gates [ProbabilitiesGate@68bbe345]
 Prob for QuantumStep 5
  = 8.881784197001252E-16
 n = 2 and N = 4, dY = 40.0

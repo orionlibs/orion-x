@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class ProbabilitiesGate extends InformalGate
 {
     private Complex[] probabilities;

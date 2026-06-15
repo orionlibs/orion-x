@@ -1,9 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.QuantumGate;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class TwoQubitGate implements Gate
+public abstract class TwoQubitGate implements QuantumGate
 {
     private int first;
     private int second;

@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class R extends SingleQubitGate
 {
     private final double expv;

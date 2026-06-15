@@ -2,6 +2,15 @@ package com.orion.quantumcomputing;
 
 import static com.orion.quantumcomputing.Complex.tensor;
 
+import com.orion.quantumcomputing.gate.Identity;
+import com.orion.quantumcomputing.gate.ImmediateQuantumMeasurement;
+import com.orion.quantumcomputing.gate.Oracle;
+import com.orion.quantumcomputing.gate.PermutationGate;
+import com.orion.quantumcomputing.gate.ProbabilitiesGate;
+import com.orion.quantumcomputing.gate.SingleQubitGate;
+import com.orion.quantumcomputing.gate.Swap;
+import com.orion.quantumcomputing.gate.ThreeQubitGate;
+import com.orion.quantumcomputing.gate.TwoQubitGate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -710,10 +719,10 @@ public class QuantumComputations
     {
         int size = vector.length;
         QuantumGate gate = gates.stream()
-                                .filter(g -> g instanceof ImmediateMeasurement)
+                                .filter(g -> g instanceof ImmediateQuantumMeasurement)
                                 .findFirst()
                                 .orElseThrow(() -> new IllegalArgumentException("Need an ImmediateMeasurement gate"));
-        ImmediateMeasurement mGate = (ImmediateMeasurement)gate;
+        ImmediateQuantumMeasurement mGate = (ImmediateQuantumMeasurement)gate;
         int idx = mGate.getMainQubitIndex();
         double[] p = new double[2];
         for(int i = 0; i < size; i++)
@@ -743,10 +752,10 @@ public class QuantumComputations
     }
 
 
-    static boolean containsImmediateMeasurementOnly(List<Gate> gates)
+    static boolean containsImmediateMeasurementOnly(List<QuantumGate> gates)
     {
         return gates.stream()
-                    .anyMatch(g -> g instanceof ImmediateMeasurement) && gates.stream().allMatch(g -> g instanceof ImmediateMeasurement || g instanceof Identity);
+                    .anyMatch(g -> g instanceof ImmediateQuantumMeasurement) && gates.stream().allMatch(g -> g instanceof ImmediateQuantumMeasurement || g instanceof Identity);
     }
 
 

@@ -1,5 +1,6 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.PermutationGate;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;

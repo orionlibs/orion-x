@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class Hadamard extends SingleQubitGate
 {
     Complex[][] matrix = new Complex[][] {{Complex.HC, Complex.HC}, {Complex.HC, Complex.HCN}};

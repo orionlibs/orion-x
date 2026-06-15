@@ -1,5 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
+import static com.orion.quantumcomputing.Complex.ONE;
+import static com.orion.quantumcomputing.Complex.ZERO;
+
+import com.orion.quantumcomputing.Complex;
+
 public class Toffoli extends ThreeQubitGate
 {
     Complex[][] matrix = new Complex[][] {

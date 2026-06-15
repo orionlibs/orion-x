@@ -1,5 +1,6 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 

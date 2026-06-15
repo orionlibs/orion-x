@@ -1,5 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.ControlledBlockGate;
+import com.orion.quantumcomputing.QuantumStep;
+
 public class AddIntegerModulus extends BlockGate<AddIntegerModulus>
 {
     Block block;
@@ -33,20 +38,20 @@ public class AddIntegerModulus extends BlockGate<AddIntegerModulus>
         Block answer = new Block("AddIntegerModulus", x1 - x0 + 2);
         int n = x1 - x0;
         int dim = n + 1;
-        org.redfx.strange.gate.AddInteger add = new org.redfx.strange.gate.AddInteger(x0, x1, a);
+        AddInteger add = new AddInteger(x0, x1, a);
         answer.addStep(new QuantumStep(add));
-        org.redfx.strange.gate.AddInteger min = new org.redfx.strange.gate.AddInteger(x0, x1, N).inverse();
+        AddInteger min = new AddInteger(x0, x1, N).inverse();
         answer.addStep(new QuantumStep(min));
         answer.addStep(new QuantumStep(new Cnot(x1, dim)));
-        org.redfx.strange.gate.AddInteger addN = new org.redfx.strange.gate.AddInteger(x0, x1, N);
+        AddInteger addN = new AddInteger(x0, x1, N);
         ControlledBlockGate cbg = new ControlledBlockGate(addN, x0, dim);
         answer.addStep(new QuantumStep(cbg));
-        org.redfx.strange.gate.AddInteger add2 = new org.redfx.strange.gate.AddInteger(x0, x1, a).inverse();
+        AddInteger add2 = new AddInteger(x0, x1, a).inverse();
         answer.addStep(new QuantumStep(add2));
         answer.addStep(new QuantumStep(new X(dim - 1)));
         answer.addStep(new QuantumStep(new Cnot(x1, dim)));
         answer.addStep(new QuantumStep(new X(dim - 1)));
-        org.redfx.strange.gate.AddInteger add3 = new AddInteger(x0, x1, a);
+        AddInteger add3 = new AddInteger(x0, x1, a);
         answer.addStep(new QuantumStep(add3));
         return answer;
     }

@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class Swap extends TwoQubitGate
 {
     Complex[][] matrix = new Complex[][] {

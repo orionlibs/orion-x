@@ -1,5 +1,8 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.Cnot;
+import com.orion.quantumcomputing.gate.Hadamard;
+import com.orion.quantumcomputing.gate.QuantumMeasurement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,14 +11,13 @@ import java.util.Objects;
 public class QuantumProgram
 {
     private final int numberOfQubits;
-    private final ArrayList<QuantumStep> QuantumSteps = new ArrayList<>();
+    private final ArrayList<QuantumStep> steps = new ArrayList<>();
     private QuantumResult result;
     private double[] initAlpha;
-    // cache decomposedSteps
     private List<QuantumStep> decomposedSteps = null;
 
 
-    public QuantumProgram(int numberOfQubits, QuantumStep... QuantumSteps)
+    public QuantumProgram(int numberOfQubits, QuantumStep... steps)
     {
         this.numberOfQubits = numberOfQubits;
         this.initAlpha = new double[numberOfQubits];
@@ -40,22 +42,22 @@ public class QuantumProgram
     }
 
 
-    public void addStep(QuantumStep QuantumStep)
+    public void addStep(QuantumStep step)
     {
         if(!ensureMeasureSafe(Objects.requireNonNull(step)))
         {
             throw new IllegalArgumentException("Cannot add a superposition QuantumStep to a measured qubit");
         }
-        QuantumStep.setIndex(steps.size());
-        QuantumStep.setProgram(this);
-        QuantumSteps.add(step);
+        step.setIndex(steps.size());
+        step.setProgram(this);
+        steps.add(step);
         this.decomposedSteps = null;
     }
 
 
     public void addSteps(QuantumStep... moreSteps)
     {
-        for(QuantumStep QuantumStep : moreSteps)
+        for(QuantumStep step : moreSteps)
         {
             addStep(step);
         }
@@ -77,9 +79,9 @@ public class QuantumProgram
                 mainQubits.add(((Cnot)g).getSecondQubitIndex());
             }
         }
-        for(QuantumStep QuantumStep : this.getSteps())
+        for(QuantumStep step : this.getSteps())
         {
-            boolean match = QuantumStep.getGates()
+            boolean match = step.getGates()
                                 .stream()
                                 .filter(g -> g instanceof QuantumMeasurement).map(QuantumGate::getMainQubitIndex)
                                 .anyMatch(mainQubits::contains);
@@ -88,7 +90,7 @@ public class QuantumProgram
                 return false;
             }
         }
-        ;
+
         return true;
     }
 
@@ -119,13 +121,13 @@ public class QuantumProgram
     }
 
 
-    public Result getResult()
+    public QuantumResult getResult()
     {
         return this.result;
     }
 
 
-    public void setResult(Result r)
+    public void setResult(QuantumResult r)
     {
         this.result = r;
     }
@@ -135,9 +137,9 @@ public class QuantumProgram
     {
         System.out.println("Info about Quantum Program");
         System.out.println("==========================");
-        System.out.println("Number of qubits = " + numberOfQubits + ", number of QuantumSteps = " + QuantumSteps.size());
-        QuantumSteps.forEach(step -> {
-            System.out.println("Step: " + QuantumStep.getGates());
+        System.out.println("Number of qubits = " + numberOfQubits + ", number of QuantumSteps = " + steps.size());
+        steps.forEach(step -> {
+            System.out.println("Step: " + step.getGates());
         });
         System.out.println("==========================");
     }

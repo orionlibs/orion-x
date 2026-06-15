@@ -1,5 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.QuantumComputations;
+import com.orion.quantumcomputing.QuantumStep;
+
 public class Mul extends BlockGate<Mul>
 {
     final Block block;
@@ -35,17 +40,17 @@ public class Mul extends BlockGate<Mul>
         Block answer = new Block("Mul", 2 * size);
         for(int i = 0; i < mul; i++)
         {
-            org.redfx.strange.gate.Add add = new org.redfx.strange.gate.Add(x0, x1, x1 + 1, x1 + size);
+            Add add = new Add(x0, x1, x1 + 1, x1 + size);
             answer.addStep(new QuantumStep(add));
         }
         for(int i = x0; i < x1 + 1; i++)
         {
             answer.addStep(new QuantumStep(new Swap(i, i + size)));
         }
-        int invsteps = Computations.getInverseModulus(mul, dim);
+        int invsteps = QuantumComputations.getInverseModulus(mul, dim);
         for(int i = 0; i < invsteps; i++)
         {
-            org.redfx.strange.gate.Add add = new Add(x0, x1, x1 + 1, x1 + size).inverse();
+            Add add = new Add(x0, x1, x1 + 1, x1 + size).inverse();
             answer.addStep(new QuantumStep(add));
         }
         return answer;

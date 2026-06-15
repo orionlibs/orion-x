@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class Cz extends TwoQubitGate
 {
     Complex[][] matrix = new Complex[][] {

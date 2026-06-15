@@ -1,5 +1,9 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.Complex;
+import com.orion.quantumcomputing.QuantumExecutor;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

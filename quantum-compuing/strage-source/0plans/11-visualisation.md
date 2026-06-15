@@ -186,7 +186,7 @@ then fall back on `g.getSize()`. If Section 7 accessors land, replace the
 `captionOf(g)`: return `g.getCaption()`; if it equals or starts with the FQCN
 (`g.getName()` / contains a `.`), fall back to a short class-simple-name so the
 default `SingleQubitGate.getCaption()==getName()` case does not dump
-`org.redfx.strange.gate.Foo` into the diagram.
+`Foo` into the diagram.
 
 ### 3.1 — ASCII backend  (`viz/AsciiRenderer.java`; method `Program.toAsciiCircuit()`)
 

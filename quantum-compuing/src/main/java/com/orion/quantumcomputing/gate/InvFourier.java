@@ -1,5 +1,8 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+import com.orion.quantumcomputing.QuantumExecutor;
+
 public class InvFourier extends Fourier
 {
     /**

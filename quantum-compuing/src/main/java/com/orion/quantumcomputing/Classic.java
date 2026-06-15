@@ -1,5 +1,13 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.Cr;
+import com.orion.quantumcomputing.gate.Fourier;
+import com.orion.quantumcomputing.gate.Hadamard;
+import com.orion.quantumcomputing.gate.InvFourier;
+import com.orion.quantumcomputing.gate.MulModulus;
+import com.orion.quantumcomputing.gate.Oracle;
+import com.orion.quantumcomputing.gate.ProbabilitiesGate;
+import com.orion.quantumcomputing.gate.X;
 import java.util.List;
 import java.util.function.Function;
 
@@ -189,7 +197,7 @@ public class Classic
         {
             return -1;
         }
-        return Computations.fraction(p, mod);
+        return QuantumComputations.fraction(p, mod);
     }
 
 
@@ -198,7 +206,7 @@ public class Classic
         System.out.println("We need to factor " + N);
         int a = 1 + (int)((N - 1) * Math.random());
         System.out.println("Pick a random number a, a < N: " + a);
-        int gcdan = Computations.gcd(N, a);
+        int gcdan = QuantumComputations.gcd(N, a);
         System.out.println("calculate gcd(a, N):" + gcdan);
         if(gcdan != 1)
         {
@@ -224,7 +232,7 @@ public class Classic
             return qfactor(N);
         }
         int f2 = (int)Math.pow(a, p / 2) - 1;
-        int factor = Computations.gcd(N, f2);
+        int factor = QuantumComputations.gcd(N, f2);
         return factor;
     }
 

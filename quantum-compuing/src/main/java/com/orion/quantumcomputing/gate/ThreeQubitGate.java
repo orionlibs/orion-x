@@ -1,5 +1,6 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.QuantumGate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

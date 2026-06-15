@@ -1,5 +1,23 @@
 package com.orion.quantumcomputing;
 
+import com.orion.quantumcomputing.gate.Axes;
+import com.orion.quantumcomputing.gate.Cnot;
+import com.orion.quantumcomputing.gate.Cz;
+import com.orion.quantumcomputing.gate.Hadamard;
+import com.orion.quantumcomputing.gate.Identity;
+import com.orion.quantumcomputing.gate.Oracle;
+import com.orion.quantumcomputing.gate.PermutationGate;
+import com.orion.quantumcomputing.gate.ProbabilitiesGate;
+import com.orion.quantumcomputing.gate.QuantumMeasurement;
+import com.orion.quantumcomputing.gate.Rotation;
+import com.orion.quantumcomputing.gate.RotationX;
+import com.orion.quantumcomputing.gate.RotationY;
+import com.orion.quantumcomputing.gate.RotationZ;
+import com.orion.quantumcomputing.gate.Swap;
+import com.orion.quantumcomputing.gate.Toffoli;
+import com.orion.quantumcomputing.gate.X;
+import com.orion.quantumcomputing.gate.Y;
+import com.orion.quantumcomputing.gate.Z;
 import java.util.List;
 
 public interface QuantumGate
@@ -88,7 +106,7 @@ public interface QuantumGate
     }
 
 
-    static QuantumGate rotation(double theta, Rotation.Axes axis, int idx)
+    static QuantumGate rotation(double theta, Axes axis, int idx)
     {
         return new Rotation(theta, axis, idx);
     }
@@ -112,49 +130,49 @@ public interface QuantumGate
     }
 
 
-    public int getMainQubitIndex();
+    int getMainQubitIndex();
 
 
-    public void setMainQubitIndex(int idx);
+    void setMainQubitIndex(int idx);
 
 
-    public void setAdditionalQubit(int idx, int cnt);
+    void setAdditionalQubit(int idx, int cnt);
 
 
-    public List<Integer> getAffectedQubitIndexes();
+    List<Integer> getAffectedQubitIndexes();
 
 
-    public int getHighestAffectedQubitIndex();
+    int getHighestAffectedQubitIndex();
 
 
-    public String getCaption();
+    String getCaption();
 
 
-    public String getName();
+    String getName();
 
 
-    public String getGroup();
+    String getGroup();
 
 
-    public Complex[][] getMatrix();
+    Complex[][] getMatrix();
 
 
-    public int getSize();
+    int getSize();
 
 
-    default public Complex[][] getMatrix(QuantumExecutionEnvironment qee)
+    default Complex[][] getMatrix(QuantumExecutor qee)
     {
         return getMatrix();
     }
 
 
-    default public boolean hasOptimization()
+    default boolean hasOptimization()
     {
         return false;
     }
 
 
-    default public Complex[] applyOptimize(Complex[] v)
+    default Complex[] applyOptimize(Complex[] v)
     {
         return null;
     }

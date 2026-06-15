@@ -154,7 +154,7 @@ Purpose: prove the install works and show the canonical run loop. Content:
 ```java
 // Run with:  jshell --class-path target/classes 00-quickstart.jsh
 import org.redfx.strange.*;
-import org.redfx.strange.gate.*;
+import *;
 import org.redfx.strange.local.SimpleQuantumExecutionEnvironment;
 
 Program program = new Program(1, new QuantumStep(new Hadamard(0)));

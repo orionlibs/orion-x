@@ -14,12 +14,12 @@ public class QuantumResult
     private int measuredProbability = -1;
 
 
-    public QuantumResult(int numberOfQubits, int QuantumSteps)
+    public QuantumResult(int numberOfQubits, int steps)
     {
         assert (steps >= 0);
         this.numberOfQubits = numberOfQubits;
-        this.numberOfSteps = QuantumSteps;
-        intermediateProps = new Complex[steps > 0 ? QuantumSteps : 1][];
+        this.numberOfSteps = steps;
+        intermediateProps = new Complex[steps > 0 ? steps : 1][];
         intermediateQubits = new HashMap<>();
     }
 
@@ -114,7 +114,7 @@ public class QuantumResult
     }
 
 
-    public void setIntermediateProbability(int QuantumStep, Complex[] p)
+    public void setIntermediateProbability(int step, Complex[] p)
     {
         this.intermediateProps[step] = p;
         this.intermediateQubits.put(step, calculateQubitsFromVector(p));

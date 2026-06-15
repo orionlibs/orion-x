@@ -1,5 +1,7 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Complex;
+
 public class Rotation extends SingleQubitGate
 {
     protected final double thetav;

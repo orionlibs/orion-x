@@ -1,5 +1,8 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.QuantumStep;
 import java.util.HashMap;
 
 public class Add extends BlockGate<Add>

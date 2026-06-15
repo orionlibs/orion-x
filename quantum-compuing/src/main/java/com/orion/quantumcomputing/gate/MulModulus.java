@@ -1,5 +1,11 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.ControlledBlockGate;
+import com.orion.quantumcomputing.QuantumComputations;
+import com.orion.quantumcomputing.QuantumStep;
+
 public class MulModulus extends BlockGate<MulModulus>
 {
     Block block;
@@ -39,7 +45,7 @@ public class MulModulus extends BlockGate<MulModulus>
         for(int i = 0; i < n; i++)
         {
             int m = (mul * (1 << i)) % mod;
-            org.redfx.strange.gate.AddIntegerModulus add = new org.redfx.strange.gate.AddIntegerModulus(x0, x1 + 1, m, mod);
+            AddIntegerModulus add = new AddIntegerModulus(x0, x1 + 1, m, mod);
             ControlledBlockGate cbg = new ControlledBlockGate(add, n, i);
             answer.addStep(new QuantumStep(cbg));
         }
@@ -51,7 +57,7 @@ public class MulModulus extends BlockGate<MulModulus>
         for(int i = 0; i < n; i++)
         {
             int m = (invmul * (1 << i)) % mod;
-            org.redfx.strange.gate.AddIntegerModulus add = new AddIntegerModulus(x0, x1 + 1, m, mod);
+            AddIntegerModulus add = new AddIntegerModulus(x0, x1 + 1, m, mod);
             ControlledBlockGate cbg = new ControlledBlockGate(add, n, i);
             cbg.setInverse(true);
             answer.addStep(new QuantumStep(cbg));

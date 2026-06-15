@@ -1,7 +1,7 @@
 package org.redfx.javaqc.ch03.paulix;
 
 import org.redfx.strange.*;
-import org.redfx.strange.gate.*;
+import *;
 import org.redfx.strange.local.*;
 
 public class Main {

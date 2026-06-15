@@ -1,7 +1,7 @@
 package org.redfx.javaqc.ch04.hadamard2;
 
 import org.redfx.strange.*;
-import org.redfx.strange.gate.*;
+import *;
 import org.redfx.strange.local.*;
 
 public class Main {

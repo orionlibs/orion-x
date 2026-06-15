@@ -1,7 +1,7 @@
 package org.redfx.javaqc.ch08.haha;
 
 import org.redfx.strange.*;
-import org.redfx.strange.gate.*;
+import *;
 import org.redfx.strange.local.*;
 import org.redfx.strangefx.render.*;
 

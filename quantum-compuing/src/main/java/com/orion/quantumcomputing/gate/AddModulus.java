@@ -1,14 +1,10 @@
 package com.orion.quantumcomputing.gate;
 
+import com.orion.quantumcomputing.Block;
+import com.orion.quantumcomputing.BlockGate;
+import com.orion.quantumcomputing.ControlledBlockGate;
+import com.orion.quantumcomputing.QuantumStep;
 import java.util.HashMap;
-import org.redfx.strange.Block;
-import org.redfx.strange.BlockGate;
-import org.redfx.strange.ControlledBlockGate;
-import org.redfx.strange.Step;
-import org.redfx.strange.gate.Add;
-import org.redfx.strange.gate.AddInteger;
-import org.redfx.strange.gate.Cnot;
-import org.redfx.strange.gate.X;
 
 public class AddModulus extends BlockGate<AddModulus>
 {
@@ -59,22 +55,22 @@ public class AddModulus extends BlockGate<AddModulus>
         Block answer = new Block("AddModulus", y1 - x0 + 2);
         int n = x1 - x0;
         int dim = 2 * (n + 1) + 1;
-        org.redfx.strange.gate.Add add = new org.redfx.strange.gate.Add(x0, x1, y0, y1);
+        Add add = new Add(x0, x1, y0, y1);
         answer.addStep(new QuantumStep(add));
-        org.redfx.strange.gate.AddInteger min = new org.redfx.strange.gate.AddInteger(x0, x1, N).inverse();
+        AddInteger min = new AddInteger(x0, x1, N).inverse();
         answer.addStep(new QuantumStep(min));
         answer.addStep(new QuantumStep(new Cnot(x1, dim - 1)));
-        org.redfx.strange.gate.AddInteger addN = new AddInteger(x0, x1, N);
+        AddInteger addN = new AddInteger(x0, x1, N);
         ControlledBlockGate cbg = new ControlledBlockGate(addN, x0, dim - 1);
         answer.addStep(new QuantumStep(cbg));
-        org.redfx.strange.gate.Add add2 = new org.redfx.strange.gate.Add(x0, x1, y0, y1).inverse();
+        Add add2 = new Add(x0, x1, y0, y1).inverse();
         answer.addStep(new QuantumStep(add2));
         answer.addStep(new QuantumStep(new X(dim - 1)));
         Block block = new Block(1);
         block.addStep(new QuantumStep(new X(0)));
         ControlledBlockGate cbg2 = new ControlledBlockGate(block, dim - 1, x1);
         answer.addStep(new QuantumStep(cbg2));
-        org.redfx.strange.gate.Add add3 = new Add(x0, x1, y0, y1);
+        Add add3 = new Add(x0, x1, y0, y1);
         answer.addStep(new QuantumStep(add3));
         return answer;
     }
