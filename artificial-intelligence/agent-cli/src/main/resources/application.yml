@@ -15,6 +15,14 @@ spring:
       version:
         enabled: true
 
+orion:
+  openrouter:
+    api:
+      key: ${openrouter.api.key}
+      base-url: ${openrouter.api.base.url}
+    ai:
+      model-id: ${openrouter.ai.model.id}
+
 #logging:
 #  level:
 #    root: INFO

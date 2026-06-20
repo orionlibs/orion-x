@@ -16,7 +16,6 @@ public class AgentCLIApplication
         SpringApplication application = new SpringApplication(AgentCLIApplication.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.run(args);
-        //ProgramParameters parameters = new ProgramParameters(args);
         //Agent agent = new Agent(parameters.getApiKey(), parameters.getBaseUrl());
         //String reply = agent.prompt(parameters.getPrompt());
     }

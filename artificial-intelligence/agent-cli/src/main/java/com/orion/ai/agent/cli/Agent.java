@@ -23,7 +23,7 @@ public class Agent
                                         .baseUrl(baseUrl)
                                         .build();
         this.contextBuilder = ChatCompletionCreateParams.builder()
-                                                        .model("anthropic/claude-haiku-4.5");
+                                                        .model("nvidia/nemotron-3-ultra-550b-a55b:free");
         for(Class<?> tool : ToolsRegistry.getAll())
         {
             contextBuilder.addTool(tool);
