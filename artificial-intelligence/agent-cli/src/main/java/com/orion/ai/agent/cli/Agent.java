@@ -2,6 +2,7 @@ package com.orion.ai.agent.cli;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.errors.OpenAIInvalidDataException;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
@@ -34,7 +35,6 @@ public class Agent
     public String prompt(String prompt)
     {
         this.contextBuilder.addMessage(MessageFactory.user(prompt));
-        Reply reply1 = reason();
         int iterations = 0;
         while(iterations <= MAX_ITERATIONS)
         {
@@ -54,11 +54,23 @@ public class Agent
     private Reply reason()
     {
         ChatCompletion response = client.chat().completions().create(this.contextBuilder.build());
-        if(response.choices().isEmpty())
+        List<ChatCompletion.Choice> choices;
+        try
+        {
+            choices = response.choices();
+        }
+        catch(OpenAIInvalidDataException e)
+        {
+            throw new RuntimeException(
+                "Model returned a malformed response — `choices` field missing. " +
+                "The model may be unavailable or returning a non-standard error payload. " +
+                "SDK message: " + e.getMessage(), e);
+        }
+        if(choices.isEmpty())
         {
             throw new RuntimeException("no choices in response");
         }
-        return processChoice(response.choices().getFirst());
+        return processChoice(choices.getFirst());
     }
 
 
