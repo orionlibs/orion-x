@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # call this like:
-# ./build-and-run.sh 'log.error -m "hello"'
-# ./build-and-run.sh 'log.error -m "hello"' 'math.random.from.0.to.1'
-# ./build-and-run.sh --output-file /tmp/result.json 'log.error -m "hello"'
+# ./build-and-run.sh log.error -m hello
+# ./build-and-run.sh log.error -m 'hello world'
+# ./build-and-run.sh --output-file /tmp/result.json log.error -m hello
+# ./build-and-run.sh --interactive true
 set -euo pipefail
 INTERACTIVE="false"
 
@@ -18,7 +19,8 @@ done
 mvn clean install -DskipTests=true -f ../../utils/pom.xml
 mvn clean package -DskipTests=true
 JAR="target/agentcli.jar"
-TMP=$(mktemp)
-trap 'rm -f "$TMP"' EXIT
-printf '%s\n' "$@" > "$TMP"
-java --enable-native-access=ALL-UNNAMED "${OUTPUT_ARGS[@]+"${OUTPUT_ARGS[@]}"}" -Dspring.shell.interactive.enabled=$INTERACTIVE -jar "$JAR" "@$TMP"
+NONINTERACTIVE=$([ "$INTERACTIVE" = "true" ] && echo "false" || echo "true")
+java --enable-native-access=ALL-UNNAMED "${OUTPUT_ARGS[@]+"${OUTPUT_ARGS[@]}"}" \
+    -Dspring.shell.interactive.enabled=$INTERACTIVE \
+    -Dspring.shell.noninteractive.enabled=$NONINTERACTIVE \
+    -jar "$JAR" "$@"

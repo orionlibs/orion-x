@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # call this like:
-# ./run.sh 'log.error -m "hello"'
-# ./run.sh 'log.error -m "hello"' 'math.random.from.0.to.1'
-# ./run.sh --output-dir /tmp --output-file result.json 'log.error -m "hello"'
+# ./run.sh log.error -m hello
+# ./run.sh log.error -m 'hello world'
+# ./run.sh --output-file /tmp/result.json log.error -m hello
+# ./run.sh --interactive true
 set -euo pipefail
 INTERACTIVE="false"
 JAR="target/agentcli.jar"
@@ -16,7 +17,8 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-TMP=$(mktemp)
-trap 'rm -f "$TMP"' EXIT
-printf '%s\n' "$@" > "$TMP"
-java --enable-native-access=ALL-UNNAMED "${OUTPUT_ARGS[@]+"${OUTPUT_ARGS[@]}"}" -Dspring.shell.interactive.enabled=$INTERACTIVE -jar "$JAR" "@$TMP"
+NONINTERACTIVE=$([ "$INTERACTIVE" = "true" ] && echo "false" || echo "true")
+java --enable-native-access=ALL-UNNAMED "${OUTPUT_ARGS[@]+"${OUTPUT_ARGS[@]}"}" \
+    -Dspring.shell.interactive.enabled=$INTERACTIVE \
+    -Dspring.shell.noninteractive.enabled=$NONINTERACTIVE \
+    -jar "$JAR" "$@"

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # call this like:
-# ./orionaiagentcli 'log.error -m "hello"'
-# ./orionaiagentcli 'log.error -m "hello"' 'math.random.from.0.to.1'
+# ./orionaiagentcli log.error -m hello
+# ./orionaiagentcli log.error -m 'hello world'
+# ./orionaiagentcli --interactive true
 set -euo pipefail
 cd /Users/dimiefthymiou/workspaces/misc/orion-x/artificial-intelligence/agent-cli
 exec ./run.sh "$@"
