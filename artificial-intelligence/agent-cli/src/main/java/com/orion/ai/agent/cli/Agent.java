@@ -16,14 +16,14 @@ public class Agent
     private final ChatCompletionCreateParams.Builder contextBuilder;
 
 
-    public Agent(String apiKey, String baseUrl)
+    public Agent(String apiKey, String baseUrl, String modelId)
     {
         this.client = OpenAIOkHttpClient.builder()
                                         .apiKey(apiKey)
                                         .baseUrl(baseUrl)
                                         .build();
         this.contextBuilder = ChatCompletionCreateParams.builder()
-                                                        .model("nvidia/nemotron-3-ultra-550b-a55b:free");
+                                                        .model(modelId);
         for(Class<?> tool : ToolsRegistry.getAll())
         {
             contextBuilder.addTool(tool);
@@ -34,6 +34,7 @@ public class Agent
     public String prompt(String prompt)
     {
         this.contextBuilder.addMessage(MessageFactory.user(prompt));
+        Reply reply1 = reason();
         int iterations = 0;
         while(iterations <= MAX_ITERATIONS)
         {

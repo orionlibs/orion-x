@@ -1,6 +1,8 @@
 spring:
   application:
     name: orion-ai-agent-cli
+  config:
+    import: optional:classpath:.env[.properties]
   main:
     web-application-type: none
   shell:
@@ -19,9 +21,9 @@ orion:
   openrouter:
     api:
       key: ${openrouter.api.key}
-      base-url: ${openrouter.api.base.url}
+      base-url: ${openrouter.api.base-url}
     ai:
-      model-id: ${openrouter.ai.model.id}
+      model-id: ${openrouter.ai.model-id}
 
 #logging:
 #  level:
