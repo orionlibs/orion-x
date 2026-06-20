@@ -77,7 +77,7 @@ public class Agent
     private Reply processChoice(ChatCompletion.Choice choice)
     {
         String modelReply = choice.message().content().orElse("Reply is empty");
-        if(choice.message().toolCalls().isEmpty())
+        if(choice.message().toolCalls().isEmpty() || choice.message().toolCalls().get().isEmpty())
         {
             return Reply.stop(modelReply);
         }
