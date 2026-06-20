@@ -40,8 +40,8 @@ public class AgentCLIApplication
             String prompt = args.getNonOptionArgs().getFirst();
             OrionConfiguration.Openrouter.Api api = config.getOpenrouter().getApi();
             OrionConfiguration.Openrouter.Ai ai = config.getOpenrouter().getAi();
-            System.out.println("running agent");
             Agent agent = new Agent(api.getKey(), api.getBaseUrl(), ai.getModelId());
+            System.out.println("running model " + ai.getModelId());
             System.out.println(agent.prompt(prompt));
             System.exit(0);
         };
