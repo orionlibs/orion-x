@@ -5,6 +5,7 @@ spring:
     import: optional:classpath:.env[.properties]
   main:
     web-application-type: none
+    banner-mode: off
   shell:
     enabled: true
     interactive:
