@@ -8,6 +8,8 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @SpringBootApplication
@@ -27,6 +29,7 @@ public class AgentCLIApplication
 
 
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     public ApplicationRunner agentRunner()
     {
         return args -> {
@@ -34,11 +37,13 @@ public class AgentCLIApplication
             {
                 return;
             }
-            String prompt = args.getNonOptionArgs().get(0);
+            String prompt = args.getNonOptionArgs().getFirst();
             OrionConfiguration.Openrouter.Api api = config.getOpenrouter().getApi();
             OrionConfiguration.Openrouter.Ai ai = config.getOpenrouter().getAi();
+            System.out.println("running agent");
             Agent agent = new Agent(api.getKey(), api.getBaseUrl(), ai.getModelId());
             System.out.println(agent.prompt(prompt));
+            System.exit(0);
         };
     }
 
