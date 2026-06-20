@@ -1,23 +1,18 @@
 package com.orion.ai.agent.cli;
 
-import com.orion.ai.agent.cli.configuration.OrionConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.orion"})
 public class AgentCLIApplication
 {
-    @Autowired
-    private OrionConfiguration config;
+    //@Autowired
+    //private OrionConfiguration config;
 
 
     static void main(String[] args)
@@ -28,7 +23,7 @@ public class AgentCLIApplication
     }
 
 
-    @Bean
+    /*@Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ApplicationRunner agentRunner()
     {
@@ -45,7 +40,7 @@ public class AgentCLIApplication
             System.out.println(agent.prompt(prompt));
             System.exit(0);
         };
-    }
+    }*/
 
 
     @Bean
