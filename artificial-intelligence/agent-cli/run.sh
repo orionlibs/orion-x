@@ -11,9 +11,6 @@ OUTPUT_ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --output-file) OUTPUT_ARGS+=("-Dorion.x.ai.agent.cli.output-file=$2"); shift 2 ;;
-        *) break ;;
-    esac
-    case "$1" in
         --interactive) INTERACTIVE=$2; shift 2 ;;
         *) break ;;
     esac
