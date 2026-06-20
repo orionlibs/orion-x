@@ -21,6 +21,9 @@
 
 
     <build>
+        <finalName>agentcli</finalName>
+
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -66,6 +69,26 @@
 
                 <version>3.5.6</version>
             </plugin>
+
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.5.7</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.orion.ai.agent.cli.AgentCLIApplication</mainClass>
+                    <jvmArguments>
+                        --enable-native-access=ALL-UNNAMED
+                    </jvmArguments>
+                </configuration>
+            </plugin>
         </plugins>
 
 
@@ -97,18 +120,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <artifactId>spring-framework-bom</artifactId>
-                <groupId>org.springframework</groupId>
-                <scope>import</scope>
-                <type>pom</type>
-                <version>7.0.7</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
+                <groupId>org.springframework.shell</groupId>
+                <artifactId>spring-shell-dependencies</artifactId>
+                <version>3.4.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -127,9 +141,43 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.orion</groupId>
+            <artifactId>utils</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>3.5.7</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline-terminal</artifactId>
+            <version>3.30.6</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>tools.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>3.0.2</version>
         </dependency>
 
 
@@ -151,6 +199,14 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.5.7</version>
+            <scope>test</scope>
         </dependency>
 
 
