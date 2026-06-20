@@ -1,17 +1,17 @@
 package com.orion.ai.agent.cli.command.log;
 
 import com.orion.util.logger.Logger;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
+import org.springframework.shell.core.command.annotation.Command;
+import org.springframework.shell.core.command.annotation.Option;
+import org.springframework.stereotype.Component;
 
-@ShellComponent
+@Component
 public class LogInfoCommand
 {
-    @ShellMethod(key = "log.info")
-    public String logInfo(@ShellOption(value = {"--message", "-m"}) String message)
+    @Command(name = "log.info", description = "Log a message at INFO level")
+    public String logInfo(@Option(longName = "message", shortName = 'm') String message)
     {
         Logger.info(message);
-        return null;
+        return message;
     }
 }
