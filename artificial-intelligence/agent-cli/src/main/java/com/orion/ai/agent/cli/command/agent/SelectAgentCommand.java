@@ -1,5 +1,6 @@
 package com.orion.ai.agent.cli.command.agent;
 
+import com.orion.ai.agent.cli.Agent;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
 import com.orion.util.logger.Logger;
 import com.orion.util.shell.cli.InteractiveSelectorInCLI;
@@ -22,6 +23,7 @@ public class SelectAgentCommand
     {
         if(agentID == null || agentID.isBlank())
         {
+            System.out.println("Currently selected agent is " + Agent.SELECTED_AGENT);
             return selectInteractively();
         }
         else
@@ -34,8 +36,9 @@ public class SelectAgentCommand
             {
                 if(config.getAi().getAvailableAgents().contains(agentID))
                 {
-                    Logger.info("Selected " + agentID);
-                    return "Agent set to: " + agentID;
+                    Agent.SELECTED_AGENT = agentID;
+                    Logger.info("Selected agent " + agentID);
+                    return "Agent set to " + agentID;
                 }
                 else
                 {
@@ -53,7 +56,8 @@ public class SelectAgentCommand
         {
             return "Invalid selection";
         }
-        Logger.info("Selected " + selected);
-        return "Agent set to: " + selected;
+        Agent.SELECTED_AGENT = selected;
+        Logger.info("Selected agent " + selected);
+        return "Agent set to " + selected;
     }
 }

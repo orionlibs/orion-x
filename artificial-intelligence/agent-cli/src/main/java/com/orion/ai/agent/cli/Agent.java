@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Agent
 {
+    public static String SELECTED_AGENT = "NONE";
     private static final int MAX_ITERATIONS = 5;
     private static final Logger logger = new Logger();
     private final OpenAIClient client;
