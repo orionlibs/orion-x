@@ -8,33 +8,21 @@ import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
 import com.openai.models.chat.completions.ChatCompletionMessageToolCall;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Agent
 {
     public static String SELECTED_AGENT = "NONE";
     private static final int MAX_ITERATIONS = 5;
     private static final Logger logger = new Logger();
-    private final OpenAIClient client;
-    private final ChatCompletionCreateParams.Builder contextBuilder;
+    private OpenAIClient client;
+    private ChatCompletionCreateParams.Builder contextBuilder;
 
 
-    public Agent(String apiKey, String baseUrl, String modelId)
+    public String prompt(String apiKey, String baseUrl, String modelId, String prompt)
     {
-        this.client = OpenAIOkHttpClient.builder()
-                                        .apiKey(apiKey)
-                                        .baseUrl(baseUrl)
-                                        .build();
-        this.contextBuilder = ChatCompletionCreateParams.builder()
-                                                        .model(modelId);
-        for(Class<?> tool : ToolsRegistry.getAll())
-        {
-            contextBuilder.addTool(tool);
-        }
-    }
-
-
-    public String prompt(String prompt)
-    {
+        initialise(apiKey, baseUrl, modelId);
         this.contextBuilder.addMessage(MessageFactory.user(prompt));
         int iterations = 0;
         while(iterations <= MAX_ITERATIONS)
@@ -49,6 +37,21 @@ public class Agent
             iterations += 1;
         }
         return "I have reached the max number of iterations and I am unable to come to an answer.";
+    }
+
+
+    private void initialise(String apiKey, String baseUrl, String modelId)
+    {
+        this.client = OpenAIOkHttpClient.builder()
+                                        .apiKey(apiKey)
+                                        .baseUrl(baseUrl)
+                                        .build();
+        this.contextBuilder = ChatCompletionCreateParams.builder()
+                                                        .model(modelId);
+        for(Class<?> tool : ToolsRegistry.getAll())
+        {
+            contextBuilder.addTool(tool);
+        }
     }
 
 
