@@ -1,5 +1,6 @@
 package com.orion.ai.agent.cli;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.errors.OpenAIInvalidDataException;
@@ -114,11 +115,26 @@ public class Agent
     }
 
 
+    protected String executeTool(String toolName, String jsonArguments)
+    {
+        try
+        {
+            Class<Tool> toolClass = ToolsRegistry.get(toolName);
+            Tool tool = new ObjectMapper().readValue(jsonArguments, toolClass);
+            return tool.execute();
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("Failed to execute tool " + toolName + ": " + e.getMessage(), e);
+        }
+    }
+
+
     private void callTool(ChatCompletionMessageToolCall toolCall)
     {
         ChatCompletionMessageFunctionToolCall.Function fn = toolCall.asFunction().function();
-        String result = fn.arguments(ToolsRegistry.get(fn.name())).execute();
-        logger.debug("Tool [" + toolCall.asFunction().function().name() + "] output: <<\n\n" + result + "\n\n>>");
+        String result = executeTool(fn.name(), fn.arguments());
+        logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
         this.contextBuilder.addMessage(MessageFactory.tool(toolCall.asFunction().id(), result));
     }
 
