@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.command.agent;
+package com.orion.util.shell.cli;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -6,18 +6,18 @@ import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
-public class InteractiveSelectorInShell
+@Component
+public class InteractiveSelectorInCLI
 {
-    private final Terminal terminal;
-    private final LineReader lineReader;
-
-
-    public InteractiveSelectorInShell(Terminal terminal, LineReader lineReader)
-    {
-        this.terminal = terminal;
-        this.lineReader = lineReader;
-    }
+    @Autowired
+    private Terminal terminal;
+    @Autowired
+    @Lazy
+    private LineReader lineReader;
 
 
     public String select(String title, List<String> options)

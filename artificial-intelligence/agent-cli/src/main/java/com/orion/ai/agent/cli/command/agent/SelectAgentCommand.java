@@ -1,11 +1,9 @@
 package com.orion.ai.agent.cli.command.agent;
 
 import com.orion.util.logger.Logger;
+import com.orion.util.shell.cli.InteractiveSelectorInCLI;
 import java.util.List;
-import org.jline.reader.LineReader;
-import org.jline.terminal.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.core.command.annotation.Command;
 import org.springframework.shell.core.command.annotation.Option;
 import org.springframework.stereotype.Component;
@@ -15,10 +13,7 @@ public class SelectAgentCommand
 {
     private static final List<String> AGENTS = List.of("claude", "OpenAI", "gemini");
     @Autowired
-    private Terminal terminal;
-    @Autowired
-    @Lazy
-    private LineReader lineReader;
+    private InteractiveSelectorInCLI interactiveSelectorInCLI;
 
 
     @Command(name = "/agent", description = "Select an agent")
@@ -35,7 +30,7 @@ public class SelectAgentCommand
 
     private String selectInteractively()
     {
-        String selected = new InteractiveSelectorInShell(terminal, lineReader).select("Select Agent", AGENTS);
+        String selected = interactiveSelectorInCLI.select("Select Agent", AGENTS);
         if(selected == null)
         {
             return "Invalid selection";
