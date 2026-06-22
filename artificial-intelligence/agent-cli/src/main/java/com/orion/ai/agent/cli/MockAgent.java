@@ -8,16 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockAgent extends Agent
 {
-    private static final String DEFAULT_RESPONSE =
-                    "This is a mock response. No matching response configured for this prompt.";
-
+    private static final String DEFAULT_RESPONSE = "This is a mock response. No matching response configured for this prompt.";
     private final Map<String, String> responses;
     private final String defaultResponse;
 
 
     public MockAgent()
     {
-        this.responses = Map.of();
+        this.responses = Map.of(
+                        "hello", "Hello! I am the mock agent.",
+                        "help", "I am the mock agent. I return predefined responses without calling any AI service.",
+                        "ping", "pong",
+                        "what are you", "I am the mock agent, used for testing and experimentation.",
+                        "what can you do", "I can respond to a fixed set of prompts. Configure me with a Map<String, String> for custom responses.");
         this.defaultResponse = DEFAULT_RESPONSE;
     }
 

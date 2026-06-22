@@ -36,8 +36,6 @@ public class AgentCLIApplication
             Agent.SELECTED_AGENT = config.getAi().getAgents().get(config.getAi().getDefaultAgent());
         };
     }
-
-
     //this is useful if we want to run a command and just terminate the CLI
     /*@Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
