@@ -20,7 +20,7 @@ public class RunPromptCommand
     public String runPrompt(@Arguments String[] words)
     {
         String prompt = String.join(" ", words);
-        OrionConfiguration.Openrouter.Api api = config.getOpenrouter().getApi();
+        OrionConfiguration.Ai.Openrouter.Api api = config.getAi().getOpenrouter().getApi();
         return agent.prompt(api.getKey(), api.getBaseUrl(), Agent.SELECTED_AGENT, prompt);
     }
 }

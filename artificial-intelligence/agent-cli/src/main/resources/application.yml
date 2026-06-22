@@ -23,10 +23,10 @@ orion:
     agents:
       nvidia: nvidia/nemotron-3-ultra-550b-a55b:free
     default-agent: nvidia
-  openrouter:
-    api:
-      key: ${openrouter.api.key}
-      base-url: ${openrouter.api.base-url}
+    openrouter:
+      api:
+        key: ${openrouter.api.key}
+        base-url: ${openrouter.api.base-url}
 
 #logging:
 #  level:

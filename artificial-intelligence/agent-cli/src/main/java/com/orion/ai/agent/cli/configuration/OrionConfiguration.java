@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "orion")
 public class OrionConfiguration
 {
-    private Openrouter openrouter = new Openrouter();
     private Ai ai = new Ai();
 
 
@@ -19,20 +18,21 @@ public class OrionConfiguration
     {
         private Map<String, String> agents;
         private String defaultAgent;
-    }
-
-
-    @Data
-    public static class Openrouter
-    {
-        private Openrouter.Api api = new Openrouter.Api();
+        private Openrouter openrouter = new Openrouter();
 
 
         @Data
-        public static class Api
+        public static class Openrouter
         {
-            private String key;
-            private String baseUrl;
+            private Openrouter.Api api = new Openrouter.Api();
+
+
+            @Data
+            public static class Api
+            {
+                private String key;
+                private String baseUrl;
+            }
         }
     }
 }
