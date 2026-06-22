@@ -29,7 +29,7 @@ public class SelectAgentCommand
         {
             if(config.getAi().getAgents().containsKey(agentID))
             {
-                Agent.SELECTED_AGENT = agentID;
+                Agent.SELECTED_AGENT = config.getAi().getAgents().get(agentID);
                 return "Agent set to " + agentID;
             }
             else
@@ -47,7 +47,7 @@ public class SelectAgentCommand
         {
             return "Invalid selection";
         }
-        Agent.SELECTED_AGENT = selected;
+        Agent.SELECTED_AGENT = config.getAi().getAgents().get(selected);
         return "Agent set to " + selected;
     }
 }
