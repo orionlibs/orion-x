@@ -5,7 +5,7 @@
 # ./run.sh --output-file /tmp/result.json log.error -m hello
 # ./run.sh --interactive true
 set -euo pipefail
-INTERACTIVE="false"
+INTERACTIVE="true"
 JAR="target/agentcli.jar"
 
 OUTPUT_ARGS=()

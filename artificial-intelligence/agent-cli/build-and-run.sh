@@ -5,7 +5,7 @@
 # ./build-and-run.sh --output-file /tmp/result.json log.error -m hello
 # ./build-and-run.sh --interactive true
 set -euo pipefail
-INTERACTIVE="false"
+INTERACTIVE="true"
 
 OUTPUT_ARGS=()
 while [[ $# -gt 0 ]]; do
