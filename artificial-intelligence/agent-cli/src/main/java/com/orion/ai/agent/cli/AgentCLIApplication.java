@@ -38,6 +38,7 @@ public class AgentCLIApplication
     }
 
 
+    //this is useful if we want to run a command and just terminate the CLI
     /*@Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ApplicationRunner agentRunner()

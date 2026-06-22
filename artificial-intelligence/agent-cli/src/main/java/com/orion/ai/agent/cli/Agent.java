@@ -42,6 +42,7 @@ public class Agent
 
     private void initialise(String apiKey, String baseUrl, String modelId)
     {
+        validate(apiKey, baseUrl, modelId);
         this.client = OpenAIOkHttpClient.builder()
                                         .apiKey(apiKey)
                                         .baseUrl(baseUrl)
@@ -51,6 +52,23 @@ public class Agent
         for(Class<?> tool : ToolsRegistry.getAll())
         {
             contextBuilder.addTool(tool);
+        }
+    }
+
+
+    private static void validate(String apiKey, String baseUrl, String modelId)
+    {
+        if(apiKey == null || apiKey.isBlank())
+        {
+            logger.error("The API key for openrouter cannot be empty");
+        }
+        if(baseUrl == null || baseUrl.isBlank())
+        {
+            logger.error("The API base URL for openrouter cannot be empty");
+        }
+        if(modelId == null || modelId.isBlank())
+        {
+            logger.error("The openrouter requires a modelID");
         }
     }
 

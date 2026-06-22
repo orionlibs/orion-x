@@ -21,6 +21,12 @@ public class Logger
     }
 
 
+    public void error(String message)
+    {
+        System.err.println(message);
+    }
+
+
     enum Level
-    {DEBUG, INFO}
+    {DEBUG, INFO, ERROR}
 }

@@ -22,7 +22,8 @@ orion:
   ai:
     agents:
       nvidia: nvidia/nemotron-3-ultra-550b-a55b:free
-    default-agent: nvidia
+      mock: mock-agent
+    default-agent: mock
     openrouter:
       api:
         key: ${openrouter.api.key}

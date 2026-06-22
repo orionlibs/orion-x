@@ -2,7 +2,6 @@ package com.orion.ai.agent.cli.command.agent;
 
 import com.orion.ai.agent.cli.Agent;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
-import com.orion.util.logger.Logger;
 import com.orion.util.shell.cli.InteractiveSelectorInCLI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.command.annotation.Command;
@@ -28,22 +27,14 @@ public class SelectAgentCommand
         }
         else
         {
-            if(agentID == null)
+            if(config.getAi().getAgents().containsKey(agentID))
             {
-                return "Invalid selection";
+                Agent.SELECTED_AGENT = agentID;
+                return "Agent set to " + agentID;
             }
             else
             {
-                if(config.getAi().getAgents().containsKey(agentID))
-                {
-                    Agent.SELECTED_AGENT = agentID;
-                    Logger.info("Selected agent " + agentID);
-                    return "Agent set to " + agentID;
-                }
-                else
-                {
-                    return "Invalid selection";
-                }
+                return "Invalid selection";
             }
         }
     }
@@ -57,7 +48,6 @@ public class SelectAgentCommand
             return "Invalid selection";
         }
         Agent.SELECTED_AGENT = selected;
-        Logger.info("Selected agent " + selected);
         return "Agent set to " + selected;
     }
 }
