@@ -21,9 +21,6 @@ public class RunPromptCommand
     {
         String prompt = String.join(" ", words);
         OrionConfiguration.Openrouter.Api api = config.getOpenrouter().getApi();
-        OrionConfiguration.Openrouter.Ai ai = config.getOpenrouter().getAi();
-        //System.out.println("running model " + ai.getModelId());
-        String response = agent.prompt(api.getKey(), api.getBaseUrl(), ai.getModelId(), prompt);
-        return response;
+        return agent.prompt(api.getKey(), api.getBaseUrl(), Agent.SELECTED_AGENT, prompt);
     }
 }

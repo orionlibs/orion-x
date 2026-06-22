@@ -1,18 +1,23 @@
 package com.orion.ai.agent.cli;
 
+import com.orion.ai.agent.cli.configuration.OrionConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.orion"})
 public class AgentCLIApplication
 {
-    //@Autowired
-    //private OrionConfiguration config;
+    @Autowired
+    private OrionConfiguration config;
 
 
     static void main(String[] args)
@@ -20,6 +25,16 @@ public class AgentCLIApplication
         SpringApplication application = new SpringApplication(AgentCLIApplication.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.run(args);
+    }
+
+
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public ApplicationRunner agentRunner()
+    {
+        return args -> {
+            Agent.SELECTED_AGENT = config.getAi().getAgents().get(config.getAi().getDefaultAgent());
+        };
     }
 
 

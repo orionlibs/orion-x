@@ -1,6 +1,6 @@
 package com.orion.ai.agent.cli.configuration;
 
-import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -17,15 +17,15 @@ public class OrionConfiguration
     @Data
     public static class Ai
     {
-        private List<String> availableAgents;
+        private Map<String, String> agents;
+        private String defaultAgent;
     }
 
 
     @Data
     public static class Openrouter
     {
-        private Api api = new Api();
-        private Ai ai = new Ai();
+        private Openrouter.Api api = new Openrouter.Api();
 
 
         @Data
@@ -33,13 +33,6 @@ public class OrionConfiguration
         {
             private String key;
             private String baseUrl;
-        }
-
-
-        @Data
-        public static class Ai
-        {
-            private String modelId;
         }
     }
 }

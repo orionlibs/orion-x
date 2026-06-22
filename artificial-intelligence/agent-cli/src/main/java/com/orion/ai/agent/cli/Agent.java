@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Agent
 {
-    public static String SELECTED_AGENT = "NONE";
     private static final int MAX_ITERATIONS = 5;
     private static final Logger logger = new Logger();
+    public static String SELECTED_AGENT = "NONE";
     private OpenAIClient client;
     private ChatCompletionCreateParams.Builder contextBuilder;
 
@@ -66,9 +66,9 @@ public class Agent
         catch(OpenAIInvalidDataException e)
         {
             throw new RuntimeException(
-                "Model returned a malformed response — `choices` field missing. " +
-                "The model may be unavailable or returning a non-standard error payload. " +
-                "SDK message: " + e.getMessage(), e);
+                            "Model returned a malformed response — `choices` field missing. " +
+                                            "The model may be unavailable or returning a non-standard error payload. " +
+                                            "SDK message: " + e.getMessage(), e);
         }
         if(choices.isEmpty())
         {

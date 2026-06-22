@@ -34,7 +34,7 @@ public class SelectAgentCommand
             }
             else
             {
-                if(config.getAi().getAvailableAgents().contains(agentID))
+                if(config.getAi().getAgents().containsKey(agentID))
                 {
                     Agent.SELECTED_AGENT = agentID;
                     Logger.info("Selected agent " + agentID);
@@ -51,7 +51,7 @@ public class SelectAgentCommand
 
     private String selectInteractively()
     {
-        String selected = interactiveSelectorInCLI.select("Select Agent", config.getAi().getAvailableAgents());
+        String selected = interactiveSelectorInCLI.select("Select Agent", config.getAi().getAgents().keySet().stream().toList());
         if(selected == null)
         {
             return "Invalid selection";
