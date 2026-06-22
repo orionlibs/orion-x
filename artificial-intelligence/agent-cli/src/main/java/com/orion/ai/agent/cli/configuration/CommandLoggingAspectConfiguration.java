@@ -41,7 +41,7 @@ public class CommandLoggingAspectConfiguration
         try
         {
             Object result = pjp.proceed();
-            auditLog.info("{} | command={} | args=[{}] | result={}", Instant.now(), commandName, args, result);
+            //auditLog.info("{} | command={} | args=[{}] | result={}", Instant.now(), commandName, args, result);
             return result;
         }
         catch(Throwable t)

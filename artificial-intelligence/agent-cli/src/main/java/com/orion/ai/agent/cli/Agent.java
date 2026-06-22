@@ -20,7 +20,7 @@ public class Agent
     private ChatCompletionCreateParams.Builder contextBuilder;
 
 
-    private static void validate(String apiKey, String baseUrl, String modelId)
+    private void validate(String apiKey, String baseUrl, String modelId)
     {
         if(apiKey == null || apiKey.isBlank())
         {
