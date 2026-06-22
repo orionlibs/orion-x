@@ -19,6 +19,8 @@ spring:
         enabled: true
 
 orion:
+  ai:
+    available-agents: ["Claude", "Gemini"]
   openrouter:
     api:
       key: ${openrouter.api.key}
