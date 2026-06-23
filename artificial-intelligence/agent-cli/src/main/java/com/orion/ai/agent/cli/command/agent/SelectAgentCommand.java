@@ -1,7 +1,7 @@
 package com.orion.ai.agent.cli.command.agent;
 
 import com.orion.ai.agent.cli.Agent;
-import com.orion.ai.agent.cli.configuration.OrionConfiguration;
+import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.util.shell.cli.InteractiveSelectorInCLI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.command.annotation.Command;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SelectAgentCommand
 {
-    @Autowired
-    private OrionConfiguration config;
     @Autowired
     private InteractiveSelectorInCLI interactiveSelectorInCLI;
 
@@ -27,9 +25,9 @@ public class SelectAgentCommand
         }
         else
         {
-            if(config.getAi().getAgents().containsKey(agentID))
+            if(Config.config.getAi().getAgents().containsKey(agentID))
             {
-                Agent.SELECTED_AGENT = config.getAi().getAgents().get(agentID);
+                Agent.SELECTED_AGENT = Config.config.getAi().getAgents().get(agentID);
                 return "Agent set to " + agentID;
             }
             else
@@ -42,12 +40,12 @@ public class SelectAgentCommand
 
     private String selectInteractively()
     {
-        String selected = interactiveSelectorInCLI.select("Select Agent", config.getAi().getAgents().keySet().stream().toList());
+        String selected = interactiveSelectorInCLI.select("Select Agent", Config.config.getAi().getAgents().keySet().stream().toList());
         if(selected == null)
         {
             return "Invalid selection";
         }
-        Agent.SELECTED_AGENT = config.getAi().getAgents().get(selected);
+        Agent.SELECTED_AGENT = Config.config.getAi().getAgents().get(selected);
         return "Agent set to " + selected;
     }
 }

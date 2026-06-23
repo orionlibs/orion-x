@@ -1,6 +1,7 @@
 package com.orion.ai.agent.cli.command.prompt;
 
 import com.orion.ai.agent.cli.Agent;
+import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.command.annotation.Arguments;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Component;
 public class RunPromptCommand
 {
     @Autowired
-    private OrionConfiguration config;
-    @Autowired
     private Agent agent;
 
 
@@ -20,7 +19,7 @@ public class RunPromptCommand
     public String runPrompt(@Arguments String[] words)
     {
         String prompt = String.join(" ", words);
-        OrionConfiguration.Ai.Openrouter.Api api = config.getAi().getOpenrouter().getApi();
+        OrionConfiguration.Ai.Openrouter.Api api = Config.config.getAi().getOpenrouter().getApi();
         return agent.prompt(api.getKey(), api.getBaseUrl(), Agent.SELECTED_AGENT, prompt);
     }
 }

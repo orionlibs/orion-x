@@ -1,5 +1,6 @@
 package com.orion.ai.agent.cli;
 
+import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -33,6 +34,7 @@ public class AgentCLIApplication
     public ApplicationRunner agentRunner()
     {
         return args -> {
+            Config.config = config;
             Agent.SELECTED_AGENT = config.getAi().getAgents().get(config.getAi().getDefaultAgent());
         };
     }
