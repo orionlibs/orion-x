@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.tool;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

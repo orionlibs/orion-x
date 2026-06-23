@@ -1,8 +1,7 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.orion.ai.agent.cli.core.MockAgent;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 

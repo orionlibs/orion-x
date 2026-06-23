@@ -3,6 +3,7 @@ package com.orion.ai.agent.cli;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.orion.ai.agent.cli.tool.ReadFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

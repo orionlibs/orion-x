@@ -2,6 +2,7 @@ package com.orion.ai.agent.cli;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.orion.ai.agent.cli.tool.RunBashCommand;
 import org.junit.jupiter.api.Test;
 
 class RunBashCommandTest

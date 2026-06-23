@@ -1,9 +1,11 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.orion.ai.agent.cli.core.ToolsRegistry;
+import com.orion.ai.agent.cli.tool.ReadFile;
+import com.orion.ai.agent.cli.tool.RunBashCommand;
+import com.orion.ai.agent.cli.tool.WriteFile;
 import org.junit.jupiter.api.Test;
 
 class ToolsRegistryTest
