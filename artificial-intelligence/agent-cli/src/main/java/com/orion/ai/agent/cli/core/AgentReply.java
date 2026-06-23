@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.core;
 
 public class AgentReply
 {

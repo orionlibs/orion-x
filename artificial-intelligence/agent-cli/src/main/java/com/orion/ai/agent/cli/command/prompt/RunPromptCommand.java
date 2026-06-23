@@ -1,6 +1,6 @@
 package com.orion.ai.agent.cli.command.prompt;
 
-import com.orion.ai.agent.cli.Agent;
+import com.orion.ai.agent.cli.core.Agent;
 import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;

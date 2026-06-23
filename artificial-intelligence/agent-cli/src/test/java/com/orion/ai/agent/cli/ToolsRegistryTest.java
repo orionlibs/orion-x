@@ -3,6 +3,7 @@ package com.orion.ai.agent.cli;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.orion.ai.agent.cli.core.ToolsRegistry;
 import org.junit.jupiter.api.Test;
 
 class ToolsRegistryTest

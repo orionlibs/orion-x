@@ -1,5 +1,8 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.core;
 
+import com.orion.ai.agent.cli.ReadFile;
+import com.orion.ai.agent.cli.RunBashCommand;
+import com.orion.ai.agent.cli.WriteFile;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

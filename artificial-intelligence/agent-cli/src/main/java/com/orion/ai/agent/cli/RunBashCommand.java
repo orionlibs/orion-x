@@ -2,6 +2,7 @@ package com.orion.ai.agent.cli;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.orion.ai.agent.cli.core.Tool;
 import java.io.BufferedReader;
 import java.io.IOException;
 

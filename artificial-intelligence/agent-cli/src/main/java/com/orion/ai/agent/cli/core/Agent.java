@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli;
+package com.orion.ai.agent.cli.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openai.client.OpenAIClient;
