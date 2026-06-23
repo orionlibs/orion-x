@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @JsonClassDescription("Write content to a file. If the file doesn't exist, it's created. If it exists, it's overwritten with the new content.")
-public class WriteFile implements Tool
+public class WriteFileTool implements Tool
 {
     @JsonPropertyDescription("The path of the file to write to")
     public String file_path;

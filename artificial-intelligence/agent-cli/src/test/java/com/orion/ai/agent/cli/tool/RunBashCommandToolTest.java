@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-class RunBashCommandTest
+class RunBashCommandToolTest
 {
     @Test
     void returnsCommandStdout()
     {
-        RunBashCommand tool = new RunBashCommand();
+        RunBashCommandTool tool = new RunBashCommandTool();
         tool.command = "echo hello";
         assertThat(tool.execute()).isEqualTo("hello");
     }
@@ -18,7 +18,7 @@ class RunBashCommandTest
     @Test
     void joinsMultipleOutputLines()
     {
-        RunBashCommand tool = new RunBashCommand();
+        RunBashCommandTool tool = new RunBashCommandTool();
         tool.command = "printf 'line1\\nline2'";
         assertThat(tool.execute()).isEqualTo("line1\nline2");
     }
@@ -27,7 +27,7 @@ class RunBashCommandTest
     @Test
     void capturesStderr()
     {
-        RunBashCommand tool = new RunBashCommand();
+        RunBashCommandTool tool = new RunBashCommandTool();
         tool.command = "echo error_output >&2";
         assertThat(tool.execute()).isEqualTo("error_output");
     }
@@ -36,7 +36,7 @@ class RunBashCommandTest
     @Test
     void returnsEmptyStringForNoOutput()
     {
-        RunBashCommand tool = new RunBashCommand();
+        RunBashCommandTool tool = new RunBashCommandTool();
         tool.command = "true";
         assertThat(tool.execute()).isEqualTo("");
     }
@@ -45,7 +45,7 @@ class RunBashCommandTest
     @Test
     void returnsFatalMessageOnInvalidCommand()
     {
-        RunBashCommand tool = new RunBashCommand();
+        RunBashCommandTool tool = new RunBashCommandTool();
         tool.command = "exit 1";
         // Non-zero exit codes don't throw — only I/O failures do
         assertThat(tool.execute()).isEqualTo("");

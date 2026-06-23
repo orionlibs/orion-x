@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class WriteFileTest
+class WriteFileToolTest
 {
     @TempDir
     Path tempDir;
@@ -19,7 +19,7 @@ class WriteFileTest
     void writesContentToNewFile() throws IOException
     {
         Path file = tempDir.resolve("output.txt");
-        WriteFile tool = new WriteFile();
+        WriteFileTool tool = new WriteFileTool();
         tool.file_path = file.toString();
         tool.content = "test content";
         String result = tool.execute();
@@ -32,7 +32,7 @@ class WriteFileTest
     void overwritesExistingFile() throws IOException
     {
         Path file = Files.writeString(tempDir.resolve("existing.txt"), "old content");
-        WriteFile tool = new WriteFile();
+        WriteFileTool tool = new WriteFileTool();
         tool.file_path = file.toString();
         tool.content = "new content";
         tool.execute();
@@ -43,7 +43,7 @@ class WriteFileTest
     @Test
     void throwsOnInvalidPath()
     {
-        WriteFile tool = new WriteFile();
+        WriteFileTool tool = new WriteFileTool();
         tool.file_path = "/nonexistent/dir/file.txt";
         tool.content = "content";
         assertThatThrownBy(tool::execute)

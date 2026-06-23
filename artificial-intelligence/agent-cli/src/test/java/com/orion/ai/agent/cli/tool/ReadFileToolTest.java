@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-class ReadFileTest
+class ReadFileToolTest
 {
     @TempDir
     Path tempDir;
@@ -20,7 +20,7 @@ class ReadFileTest
     {
         Path file = tempDir.resolve("test.txt");
         Files.writeString(file, "hello\nworld");
-        ReadFile tool = new ReadFile();
+        ReadFileTool tool = new ReadFileTool();
         tool.file_path = file.toString();
         assertThat(tool.execute()).isEqualTo("hello\nworld");
     }
@@ -31,7 +31,7 @@ class ReadFileTest
     {
         Path file = tempDir.resolve("single.txt");
         Files.writeString(file, "only one line");
-        ReadFile tool = new ReadFile();
+        ReadFileTool tool = new ReadFileTool();
         tool.file_path = file.toString();
         assertThat(tool.execute()).isEqualTo("only one line");
     }
@@ -40,7 +40,7 @@ class ReadFileTest
     @Test
     void throwsOnMissingFile()
     {
-        ReadFile tool = new ReadFile();
+        ReadFileTool tool = new ReadFileTool();
         tool.file_path = "/nonexistent/path/file.txt";
         assertThatThrownBy(tool::execute)
                         .isInstanceOf(RuntimeException.class)

@@ -1,8 +1,8 @@
 package com.orion.ai.agent.cli.core;
 
-import com.orion.ai.agent.cli.tool.ReadFile;
-import com.orion.ai.agent.cli.tool.RunBashCommand;
-import com.orion.ai.agent.cli.tool.WriteFile;
+import com.orion.ai.agent.cli.tool.ReadFileTool;
+import com.orion.ai.agent.cli.tool.RunBashCommandTool;
+import com.orion.ai.agent.cli.tool.WriteFileTool;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +11,9 @@ public class ToolsRegistry
 {
     private static final Map<String, Class<?>> registry = new HashMap<>()
     {{
-        put(ReadFile.class.getSimpleName(), ReadFile.class);
-        put(WriteFile.class.getSimpleName(), WriteFile.class);
-        put(RunBashCommand.class.getSimpleName(), RunBashCommand.class);
+        put(ReadFileTool.class.getSimpleName(), ReadFileTool.class);
+        put(WriteFileTool.class.getSimpleName(), WriteFileTool.class);
+        put(RunBashCommandTool.class.getSimpleName(), RunBashCommandTool.class);
     }};
 
 

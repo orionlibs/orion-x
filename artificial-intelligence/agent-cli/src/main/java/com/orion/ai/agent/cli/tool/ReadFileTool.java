@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @JsonClassDescription("Read and return the contents of a file")
-public class ReadFile implements Tool
+public class ReadFileTool implements Tool
 {
     @JsonPropertyDescription("The path to the file to read")
     public String file_path;

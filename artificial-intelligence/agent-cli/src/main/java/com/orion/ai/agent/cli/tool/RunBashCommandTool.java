@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @JsonClassDescription("Execute a shell command")
-public class RunBashCommand implements Tool
+public class RunBashCommandTool implements Tool
 {
     @JsonPropertyDescription("The command to execute")
     public String command;
