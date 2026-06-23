@@ -1,7 +1,7 @@
 package com.orion.ai.agent.cli.command.agent;
 
-import com.orion.ai.agent.cli.core.Agent;
 import com.orion.ai.agent.cli.configuration.Config;
+import com.orion.ai.agent.cli.core.Agent;
 import com.orion.util.shell.cli.InteractiveSelectorInCLI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.command.annotation.Command;

@@ -5,7 +5,6 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.errors.OpenAIInvalidDataException;
 import com.openai.models.chat.completions.ChatCompletion;
-import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
 import com.openai.models.chat.completions.ChatCompletionMessageToolCall;
 import com.orion.ai.agent.cli.tool.Tool;
@@ -21,7 +20,7 @@ public class Agent
     @Autowired
     private AgentValidator agentValidator;
     private OpenAIClient client;
-    private ChatCompletionCreateParams.Builder contextBuilder;
+    private ContextBuilder contextBuilder;
 
 
     public String prompt(String apiKey, String baseUrl, String modelId, String prompt)
@@ -42,11 +41,10 @@ public class Agent
     {
         agentValidator.validate(apiKey, baseUrl, modelId);
         client = OpenAIOkHttpClient.builder()
-                                        .apiKey(apiKey)
-                                        .baseUrl(baseUrl)
-                                        .build();
-        contextBuilder = ChatCompletionCreateParams.builder()
-                                                        .model(modelId);
+                                   .apiKey(apiKey)
+                                   .baseUrl(baseUrl)
+                                   .build();
+        contextBuilder = new ContextBuilder(modelId);
         for(Class<?> tool : ToolsRegistry.getAll())
         {
             contextBuilder.addTool(tool);
@@ -92,6 +90,15 @@ public class Agent
     }
 
 
+    private void callTool(ChatCompletionMessageToolCall toolCall)
+    {
+        ChatCompletionMessageFunctionToolCall.Function fn = toolCall.asFunction().function();
+        String result = executeTool(fn.name(), fn.arguments());
+        //Logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
+        contextBuilder.addMessage(MessageFactory.tool(toolCall.asFunction().id(), result));
+    }
+
+
     protected String executeTool(String toolName, String jsonArguments)
     {
         try
@@ -104,14 +111,5 @@ public class Agent
         {
             throw new RuntimeException("Failed to execute tool " + toolName + ": " + e.getMessage(), e);
         }
-    }
-
-
-    private void callTool(ChatCompletionMessageToolCall toolCall)
-    {
-        ChatCompletionMessageFunctionToolCall.Function fn = toolCall.asFunction().function();
-        String result = executeTool(fn.name(), fn.arguments());
-        //Logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
-        contextBuilder.addMessage(MessageFactory.tool(toolCall.asFunction().id(), result));
     }
 }
