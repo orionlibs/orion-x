@@ -24,10 +24,10 @@ public class MessageFactory
     }
 
 
-    public static ChatCompletionToolMessageParam tool(String toolCallId, String callResult)
+    public static ChatCompletionToolMessageParam tool(String toolCallID, String callResult)
     {
         return ChatCompletionToolMessageParam.builder()
-                                             .toolCallId(toolCallId)
+                                             .toolCallId(toolCallID)
                                              .content(callResult)
                                              .build();
     }

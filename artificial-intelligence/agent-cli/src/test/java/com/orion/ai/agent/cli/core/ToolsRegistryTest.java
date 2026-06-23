@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.orion.ai.agent.cli.tool.ReadFileTool;
 import com.orion.ai.agent.cli.tool.RunBashCommandTool;
+import com.orion.ai.agent.cli.tool.ToolsRegistry;
 import com.orion.ai.agent.cli.tool.WriteFileTool;
 import org.junit.jupiter.api.Test;
 
@@ -13,21 +14,21 @@ class ToolsRegistryTest
     @Test
     void getReturnsReadFileClass()
     {
-        assertThat(ToolsRegistry.get("ReadFile")).isEqualTo(ReadFileTool.class);
+        assertThat(ToolsRegistry.get("ReadFileTool")).isEqualTo(ReadFileTool.class);
     }
 
 
     @Test
     void getReturnsWriteFileClass()
     {
-        assertThat(ToolsRegistry.get("WriteFile")).isEqualTo(WriteFileTool.class);
+        assertThat(ToolsRegistry.get("WriteFileTool")).isEqualTo(WriteFileTool.class);
     }
 
 
     @Test
     void getReturnsRunBashCommandClass()
     {
-        assertThat(ToolsRegistry.get("RunBashCommand")).isEqualTo(RunBashCommandTool.class);
+        assertThat(ToolsRegistry.get("RunBashCommandTool")).isEqualTo(RunBashCommandTool.class);
     }
 
 
