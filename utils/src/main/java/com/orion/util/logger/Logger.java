@@ -16,6 +16,12 @@ public class Logger
     }
 
 
+    public static void debug(String message, Object... parameters)
+    {
+        log.debug(message, parameters);
+    }
+
+
     public static void error(String message, Object... parameters)
     {
         log.error(message, parameters);

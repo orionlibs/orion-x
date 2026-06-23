@@ -8,13 +8,13 @@ import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
 import com.openai.models.chat.completions.ChatCompletionMessageToolCall;
+import com.orion.util.logger.Logger;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Agent
 {
-    private static final Logger logger = new Logger();
     public static String SELECTED_AGENT = "NONE";
     private OpenAIClient client;
     private ChatCompletionCreateParams.Builder contextBuilder;
@@ -40,15 +40,15 @@ public class Agent
     {
         if(apiKey == null || apiKey.isBlank())
         {
-            logger.error("The API key for openrouter cannot be empty");
+            Logger.error("The API key for openrouter cannot be empty");
         }
         if(baseUrl == null || baseUrl.isBlank())
         {
-            logger.error("The API base URL for openrouter cannot be empty");
+            Logger.error("The API base URL for openrouter cannot be empty");
         }
         if(modelId == null || modelId.isBlank())
         {
-            logger.error("The openrouter requires a modelID");
+            Logger.error("The openrouter requires a modelID");
         }
     }
 
@@ -60,7 +60,7 @@ public class Agent
         AgentReply reply = reason();
         if(reply.shouldStop)
         {
-            logger.debug("No further tool calls requested.\n");
+            Logger.debug("No further tool calls requested.\n");
             return reply.answer;
         }
         return "I reached the max number of iterations and I am unable to come to an answer.";
@@ -94,7 +94,7 @@ public class Agent
         {
             return AgentReply.stop(modelReply);
         }
-        logger.info("Model reply: " + modelReply + "\n");
+        Logger.info("Model reply: " + modelReply + "\n");
         List<ChatCompletionMessageToolCall> toolCalls = choice.message().toolCalls().get();
         this.contextBuilder.addMessage(MessageFactory.assistant(toolCalls));
         for(ChatCompletionMessageToolCall toolCall : toolCalls)
@@ -124,7 +124,7 @@ public class Agent
     {
         ChatCompletionMessageFunctionToolCall.Function fn = toolCall.asFunction().function();
         String result = executeTool(fn.name(), fn.arguments());
-        logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
+        Logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
         this.contextBuilder.addMessage(MessageFactory.tool(toolCall.asFunction().id(), result));
     }
 }
