@@ -19,7 +19,7 @@ public class ToolsRegistry
     {
         if(!registry.containsKey(toolName))
         {
-            throw new IllegalArgumentException("Unknown function: " + toolName);
+            throw new IllegalArgumentException("Unknown tool: " + toolName);
         }
         return (Class<Tool>)registry.get(toolName);
     }

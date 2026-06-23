@@ -47,7 +47,7 @@ public class MockAgent extends Agent
             if(prompt != null && prompt.startsWith("read "))
             {
                 String filePath = prompt.substring(5).trim();
-                return executeTool("ReadFile", "{\"file_path\": \"" + filePath + "\"}");
+                return executeTool("ReadFileTool", "{\"file_path\": \"" + filePath + "\"}");
             }
             return responses.getOrDefault(prompt, defaultResponse);
         }
