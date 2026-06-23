@@ -14,11 +14,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class Agent
 {
-    private static final int MAX_ITERATIONS = 5;
     private static final Logger logger = new Logger();
     public static String SELECTED_AGENT = "NONE";
     private OpenAIClient client;
     private ChatCompletionCreateParams.Builder contextBuilder;
+
+
+    private void initialise(String apiKey, String baseUrl, String modelId)
+    {
+        validate(apiKey, baseUrl, modelId);
+        this.client = OpenAIOkHttpClient.builder()
+                                        .apiKey(apiKey)
+                                        .baseUrl(baseUrl)
+                                        .build();
+        this.contextBuilder = ChatCompletionCreateParams.builder()
+                                                        .model(modelId);
+        for(Class<?> tool : ToolsRegistry.getAll())
+        {
+            contextBuilder.addTool(tool);
+        }
+    }
 
 
     private void validate(String apiKey, String baseUrl, String modelId)
@@ -42,39 +57,17 @@ public class Agent
     {
         initialise(apiKey, baseUrl, modelId);
         this.contextBuilder.addMessage(MessageFactory.user(prompt));
-        int iterations = 0;
-        while(iterations <= MAX_ITERATIONS)
+        AgentReply reply = reason();
+        if(reply.shouldStop)
         {
-            logger.debug("\n====================================================\nIteration: " + iterations + "\n");
-            Reply reply = reason();
-            if(reply.shouldStop)
-            {
-                logger.debug("No further tool calls requested, stopping agent loop.\n");
-                return reply.answer;
-            }
-            iterations += 1;
+            logger.debug("No further tool calls requested.\n");
+            return reply.answer;
         }
-        return "I have reached the max number of iterations and I am unable to come to an answer.";
+        return "I reached the max number of iterations and I am unable to come to an answer.";
     }
 
 
-    private void initialise(String apiKey, String baseUrl, String modelId)
-    {
-        validate(apiKey, baseUrl, modelId);
-        this.client = OpenAIOkHttpClient.builder()
-                                        .apiKey(apiKey)
-                                        .baseUrl(baseUrl)
-                                        .build();
-        this.contextBuilder = ChatCompletionCreateParams.builder()
-                                                        .model(modelId);
-        for(Class<?> tool : ToolsRegistry.getAll())
-        {
-            contextBuilder.addTool(tool);
-        }
-    }
-
-
-    private Reply reason()
+    private AgentReply reason()
     {
         ChatCompletion response = client.chat().completions().create(this.contextBuilder.build());
         List<ChatCompletion.Choice> choices;
@@ -84,10 +77,7 @@ public class Agent
         }
         catch(OpenAIInvalidDataException e)
         {
-            throw new RuntimeException(
-                            "Model returned a malformed response — `choices` field missing. " +
-                                            "The model may be unavailable or returning a non-standard error payload. " +
-                                            "SDK message: " + e.getMessage(), e);
+            throw new RuntimeException("Model returned a malformed response — `choices` field missing. " + "The model may be unavailable or returning a non-standard error payload. " + "SDK message: " + e.getMessage(), e);
         }
         if(choices.isEmpty())
         {
@@ -97,21 +87,21 @@ public class Agent
     }
 
 
-    private Reply processChoice(ChatCompletion.Choice choice)
+    private AgentReply processChoice(ChatCompletion.Choice choice)
     {
         String modelReply = choice.message().content().orElse("Reply is empty");
         if(choice.message().toolCalls().isEmpty() || choice.message().toolCalls().get().isEmpty())
         {
-            return Reply.stop(modelReply);
+            return AgentReply.stop(modelReply);
         }
-        logger.debug("Model reply: " + modelReply + "\n");
+        logger.info("Model reply: " + modelReply + "\n");
         List<ChatCompletionMessageToolCall> toolCalls = choice.message().toolCalls().get();
         this.contextBuilder.addMessage(MessageFactory.assistant(toolCalls));
         for(ChatCompletionMessageToolCall toolCall : toolCalls)
         {
             callTool(toolCall);
         }
-        return Reply.keepGoing();
+        return AgentReply.keepGoing();
     }
 
 
@@ -136,29 +126,5 @@ public class Agent
         String result = executeTool(fn.name(), fn.arguments());
         logger.debug("Tool [" + fn.name() + "] output: <<\n\n" + result + "\n\n>>");
         this.contextBuilder.addMessage(MessageFactory.tool(toolCall.asFunction().id(), result));
-    }
-
-
-    static class Reply
-    {
-        public boolean shouldStop;
-        public String answer;
-
-
-        static Reply stop(String answer)
-        {
-            var reply = new Reply();
-            reply.shouldStop = true;
-            reply.answer = answer;
-            return reply;
-        }
-
-
-        static Reply keepGoing()
-        {
-            var reply = new Reply();
-            reply.shouldStop = false;
-            return reply;
-        }
     }
 }
