@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.command.agent;
+package com.orion.ai.agent.cli.command.session;
 
 import com.orion.ai.agent.cli.core.Session;
 import org.springframework.shell.core.command.annotation.Command;
