@@ -44,10 +44,21 @@ public class MockAgent extends Agent
     {
         if("mock-agent".equals(modelId))
         {
-            if(prompt != null && prompt.startsWith("read "))
+            if(prompt != null)
             {
-                String filePath = prompt.substring(5).trim();
-                return executeTool("ReadFileTool", "{\"file_path\": \"" + filePath + "\"}");
+                if(prompt.startsWith("read "))
+                {
+                    String filePath = prompt.substring(5).trim();
+                    return executeTool("ReadFileTool", "{\"file_path\": \"" + filePath + "\"}");
+                }
+                else if(prompt.startsWith("write "))
+                {
+                    //fix the string indexing
+                    String filePath = prompt.substring(6).trim();
+                    //fix the string indexing
+                    String content = prompt.substring(6).trim();
+                    return executeTool("WriteFileTool", "{\"file_path\": \"" + filePath + "\",\"content\": \"" + content + "\"}");
+                }
             }
             return responses.getOrDefault(prompt, defaultResponse);
         }
