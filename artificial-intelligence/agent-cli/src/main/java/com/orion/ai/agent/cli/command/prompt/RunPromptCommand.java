@@ -2,7 +2,7 @@ package com.orion.ai.agent.cli.command.prompt;
 
 import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
-import com.orion.ai.agent.cli.core.Agent;
+import com.orion.ai.agent.cli.core.agent.Agent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.command.annotation.Arguments;
 import org.springframework.shell.core.command.annotation.Command;

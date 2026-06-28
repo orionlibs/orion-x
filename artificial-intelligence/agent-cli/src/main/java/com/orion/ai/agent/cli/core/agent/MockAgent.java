@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.core;
+package com.orion.ai.agent.cli.core.agent;
 
 import java.util.Map;
 import org.springframework.context.annotation.Primary;

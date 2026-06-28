@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.core;
+package com.orion.ai.agent.cli.core.agent.context;
 
 import com.openai.models.chat.completions.ChatCompletionAssistantMessageParam;
 import com.openai.models.chat.completions.ChatCompletionMessageToolCall;

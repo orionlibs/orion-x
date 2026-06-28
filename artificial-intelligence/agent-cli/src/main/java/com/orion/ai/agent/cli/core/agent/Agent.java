@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.core;
+package com.orion.ai.agent.cli.core.agent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openai.client.OpenAIClient;
@@ -7,6 +7,8 @@ import com.openai.errors.OpenAIInvalidDataException;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionMessageFunctionToolCall;
 import com.openai.models.chat.completions.ChatCompletionMessageToolCall;
+import com.orion.ai.agent.cli.core.agent.context.ContextBuilder;
+import com.orion.ai.agent.cli.core.agent.context.MessageFactory;
 import com.orion.ai.agent.cli.tool.Tool;
 import com.orion.ai.agent.cli.tool.ToolsRegistry;
 import java.util.List;

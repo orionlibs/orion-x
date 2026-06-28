@@ -2,8 +2,8 @@ package com.orion.ai.agent.cli;
 
 import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
-import com.orion.ai.agent.cli.core.Agent;
-import com.orion.ai.agent.cli.core.Session;
+import com.orion.ai.agent.cli.core.agent.Agent;
+import com.orion.ai.agent.cli.core.agent.session.Session;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;

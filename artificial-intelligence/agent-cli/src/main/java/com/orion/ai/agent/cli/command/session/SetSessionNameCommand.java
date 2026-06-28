@@ -1,6 +1,6 @@
 package com.orion.ai.agent.cli.command.session;
 
-import com.orion.ai.agent.cli.core.Session;
+import com.orion.ai.agent.cli.core.agent.session.Session;
 import org.springframework.shell.core.command.annotation.Command;
 import org.springframework.shell.core.command.annotation.Option;
 import org.springframework.stereotype.Component;

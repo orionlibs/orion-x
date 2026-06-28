@@ -1,4 +1,4 @@
-package com.orion.ai.agent.cli.core;
+package com.orion.ai.agent.cli.core.agent.session;
 
 import java.util.UUID;
 
