@@ -3,6 +3,8 @@ package com.orion.ai.agent.cli;
 import com.orion.ai.agent.cli.configuration.Config;
 import com.orion.ai.agent.cli.configuration.OrionConfiguration;
 import com.orion.ai.agent.cli.core.Agent;
+import com.orion.ai.agent.cli.core.Session;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -36,28 +38,10 @@ public class AgentCLIApplication
     {
         return args -> {
             Config.config = config;
+            Session.sessionID = UUID.randomUUID();
             Agent.SELECTED_AGENT = config.getAi().getAgents().get(config.getAi().getDefaultAgent());
         };
     }
-    //this is useful if we want to run a command and just terminate the CLI
-    /*@Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public ApplicationRunner agentRunner()
-    {
-        return args -> {
-            if (args.getNonOptionArgs().isEmpty())
-            {
-                return;
-            }
-            String prompt = args.getNonOptionArgs().getFirst();
-            OrionConfiguration.Openrouter.Api api = config.getOpenrouter().getApi();
-            OrionConfiguration.Openrouter.Ai ai = config.getOpenrouter().getAi();
-            Agent agent = new Agent(api.getKey(), api.getBaseUrl(), ai.getModelId());
-            System.out.println("running model " + ai.getModelId());
-            System.out.println(agent.prompt(prompt));
-            System.exit(0);
-        };
-    }*/
 
 
     @Bean
