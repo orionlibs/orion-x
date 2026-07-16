@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: orion-account-organisation
+  main:
+    banner-mode: off
+
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.shell: DEBUG
+#    platform.application: DEBUG
