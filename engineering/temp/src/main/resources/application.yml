@@ -1,33 +1,8 @@
 spring:
   application:
-    name: orion-ai-agent-cli
-  config:
-    import: optional:classpath:.env[.properties]
+    name: orion-engineering
   main:
-    web-application-type: none
     banner-mode: off
-  shell:
-    enabled: true
-    interactive:
-      enabled: true
-    noninteractive:
-      enabled: false
-    history:
-      enabled: true
-    command:
-      version:
-        enabled: true
-
-orion:
-  ai:
-    agents:
-      mock: mock-agent
-      nvidia: nvidia/nemotron-3-ultra-550b-a55b:free
-    default-agent: mock
-    openrouter:
-      api:
-        key: ${openrouter.api.key}
-        base-url: ${openrouter.api.base-url}
 
 #logging:
 #  level:

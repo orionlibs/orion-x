@@ -151,34 +151,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.orion</groupId>
-            <artifactId>utils</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <version>3.5.15</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.shell</groupId>
-            <artifactId>spring-shell-starter</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.shell</groupId>
-            <artifactId>spring-shell-jline</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
 
@@ -186,20 +160,6 @@
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>tools.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.openai</groupId>
-            <artifactId>openai-java</artifactId>
-            <version>4.41.0</version>
         </dependency>
 
 
