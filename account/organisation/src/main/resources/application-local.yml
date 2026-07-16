@@ -7,19 +7,19 @@ spring:
   main:
     banner-mode: off
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/account-organisations}
-    username: ${DB_USERNAME:local}
-    password: ${DB_PASSWORD:local}
+    driver-class-name: org.h2.Driver
+    url: "jdbc:postgresql://localhost:5432/account-organisations"
+    username: local
+    password: local
     hikari:
       connection-timeout: 5000
       validation-timeout: 3000
   jpa:
-    database: postgresql
-    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
 #logging:
 #  level:
