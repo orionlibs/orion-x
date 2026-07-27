@@ -17,7 +17,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jackson.version>3.1.4</jackson.version>
         <lombok.version>1.18.46</lombok.version>
-        <spring.boot.version>4.1.0</spring.boot.version>
     </properties>
 
 
