@@ -1,6 +1,7 @@
 package com.orion.engineering.project.sdk;
 
-import com.orion.engineering_util.api.payload.APIResponse;
+import com.orion.engineering.project.api.payload.response.ProjectSummariesResponse;
+import com.orion.engineering.project.api.payload.response.ProjectsCountResponse;
 import com.orion.sdk.decoder.SDKErrorDecoder;
 import com.orion.sdk.exception.SDKClientException;
 import com.orion.sdk.factory.SDKRetryConfigBuilder;
@@ -144,14 +145,14 @@ public class EngineeringProjectServiceFeignClientFactory
         return new EngineeringProjectServiceFeignClient()
         {
             @Override
-            public APIResponse getProjectsSummaries(Map<String, String> headers)
+            public ProjectSummariesResponse getProjectsSummaries(Map<String, String> headers)
             {
                 return executeWithRetry(() -> client.getProjectsSummaries(headers), retry);
             }
 
 
             @Override
-            public APIResponse getNumberOfProjects(Map<String, String> headers)
+            public ProjectsCountResponse getNumberOfProjects(Map<String, String> headers)
             {
                 return executeWithRetry(() -> client.getNumberOfProjects(headers), retry);
             }
@@ -257,7 +258,7 @@ public class EngineeringProjectServiceFeignClientFactory
         }
 
 
-        public Builder objectMapper(@Qualifier("sdkObjectMapper") JsonMapper objectMapper)
+        public Builder objectMapper(@Qualifier("engineeringProjectSDKObjectMapper") JsonMapper objectMapper)
         {
             this.objectMapper = objectMapper;
             return this;

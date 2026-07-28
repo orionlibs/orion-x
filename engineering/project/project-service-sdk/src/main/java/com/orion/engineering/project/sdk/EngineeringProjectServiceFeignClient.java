@@ -1,6 +1,7 @@
 package com.orion.engineering.project.sdk;
 
-import com.orion.engineering_util.api.payload.APIResponse;
+import com.orion.engineering.project.api.payload.response.ProjectSummariesResponse;
+import com.orion.engineering.project.api.payload.response.ProjectsCountResponse;
 import feign.HeaderMap;
 import feign.Headers;
 import feign.RequestLine;
@@ -25,11 +26,11 @@ import java.util.Map;
 public interface EngineeringProjectServiceFeignClient
 {
     @RequestLine("GET /projects/summaries")
-    APIResponse getProjectsSummaries(@HeaderMap Map<String, String> headers);
+    ProjectSummariesResponse getProjectsSummaries(@HeaderMap Map<String, String> headers);
 
 
     @RequestLine("GET /projects/count")
-    APIResponse getNumberOfProjects(@HeaderMap Map<String, String> headers);
+    ProjectsCountResponse getNumberOfProjects(@HeaderMap Map<String, String> headers);
 
 
     //@RequestLine("POST /internal/v1/institutions/{institutionId}/ais/authorization/redirect/init?raw={raw}")

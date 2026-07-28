@@ -4,12 +4,9 @@ import com.orion.engineering.project.Projects;
 import com.orion.engineering.project.api.payload.response.ProjectSummariesResponse;
 import com.orion.engineering.project.api.payload.response.ProjectsCountResponse;
 import com.orion.engineering.project.model.ProjectModel;
-import com.orion.engineering_util.api.payload.APIMeta;
-import com.orion.engineering_util.api.payload.APIResponse;
 import com.orion.engineering_util.calendar.CalendarUtils;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +19,10 @@ public class ProjectAPI
 
 
     @GetMapping(value = "/projects/summaries")
-    public ResponseEntity<APIResponse> getProjectsSummaries()
+    public ResponseEntity<ProjectSummariesResponse> getProjectsSummaries()
     {
         List<ProjectModel> projects = projectService.getProjects();
         List<ProjectSummariesResponse.Project> data = new ArrayList<>();
-
         for(ProjectModel project : projects)
         {
             data.add(ProjectSummariesResponse.Project.builder()
@@ -37,21 +33,18 @@ public class ProjectAPI
                                                      .updatedAt(project.getUpdatedAt().format(CalendarUtils.formatter))
                                                      .build());
         }
-
-        APIResponse<ProjectSummariesResponse> response = new APIResponse<>(APIMeta.of(UUID.randomUUID()), ProjectSummariesResponse.builder()
-                                                                                                                                  .projects(data)
-                                                                                                                                  .build());
+        ProjectSummariesResponse response = new ProjectSummariesResponse();
+        response.setProjects(data);
         return ResponseEntity.ok(response);
     }
 
 
     @GetMapping(value = "/projects/count")
-    public ResponseEntity<APIResponse> getNumberOfProjects()
+    public ResponseEntity<ProjectsCountResponse> getNumberOfProjects()
     {
         long count = projectService.getNumberProjects();
-        APIResponse<ProjectsCountResponse> response = new APIResponse<>(APIMeta.of(UUID.randomUUID()), ProjectsCountResponse.builder()
-                                                                                                                            .count(count)
-                                                                                                                            .build());
+        ProjectsCountResponse response = new ProjectsCountResponse();
+        response.setCount(count);
         return ResponseEntity.ok(response);
     }
 }

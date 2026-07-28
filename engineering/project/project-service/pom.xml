@@ -91,6 +91,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <classifier>exec</classifier>
                     <jvmArguments>
                         --enable-native-access=ALL-UNNAMED
                     </jvmArguments>
