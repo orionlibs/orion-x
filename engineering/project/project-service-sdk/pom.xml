@@ -3,18 +3,10 @@
   xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orion</groupId>
-    <artifactId>project-service</artifactId>
+    <artifactId>project-service-sdk</artifactId>
     <version>0.0.1</version>
-    <name>Orion Project Service</name>
+    <name>Orion Project Service SDK</name>
     <packaging>jar</packaging>
-
-
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
-        <relativePath/>
-    </parent>
 
 
     <properties>
@@ -23,28 +15,18 @@
         <java.version>26</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <jackson.version>3.1.4</jackson.version>
-        <lombok.version>1.18.46</lombok.version>
+        <jackson.version>3.2.1</jackson.version>
     </properties>
 
 
     <build>
-        <finalName>engineering-project-service</finalName>
+        <finalName>engineering-project-service-sdk</finalName>
 
 
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <artifactId>lombok</artifactId>
-                            <groupId>org.projectlombok</groupId>
-                            <version>${lombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-
-
                     <compilerArgs>
                         <arg>-J--add-opens=java.base/java.time=ALL-UNNAMED</arg>
                         <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
@@ -76,25 +58,6 @@
 
 
                 <version>3.5.6</version>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>4.0.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmArguments>
-                        --enable-native-access=ALL-UNNAMED
-                    </jvmArguments>
-                </configuration>
             </plugin>
         </plugins>
 
@@ -140,39 +103,70 @@
     <dependencies>
         <dependency>
             <groupId>com.orion</groupId>
-            <artifactId>engineering-utils</artifactId>
+            <artifactId>project-service</artifactId>
             <version>0.0.1</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>13.13</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson3</artifactId>
+            <version>13.13</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-flyway</artifactId>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-slf4j</artifactId>
+            <version>13.13</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-hc5</artifactId>
+            <version>13.13</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.6.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-retry</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-circuitbreaker</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-ratelimiter</artifactId>
+            <version>2.4.0</version>
         </dependency>
 
 
@@ -184,24 +178,9 @@
 
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>4.0.6</version>
-            <scope>test</scope>
         </dependency>
 
 
