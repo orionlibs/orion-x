@@ -1,4 +1,4 @@
-package com.orion.engineering.project.sdk.exception;
+package com.orion.sdk.exception;
 
 import java.util.List;
 import java.util.Map;

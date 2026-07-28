@@ -1,7 +1,7 @@
-package com.orion.engineering.project.sdk.decoder;
+package com.orion.sdk.decoder;
 
-import com.orion.engineering.project.sdk.exception.SDKClientException;
-import com.orion.engineering.project.sdk.exception.SDKErrorType;
+import com.orion.sdk.exception.SDKClientException;
+import com.orion.sdk.exception.SDKErrorType;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import java.io.IOException;

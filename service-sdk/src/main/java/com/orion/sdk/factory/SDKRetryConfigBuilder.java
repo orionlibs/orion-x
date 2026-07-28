@@ -1,6 +1,6 @@
-package com.orion.engineering.project.sdk.factory;
+package com.orion.sdk.factory;
 
-import com.orion.engineering.project.sdk.exception.SDKClientException;
+import com.orion.sdk.exception.SDKClientException;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import java.security.SecureRandom;
