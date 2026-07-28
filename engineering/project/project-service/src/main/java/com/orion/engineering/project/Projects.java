@@ -16,4 +16,10 @@ public class Projects
     {
         return projectDAO.findAll();
     }
+
+
+    public long getNumberProjects()
+    {
+        return projectDAO.count();
+    }
 }

@@ -3,20 +3,20 @@ package com.orion.engineering_util.api.payload;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Meta implements Serializable
+public class APIMeta implements Serializable
 {
     private UUID traceID;
 
 
-    public static Meta of()
+    public static APIMeta of()
     {
-        return new Meta();
+        return new APIMeta();
     }
 
 
-    public static Meta of(UUID traceID)
+    public static APIMeta of(UUID traceID)
     {
-        Meta meta = new Meta();
+        APIMeta meta = new APIMeta();
         meta.setTraceID(traceID);
         return meta;
     }

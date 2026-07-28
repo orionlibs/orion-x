@@ -4,32 +4,32 @@ import java.io.Serializable;
 
 public class APIResponse<DATA> implements Serializable
 {
-    private Meta meta;
+    private APIMeta meta;
     private APIError error;
     private DATA data;
 
 
-    public APIResponse(Meta meta, APIError error)
+    public APIResponse(APIMeta meta, APIError error)
     {
         this.meta = meta;
         this.error = error;
     }
 
 
-    public APIResponse(Meta meta, DATA data)
+    public APIResponse(APIMeta meta, DATA data)
     {
         this.meta = meta;
         this.data = data;
     }
 
 
-    public Meta getMeta()
+    public APIMeta getMeta()
     {
         return meta;
     }
 
 
-    public void setMeta(Meta meta)
+    public void setMeta(APIMeta meta)
     {
         this.meta = meta;
     }
