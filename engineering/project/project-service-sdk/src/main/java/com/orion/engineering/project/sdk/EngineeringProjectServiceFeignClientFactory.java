@@ -1,6 +1,5 @@
-package com.orion.engineering.project.sdk.factory;
+package com.orion.engineering.project.sdk;
 
-import com.orion.engineering.project.sdk.EngineeringProjectServiceFeignClient;
 import com.orion.engineering_util.api.payload.APIResponse;
 import com.orion.sdk.decoder.SDKErrorDecoder;
 import com.orion.sdk.exception.SDKClientException;

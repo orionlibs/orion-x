@@ -1,7 +1,5 @@
 package com.orion.engineering.project.sdk;
 
-import com.orion.engineering.project.sdk.factory.EngineeringProjectServiceFeignClientFactory;
-
 /**
  * Main entry point for creating SDK Client instances.
  * <p>
