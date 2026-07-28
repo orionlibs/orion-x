@@ -1,6 +1,6 @@
 package com.orion.engineering.project.sdk.factory;
 
-import com.orion.engineering.project.sdk.SDKFeignClient;
+import com.orion.engineering.project.sdk.EngineeringProjectServiceFeignClient;
 import com.orion.engineering_util.api.payload.APIResponse;
 import com.orion.sdk.decoder.SDKErrorDecoder;
 import com.orion.sdk.exception.SDKClientException;
@@ -63,9 +63,9 @@ import tools.jackson.databind.json.JsonMapper;
  *     .create();
  * }</pre>
  */
-public class SDKFeignClientFactory
+public class EngineeringProjectServiceFeignClientFactory
 {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SDKFeignClientFactory.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(EngineeringProjectServiceFeignClientFactory.class);
     private final String baseUrl;
     private final RetryConfig retryConfig;
     private final Duration connectTimeout;
@@ -74,7 +74,7 @@ public class SDKFeignClientFactory
     private final JsonMapper objectMapper;
 
 
-    private SDKFeignClientFactory(Builder builder)
+    private EngineeringProjectServiceFeignClientFactory(Builder builder)
     {
         this.baseUrl = builder.baseUrl;
         this.retryConfig = builder.retryConfig;
@@ -91,27 +91,27 @@ public class SDKFeignClientFactory
     }
 
 
-    public static SDKFeignClient createSimple(String baseUrl)
+    public static EngineeringProjectServiceFeignClient createSimple(String baseUrl)
     {
         return builder().baseUrl(baseUrl).build().create();
     }
 
 
-    public static SDKFeignClient createWithRetry(String baseUrl, SDKRetryConfigBuilder.BackoffStrategy backoffStrategy)
+    public static EngineeringProjectServiceFeignClient createWithRetry(String baseUrl, SDKRetryConfigBuilder.BackoffStrategy backoffStrategy)
     {
         RetryConfig retryConfig = SDKRetryConfigBuilder.withStrategy(backoffStrategy).build();
         return builder().baseUrl(baseUrl).retryConfig(retryConfig).build().create();
     }
 
 
-    public SDKFeignClient create()
+    public EngineeringProjectServiceFeignClient create()
     {
         logger.info("Creating SDKFeignClient for baseUrl={}, connectTimeout={}, readTimeout={}", baseUrl, connectTimeout, readTimeout);
         Feign.Builder feignBuilder = Feign.builder()
                                           .encoder(new Jackson3Encoder(objectMapper))
                                           .decoder(new Jackson3Decoder(objectMapper))
                                           .errorDecoder(new SDKErrorDecoder())
-                                          .logger(new Slf4jLogger(SDKFeignClient.class))
+                                          .logger(new Slf4jLogger(EngineeringProjectServiceFeignClient.class))
                                           .logLevel(logLevel)
                                           .retryer(Retryer.NEVER_RETRY) // We use Resilience4J for retry
                                           .options(new Request.Options(connectTimeout.toMillis(),
@@ -119,7 +119,7 @@ public class SDKFeignClientFactory
                                                                        readTimeout.toMillis(), TimeUnit.MILLISECONDS,
                                                                        true // followRedirects
                                           ));
-        SDKFeignClient client = feignBuilder.target(SDKFeignClient.class, baseUrl);
+        EngineeringProjectServiceFeignClient client = feignBuilder.target(EngineeringProjectServiceFeignClient.class, baseUrl);
         // Wrap with Resilience4J retry if configured
         if(retryConfig != null)
         {
@@ -130,7 +130,7 @@ public class SDKFeignClientFactory
     }
 
 
-    private SDKFeignClient wrapWithRetry(SDKFeignClient client, RetryConfig retryConfig)
+    private EngineeringProjectServiceFeignClient wrapWithRetry(EngineeringProjectServiceFeignClient client, RetryConfig retryConfig)
     {
         Retry retry = Retry.of("sdk-client", retryConfig);
         // Add event listeners for debugging
@@ -142,7 +142,7 @@ public class SDKFeignClientFactory
              .onError(event -> logger.error("All retry attempts exhausted for {}: {}",
                              event.getName(),
                              event.getLastThrowable().getMessage()));
-        return new SDKFeignClient()
+        return new EngineeringProjectServiceFeignClient()
         {
             @Override
             public APIResponse getProjectsSummaries(Map<String, String> headers)
@@ -265,13 +265,13 @@ public class SDKFeignClientFactory
         }
 
 
-        public SDKFeignClientFactory build()
+        public EngineeringProjectServiceFeignClientFactory build()
         {
             if(baseUrl == null || baseUrl.isEmpty())
             {
                 throw new IllegalStateException("baseUrl is required");
             }
-            return new SDKFeignClientFactory(this);
+            return new EngineeringProjectServiceFeignClientFactory(this);
         }
     }
 }

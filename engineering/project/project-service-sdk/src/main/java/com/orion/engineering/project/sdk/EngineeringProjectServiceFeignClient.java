@@ -22,7 +22,7 @@ import java.util.Map;
                 "Accept: application/json",
                 "Content-Type: application/json"
 })
-public interface SDKFeignClient
+public interface EngineeringProjectServiceFeignClient
 {
     @RequestLine("GET /projects/summaries")
     APIResponse getProjectsSummaries(@HeaderMap Map<String, String> headers);

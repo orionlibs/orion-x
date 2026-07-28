@@ -1,6 +1,6 @@
 package com.orion.engineering.project.sdk;
 
-import com.orion.engineering.project.sdk.factory.SDKFeignClientFactory;
+import com.orion.engineering.project.sdk.factory.EngineeringProjectServiceFeignClientFactory;
 
 /**
  * Main entry point for creating SDK Client instances.
@@ -26,24 +26,24 @@ import com.orion.engineering.project.sdk.factory.SDKFeignClientFactory;
  *     .create();
  * }</pre>
  *
- * @see SDKFeignClientFactory
+ * @see EngineeringProjectServiceFeignClientFactory
  */
-public class SDKClientFactory
+public class EngineeringProjectServiceClientFactory
 {
-    private SDKClientFactory()
+    private EngineeringProjectServiceClientFactory()
     {
         // Utility class, prevent instantiation
     }
 
 
-    public static SDKFeignClientFactory.Builder blocking()
+    public static EngineeringProjectServiceFeignClientFactory.Builder blocking()
     {
-        return SDKFeignClientFactory.builder();
+        return EngineeringProjectServiceFeignClientFactory.builder();
     }
 
 
-    public static SDKFeignClient createSimpleBlocking(String baseUrl)
+    public static EngineeringProjectServiceFeignClient createSimpleBlocking(String baseUrl)
     {
-        return SDKFeignClientFactory.createSimple(baseUrl);
+        return EngineeringProjectServiceFeignClientFactory.createSimple(baseUrl);
     }
 }
