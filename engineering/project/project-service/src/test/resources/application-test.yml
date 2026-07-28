@@ -1,11 +1,13 @@
+server:
+  port: 8101
+
 spring:
   application:
-    name: orion-engineering
+    name: orion-engineering-project
   main:
     banner-mode: off
 
 #logging:
 #  level:
 #    root: INFO
-#    org.springframework.shell: DEBUG
 #    platform.application: DEBUG
