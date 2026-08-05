@@ -46,8 +46,8 @@ The full M02 spec (Spring Security 7/Spring Authorization Server, X.509 mTLS for
 - `src/main/java/com/orion/engineering/digitaltwin/identity/PrincipalType.java` — enum: `Device`, `Service`, `Human`, `Agent`.
 - `src/main/java/com/orion/engineering/digitaltwin/identity/Principal.java` — record: `id`, `type`, `roles`.
 - `src/main/java/com/orion/engineering/digitaltwin/identity/PrincipalContext.java` — `ScopedValue<Principal>` holder + `runAs`/`callAs`/`current`.
-- `src/main/java/com/orion/engineering/digitaltwin/identity/credential/Credential.java` — record: `principalId`, `type`, `sharedSecret`, `roles`.
-- `src/main/java/com/orion/engineering/digitaltwin/identity/credential/CredentialStore.java` — interface: `findByPrincipalId`.
+- `src/main/java/com/orion/engineering/digitaltwin/identity/credential/Credential.java` — record: `principalID`, `type`, `sharedSecret`, `roles`.
+- `src/main/java/com/orion/engineering/digitaltwin/identity/credential/CredentialStore.java` — interface: `findByPrincipalID`.
 - `src/main/java/com/orion/engineering/digitaltwin/identity/credential/InMemoryCredentialStore.java` — map-backed implementation.
 - `src/main/java/com/orion/engineering/digitaltwin/identity/auth/AuthenticationException.java` — unchecked exception.
 - `src/main/java/com/orion/engineering/digitaltwin/identity/auth/SharedSecretAuthenticator.java` — looks up credential, constant-time-compares secret, returns `Principal`.
@@ -560,7 +560,7 @@ package com.orion.engineering.digitaltwin.identity.credential;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.orion.identity.PrincipalType;
+import com.orion.engineering.digitaltwin.identity.PrincipalType;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
@@ -574,7 +574,7 @@ class InMemoryCredentialStoreTest
     {
         Credential credential = new Credential("device-1", PrincipalType.Device, "s3cr3t", Set.of("telemetry:publish"));
         InMemoryCredentialStore store = new InMemoryCredentialStore(List.of(credential));
-        assertThat(store.findByPrincipalId("device-1")).contains(credential);
+        assertThat(store.findByPrincipalID("device-1")).contains(credential);
     }
 
 
@@ -583,7 +583,7 @@ class InMemoryCredentialStoreTest
     void test2()
     {
         InMemoryCredentialStore store = new InMemoryCredentialStore(List.of());
-        assertThat(store.findByPrincipalId("unknown")).isEmpty();
+        assertThat(store.findByPrincipalID("unknown")).isEmpty();
     }
 }
 ```
@@ -598,7 +598,7 @@ Expected: FAIL — `Credential`/`InMemoryCredentialStore` do not exist (compilat
 ```java
 package com.orion.engineering.digitaltwin.identity.credential;
 
-import com.orion.identity.PrincipalType;
+import com.orion.engineering.digitaltwin.identity.PrincipalType;
 import java.util.Set;
 
 public record Credential(String principalId, PrincipalType type, String sharedSecret, Set<String> roles)
@@ -638,7 +638,7 @@ public class InMemoryCredentialStore implements CredentialStore
     public InMemoryCredentialStore(Collection<Credential> credentials)
     {
         this.credentialsByPrincipalId = credentials.stream()
-                                                     .collect(Collectors.toMap(Credential::principalId, Function.identity()));
+                                                   .collect(Collectors.toMap(Credential::principalID, Function.identity()));
     }
 
 
@@ -684,10 +684,10 @@ package com.orion.engineering.digitaltwin.identity.auth;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.orion.identity.Principal;
-import com.orion.identity.PrincipalType;
-import com.orion.identity.credential.Credential;
-import com.orion.identity.credential.InMemoryCredentialStore;
+import com.orion.engineering.digitaltwin.identity.Principal;
+import com.orion.engineering.digitaltwin.identity.PrincipalType;
+import credential.com.orion.engineering.digitaltwin.identity.Credential;
+import credential.com.orion.engineering.digitaltwin.identity.InMemoryCredentialStore;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -757,9 +757,9 @@ public class AuthenticationException extends RuntimeException
 ```java
 package com.orion.engineering.digitaltwin.identity.auth;
 
-import com.orion.identity.Principal;
-import com.orion.identity.credential.Credential;
-import com.orion.identity.credential.CredentialStore;
+import com.orion.engineering.digitaltwin.identity.Principal;
+import credential.com.orion.engineering.digitaltwin.identity.Credential;
+import credential.com.orion.engineering.digitaltwin.identity.CredentialStore;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -777,7 +777,7 @@ public class SharedSecretAuthenticator
     public Principal authenticate(String principalId, String presentedSecret)
     {
         Credential credential = credentialStore.findByPrincipalId(principalId)
-                                                 .orElseThrow(() -> new AuthenticationException("Unknown principal: " + principalId));
+                                               .orElseThrow(() -> new AuthenticationException("Unknown principal: " + principalId));
         if(!secretsMatch(credential.sharedSecret(), presentedSecret))
         {
             throw new AuthenticationException("Invalid credentials for principal: " + principalId);
