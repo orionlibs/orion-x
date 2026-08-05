@@ -1,0 +1,416 @@
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/background/cover-dark.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+/* Ensure the body itself doesn't have a solid background blocking the image */
+body {
+    background-color: transparent !important;
+}
+
+
+:root {
+    /* Main Theme Colors */
+    --primary-rgb: 0, 255, 255;          /* Pure Cyan RGB */
+    --primary: #00FFFF;                 /* Pure Cyan Hex */
+}
+
+
+/* Update Sidebar Active States */
+.side-menu__item.active,
+.side-menu__item:hover {
+    color: var(--primary) !important;
+}
+
+.side-menu__item.active .side-menu__icon,
+.side-menu__item:hover .side-menu__icon {
+    fill: var(--primary) !important;
+    stroke: var(--primary) !important;
+}
+
+/* Update the Scrollbar (SimpleBar) to Cyan */
+.simplebar-scrollbar::before {
+    background: var(--primary) !important;
+}
+
+
+.page-title, .card-title a{
+    color: #00FFFF;
+}
+
+
+.twenty-percent-width
+{
+    width: 20% !important;
+}
+
+
+.hidden
+{
+    display: none !important;
+}
+
+
+.floating-alarms {
+    position: fixed;
+    top: 9%;
+    right: 5%;
+    width: 30%;
+    z-index: 1050;
+}
+
+
+.floating-alarms .alert {
+    margin-bottom: 10px;
+    opacity: 0.9;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+.led-display {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 25px;
+  color: aqua;
+  /* Optional: Add a glow effect */
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+
+.mb-025rem
+{
+    margin-bottom: 0.25rem;
+}
+
+
+.gauge-container {
+  display: flex;
+}
+
+.gauge .dxg-line {
+  -webkit-transform: scaleX(1.04) scaleY(1.03) translate(-4px, -4px);
+          transform: scaleX(1.04) scaleY(1.03) translate(-4px, -4px);
+}
+.gauge .dxg-line path:first-child,
+.gauge .dxg-line path:last-child {
+  display: none;
+}
+.gauge .dxg-line path:nth-child(2),
+.gauge .dxg-line path:nth-child(6) {
+  stroke: #ed811c;
+}
+.gauge .dxg-line path:nth-child(3),
+.gauge .dxg-line path:nth-child(5) {
+  stroke: #a7db29;
+}
+.gauge .dxg-line path:nth-child(4) {
+  stroke: #25cd6b;
+}
+.gauge .dxg-elements text:first-child {
+  -webkit-transform: translate(19px, 13px);
+          transform: translate(19px, 13px);
+}
+.gauge .dxg-elements text:last-child {
+  -webkit-transform: translate(-27px, 14px);
+          transform: translate(-27px, 14px);
+}
+.gauge .dxg-value-indicator path {
+  -webkit-transform: scale(1.2) translate(0, -5px);
+          transform: scale(1.2) translate(0, -5px);
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+}
+.gauge .dxg-value-indicator .dxg-title {
+  text-transform: uppercase;
+}
+.gauge .dxg-value-indicator .dxg-title text:first-child {
+  -webkit-transform: translateY(5px);
+          transform: translateY(5px);
+}
+.gauge .dxg-value-indicator .dxg-spindle-border:nth-child(4),
+.gauge .dxg-value-indicator .dxg-spindle-hole:nth-child(5) {
+  -webkit-transform: translate(0, -109px);
+          transform: translate(0, -109px);
+}
+.gauge .dxg-value-indicator .dxg-spindle-hole {
+  fill: #26323a;
+}
+
+
+.dropdown-selector {
+    height: 165px !important;
+    overflow-y: auto !important;
+    display: block !important;
+}
+
+
+.LED-gauge {
+  display: flex;
+  height: 100px;
+  overflow: hidden;
+}
+
+
+.modal-body {
+    background-color: #2F4F4F;
+}
+
+
+.modal-dialog {
+    max-width: 70% !important
+}
+
+
+/* While the modal is open, prevent selection on the background content */
+body.modal-open {
+    user-select: none;
+}
+
+/* Re-enable selection specifically for the modal content */
+.modal.show {
+    user-select: text;
+}
+
+
+/* Ensure the label is visible and has space next to the icon */
+#yapily-admin .side-menu__item {
+    display: flex !important;
+    align-items: center;
+    text-decoration: none;
+}
+
+#yapily-admin .sidebar-menu-subitem {
+    margin-bottom: -1rem !important;
+}
+
+#yapily-admin .side-menu__label {
+    display: inline-block !important; /* Force visibility */
+    opacity: 1 !important;           /* Force opacity */
+    visibility: visible !important;  /* Force visibility */
+    margin-left: 10px;               /* Space between SVG and Text */
+    white-space: nowrap;             /* Prevent text from wrapping */
+}
+
+/* Ensure the SVG has a fixed size so it doesn't squash the text */
+#yapily-admin .side-menu__icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+
+/* 1. Define the desired width for your sidebar */
+:root {
+    --sidebar-width: 12%;
+}
+
+/* 2. Force the sidebar to be wide and visible */
+.app-sidebar {
+    width: var(--sidebar-width) !important;
+    min-width: var(--sidebar-width) !important;
+    transition: all 0.3s ease;
+}
+
+/* 3. Ensure the menu labels are always visible */
+.side-menu__label {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    white-space: nowrap; /* Prevents text from wrapping to a second line */
+}
+
+/* 4. Shift the main content area to the right */
+.main-content.app-content {
+    margin-left: var(--sidebar-width) !important;
+    transition: all 0.3s ease;
+}
+
+/* 5. Fix SimpleBar wrappers to allow the new width */
+#sidebar-scroll,
+.simplebar-content-wrapper,
+.simplebar-content {
+    width: 100% !important;
+}
+
+/* 6. Responsive adjustment: On small screens, hide the sidebar or reset margin */
+@media (max-width: 991.98px) {
+    .main-content.app-content {
+        margin-left: 0 !important;
+    }
+    .app-sidebar {
+        width: 0 !important;
+        transform: translateX(-100%);
+    }
+}
+
+
+/* New Alert Container */
+#floating-notification-container {
+    position: fixed;
+    top: 1.25rem;    /* 20px from top */
+    right: 1.25rem;  /* 20px from right */
+    z-index: 10000;  /* Higher than sidebar and header */
+    width: 40rem;    /* 320px width */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;    /* Space between multiple alerts */
+}
+
+/* Cyan Alert Styling */
+.alert-cyan {
+    background: rgba(0, 20, 20, 0.9);
+    border: 1px solid #00FFFF;
+    color: #00FFFF;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+
+/* Style the "Show X entries" dropdown */
+.dt-length select {
+    background-color: rgba(0, 255, 255, 0.1) !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary) !important;
+    padding: 5px;
+    border-radius: 4px;
+    outline: none;
+}
+
+/* Style the label "entries per page" */
+.dt-length label {
+    color: var(--primary) !important;
+    margin-left: 10px;
+    font-size: 0.875rem;
+}
+
+/* Add some spacing between the length dropdown and the search box */
+.dt-length {
+    margin-right: 20px;
+}
+
+
+.table tbody td {
+    vertical-align: middle !important;
+    display: table-cell;
+}
+
+/* 2. Target the cell containing the Run Tests button and Dropdown */
+#repos-table tbody td:nth-child(2) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 0;
+    height: 100%;
+}
+
+/* 3. Remove Bootstrap's default bottom margin on the dropdown */
+.table .form-select-sm {
+    margin-bottom: 0 !important;
+    height: 31px; /* Matches the standard height of a btn-sm */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* 4. Ensure the links in other cells have the same height footprint */
+/*.table td a {
+    display: inline-block;
+    line-height: 31px;
+}*/
+
+.table-dropdown {
+    width: auto;
+}
+
+/* Standard Blue Links inside the table */
+.table td a {
+    color: #ADD8E6 !important;      /* Classic Bootstrap Blue */
+    text-decoration: underline !important; /* Always underlined for clarity */
+    transition: color 0.2s ease;
+    display: inline-table;
+    vertical-align: middle;
+}
+
+.table td.table-text {
+    color: #ADD8E6 !important;      /* Classic Bootstrap Blue */
+    transition: color 0.2s ease;
+}
+
+.table-button {
+    color: black !important;      /* Classic Bootstrap Blue */
+    text-decoration: underline !important; /* Always underlined for clarity */
+    transition: color 0.2s ease;
+}
+
+.table td a.table-button {
+    color: black !important;      /* Classic Bootstrap Blue */
+    text-decoration: underline !important; /* Always underlined for clarity */
+    transition: color 0.2s ease;
+}
+
+/* Hover state: Make it a slightly darker blue */
+.table-button:hover {
+    color: #0056b3 !important;
+    text-decoration: none !important; /* Optional: remove underline on hover */
+}
+
+.table td a:hover {
+    color: #0056b3 !important;
+    text-decoration: none !important; /* Optional: remove underline on hover */
+}
+
+.anchor-text {
+    text-decoration: underline;
+    color: lightblue;
+}
+
+#yapily-admin .fc-popover {
+    background: black;
+}
+
+/* 1. Allow the popover to expand based on content */
+#yapily-admin .fc-popover.fc-more-popover {
+    width: max-content !important;
+    height: max-content !important;
+}
+
+/* 2. Prevent the event titles from wrapping to a new line */
+#yapily-admin .fc-popover-body .fc-event-title {
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+
+/* 3. Ensure the event harness (container) also expands */
+#yapily-admin .fc-popover-body .fc-daygrid-event-harness {
+    width: 100% !important;
+}
+
+/* 1. Define a height for the left scrollable area */
+#repository-groups-area {
+    height: calc(78.3vh);
+    overflow-y: auto; /* Required for scrolling to trigger */
+}
+
+#help-articles {
+    height: calc(78.3vh);
+    overflow-y: auto; /* Required for scrolling to trigger */
+}
+
+/* 2. Ensure the right column stays fixed to the top of the viewport in case the page itself tries to scroll */
+#repo-group-page .col-xl-6:last-child .card {
+    position: sticky;
+}

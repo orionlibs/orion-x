@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="dark" data-vertical-style="detached" data-toggled="detached-open" data-card-style="style1" data-card-background="background1">
+<head id="html-header">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet" >
+    <link href="assets/css/jquery-ui.structure.css" rel="stylesheet" >
+    <link href="assets/css/jquery-ui.theme.css" rel="stylesheet" >
+    <script src="assets/js/plugins/jquery.min.js"></script>
+    <script src="assets/js/plugins/jquery-ui.min.js"></script>
+    <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/main.js"></script>
+    <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
+    <link href="assets/css/styles.css" rel="stylesheet" >
+    <link href="assets/css/icons.css" rel="stylesheet" >
+    <link href="assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <script src="assets/js/plugins/sevenSeg.js"></script>
+    <script src="assets/js/orion.js"></script>
+    <link href="assets/css/orion.css" rel="stylesheet">
+</head>
+<body id="yapily-admin">
+    <div id="loader" >
+        <img src="assets/images/media/loader.svg" alt="">
+    </div>
+
+
+    <div class="page">
+        <header id="header" class="app-header sticky"></header>
+        <aside id="sidebar" class="app-sidebar sticky sticky-pin"></aside>
+
+
+        <div class="main-content app-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xxl-12 col-xl-12">
+                        <div class="card custom-card">
+                            <div class="top-left"></div>
+                            <div class="top-right"></div>
+                            <div class="bottom-left"></div>
+                            <div class="bottom-right"></div>
+
+
+                            <div class="card-header">
+                                <h1 class="page-title fw-medium fs-18 mb-0">Configuration</h1>
+                            </div>
+
+
+                            <div class="card-body"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xxl-8 col-xl-8">
+                        <div class="card custom-card">
+                            <div class="top-left"></div>
+                            <div class="top-right"></div>
+                            <div class="bottom-left"></div>
+                            <div class="bottom-right"></div>
+
+
+                            <div class="card-header">
+                                <button id="show-repo-provider-api-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Repo Provider API</button>
+                                <button id="show-repo-provider-pipeline-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Repo Provider Pipeline</button>
+                                <button id="show-slack-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Slack</button>
+                                <button id="show-emailer-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Emailer</button>
+                                <button id="show-sla-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">SLA/SLO/SLI</button>
+                                <button id="show-wiki-provider-api-configuration-tab-content-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Wiki Provider API</button>
+                            </div>
+
+
+                            <div class="card-body">
+                                <div id="repo-provider-api-configuration-tab-content">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">API Key</label>
+                                                    <input id="input-repo-provider-api-key" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Username</label>
+                                                    <input id="input-repo-provider-username" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">API Base URL</label>
+                                                    <input id="input-repo-provider-api-base-url" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-repo-provider-api-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                <div id="repo-provider-pipeline-configuration-tab-content" class="hidden">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Pipeline URL Prefix</label>
+                                                    <input id="input-repo-provider-pipeline-url-prefix" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Pipeline API URL Prefix</label>
+                                                    <input id="input-repo-provider-pipeline-api-url-prefix" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Commit API URL Prefix</label>
+                                                    <input id="input-repo-provider-commit-api-url-prefix" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-repo-provider-pipeline-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                <div id="slack-configuration-tab-content" class="hidden">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Slack Channel Webhook URL</label>
+                                                    <input id="input-slack-channel-webhook-url" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-slack-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                <div id="emailer-configuration-tab-content" class="hidden">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Enable Emailer</label>
+                                                    <input id="input-emailer-enabled" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Email Username</label>
+                                                    <input id="input-emailer-username" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Emailer Password</label>
+                                                    <input id="input-emailer-password" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-emailer-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                <div id="sla-configuration-tab-content" class="hidden">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Expected Time to Fix Failed Pipeline (in minutes)</label>
+                                                    <input id="input-sla-time-to-fix-in-minutes" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-sla-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                                <div id="wiki-provider-api-configuration-tab-content" class="hidden">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">API Key</label>
+                                                    <input id="input-wiki-provider-api-key" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">Username</label>
+                                                    <input id="input-wiki-provider-username" type="text" class="form-control"/>
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">API Base URL</label>
+                                                    <input id="input-wiki-provider-api-base-url" type="text" class="form-control"/>
+                                                </div>
+
+
+                                                <button id="update-wiki-provider-api-configuration-button" type="button" class="btn btn-primary-light rounded-pill btn-wave">Update Configuration</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="scrollToTop"><span class="arrow"><i class="ti ti-arrow-narrow-up fs-20"></i></span></div>
+        <div id="responsive-overlay"></div>
+        <div id="floating-alarms-container" class="floating-alarms"></div>
+        <div id="floating-notification-container"></div>
+    </div>
+
+
+    <footer id="footer" class="footer mt-auto py-3 text-center"></footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="assets/js/plugins/sticky.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/js/plugins/custom.js"></script>
+    <script src="assets/js/header/header.js"></script>
+    <script src="assets/js/sidebar/sidebar.js"></script>
+    <script src="assets/js/configuration/configuration.js"></script>
+</body>
+</html>

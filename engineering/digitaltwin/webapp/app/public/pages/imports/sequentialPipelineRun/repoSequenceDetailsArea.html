@@ -1,0 +1,26 @@
+<template>
+    <div id="repo-sequence-details-area-body">
+        <div id="repos-details-area"></div>
+        <hr class="mb-4">
+        <h5>Pipeline logs (for each repository pipeline run) are available 1 minute after the pipeline fails</h5>
+        <br>
+        <a id="refresh-test-run-history-table-button" href="#" class="btn btn-info btn-sm btn-rounded px-3 fw-600 rounded table-button"><i class="bi bi-arrow-counterclockwise me-1"></i> Refresh Pipeline Run Status</a>
+        <br><br>
+
+        <div id="repo-test-run-history-table-area" class="data-management">
+            <table id="repo-test-run-history-table" class="table table-bordered table-sm text-nowrap w-100 overflow-auto">
+                <thead>
+                <tr>
+                    <th>Repository</th>
+                    <th>Status</th>
+                    <th>Stop Run</th>
+                    <th>Pipeline URL</th>
+                    <th>Logs</th>
+                    <th>Triggered At</th>
+                </tr>
+                </thead>
+                <tbody id="repo-test-run-history-table-body" class="text-body"></tbody>
+            </table>
+        </div>
+    </div>
+</template>

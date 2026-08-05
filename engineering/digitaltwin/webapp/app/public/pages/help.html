@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="dark" data-vertical-style="detached" data-toggled="detached-open" data-card-style="style1" data-card-background="background1">
+<head id="html-header">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.structure.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.theme.css" rel="stylesheet">
+    <script src="assets/js/plugins/jquery.min.js"></script>
+    <script src="assets/js/plugins/jquery-ui.min.js"></script>
+    <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/main.js"></script>
+    <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+    <link href="assets/css/icons.css" rel="stylesheet">
+    <link href="assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/datatables.min.css">
+    <script src="assets/js/plugins/datatables.min.js"></script>
+    <script src="assets/js/plugins/sevenSeg.js"></script>
+    <script src="assets/js/orion.js"></script>
+    <link href="assets/css/orion.css" rel="stylesheet">
+</head>
+<body id="yapily-admin">
+<div id="loader">
+    <img src="assets/images/media/loader.svg" alt="">
+</div>
+
+
+<div class="page">
+    <header id="header" class="app-header sticky"></header>
+    <aside id="sidebar" class="app-sidebar sticky sticky-pin"></aside>
+
+
+    <div class="main-content app-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center mb-5">
+                <div class="col-xl-12">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-6">
+                            <div class="text-center p-3 faq-header mb-4">
+                                <h5 class="mb-1 text-primary op-5 fw-medium">Help</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="help-articles" class="col-xl-8">
+                    <div class="card custom-card">
+                        <div class="top-left"></div>
+                        <div class="top-right"></div>
+                        <div class="bottom-left"></div>
+                        <div class="bottom-right"></div>
+
+
+                        <div class="card-header d-sm-flex d-block border-block-end-dashed justify-content-center text-center">
+                            <ul class="nav nav-tabs nav-tabs-header mb-0 d-sm-flex d-block" role="tablist">
+                                <li class="nav-item m-1">
+                                    <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page" href="#general-faqs" aria-selected="true">Features</a>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page" href="#support-faqs" aria-selected="true">System</a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane pb-0 border-0 show active" id="general-faqs" role="tabpanel">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            Features
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-body">
+                                        <div class="accordion accordion-customicon1 accordion-primary" id="accordionFAQ1">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle1" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Configuration
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle1" class="accordion-collapse collapse show" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/configuration" class="pe-auto text-primary fw-medium text-decoration-underline">Configuration</a> page allows the configuration of the
+                                                        repository provider (BitBucket), its pipelines, Slack, the emailer, etc.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle2" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Repositories
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle2" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/repos" class="pe-auto text-primary fw-medium text-decoration-underline">Repos</a> page shows
+                                                        the list of all repositories Yapily has. You can view the README.md and the bitbucket-pipelines.yml
+                                                        file contents, as well as the details of each repository by clicking on the repository name.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle3" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Repository Details and Tools
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle3" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The repository details page can be visited by clicking on a repository's name.
+                                                        Most pages give you this ability.</p>
+                                                        <p>This page has all the tools, in one place, to
+                                                        trigger pipeline runs in the development and staging environments. You can run
+                                                        any of the pipeline commands defined in the repository's bitbucket-pipelines.yml file.
+                                                        You can run such commands on any branch. The default is "master".</p>
+                                                        <p>You can also schedule
+                                                        pipeline runs. The scheduler is built-in and it does not use the BitBucket scheduler.</p>
+                                                        <p>This page allows you to stop running pipeline runs, as well, but only the ones that
+                                                        were triggered using this application.</p>
+                                                        <p>The table, at the bottom of this page, shows
+                                                        all the pipeline runs triggered using this application along with useful information
+                                                        for each run. When a run is triggered, then the system uses its built-in polling engine
+                                                        to update the run's status.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle4" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Pipeline Run Activity
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle4" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/testRunActivity" class="pe-auto text-primary fw-medium text-decoration-underline">Test Run Activity</a> page
+                                                        shows all pipeline runs triggered using this application along with useful information.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle5" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Blame Board
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle5" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/blameBoard" class="pe-auto text-primary fw-medium text-decoration-underline">Blame Board</a> page
+                                                        shows all people/committers that caused pipeline runs, triggered using this application,
+                                                            to fail in the last week, along with some statistics.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle6" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Blame Calendar
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle6" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/blameCalendar" class="pe-auto text-primary fw-medium text-decoration-underline">Blame Calendar</a> page
+                                                        shows a calendar of pipeline run failures and their fixes.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle7" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Kanban Board
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle7" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/kanbanBoard" class="pe-auto text-primary fw-medium text-decoration-underline">Kanban Board</a> page
+                                                        shows a Kanban-like board with 3 columns. The first shows the currently-running pipeline
+                                                            runs triggered using this application along with useful information. The second
+                                                            shows the failed pipeline runs that have not been fixed yet. The third column shows
+                                                            the fixed pipeline runs.</p>
+                                                        <p>The "Update Fix Timestamps of Failed Test Runs" button on the top-right of the
+                                                        top navigation bar finds all the recorded failed runs that do not have a recorded
+                                                        fix timestamp and checks the next up-to-50 pipeline runs to determine if the failed
+                                                        run on the environment and branch it run against has succeeded. If yes, then it stores
+                                                        the fix timestamp and that timestamp can be seen in various places in the application.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle8" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Repository Groups
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle8" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/repoGroup" class="pe-auto text-primary fw-medium text-decoration-underline">Repository Group</a> page
+                                                            allows the creation of groups of repositories for the convenience of running e2e-tests
+                                                            with one click.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#featuresarticle9" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Dashboard
+                                                    </button>
+                                                </h2>
+                                                <div id="featuresarticle9" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ1">
+                                                    <div class="accordion-body">
+                                                        <p>The <a href="/" class="pe-auto text-primary fw-medium text-decoration-underline">Home</a> page
+                                                            shows a dashboard of various analytics.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane pb-0 border-0" id="support-faqs" role="tabpanel">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            How to Use the System
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-body">
+                                        <div class="accordion accordion-customicon1 accordion-primary" id="accordionFAQ2">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#systemarticle1" aria-expanded="true">
+                                                        <i class="ri-question-line me-2 text-primary fs-16"></i>Trigger Pipeline Run
+                                                    </button>
+                                                </h2>
+                                                <div id="systemarticle1" class="accordion-collapse collapse show" data-bs-parent="#accordionFAQ2">
+                                                    <div class="accordion-body">
+                                                        <p>The repository details page allows the trigger of pipeline runs.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-4">
+                    <div class="card custom-card">
+                        <div class="top-left"></div>
+                        <div class="top-right"></div>
+                        <div class="bottom-left"></div>
+                        <div class="bottom-right"></div>
+
+
+                        <div class="card-header justify-content-center">
+                            <div class="card-title mb-3 text-center">
+                                Do you have any questions?
+                                <span class="subtitle fw-normal text-muted d-block fs-12">Drop your questions here and we will assist you.</span>
+                            </div>
+                        </div>
+
+
+                        <div class="card-body pb-4">
+                            <div class="row gy-3 justify-content-center">
+                                <div class="col-xl-12">
+                                    <div class="p-3 border mb-2">
+                                        <label for="input-support-name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="input-support-name" placeholder="Your Name">
+                                        <label for="input-support-question" class="form-label mt-3">Your Question</label>
+                                        <textarea class="form-control" placeholder="Your Question" id="input-support-question" rows="5"></textarea>
+                                        <button id="submit-support-question-button" class="btn btn-primary btn-wave mt-3">Submit Your Question</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="scrollToTop"><span class="arrow"><i class="ti ti-arrow-narrow-up fs-20"></i></span></div>
+<div id="responsive-overlay"></div>
+<div id="floating-alarms-container" class="floating-alarms"></div>
+<div id="floating-notification-container"></div>
+</div>
+
+
+<footer id="footer" class="footer mt-auto py-3 text-center"></footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="assets/js/plugins/sticky.js"></script>
+<script src="assets/libs/simplebar/simplebar.min.js"></script>
+<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+<script src="assets/js/plugins/custom.js"></script>
+<script src="assets/js/header/header.js"></script>
+<script src="assets/js/sidebar/sidebar.js"></script>
+<script src="assets/js/help/help.js"></script>
+</body>
+</html>
