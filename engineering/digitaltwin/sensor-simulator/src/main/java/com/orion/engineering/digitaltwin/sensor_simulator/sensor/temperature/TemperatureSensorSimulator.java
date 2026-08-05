@@ -1,4 +1,4 @@
-package com.orion.engineering.digitaltwin.sensor_simulator.sensor;
+package com.orion.engineering.digitaltwin.sensor_simulator.sensor.temperature;
 
 import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient;

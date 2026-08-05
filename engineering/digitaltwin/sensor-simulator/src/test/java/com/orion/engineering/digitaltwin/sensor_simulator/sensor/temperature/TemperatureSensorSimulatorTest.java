@@ -1,4 +1,4 @@
-package com.orion.engineering.digitaltwin.sensor_simulator.sensor;
+package com.orion.engineering.digitaltwin.sensor_simulator.sensor.temperature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
