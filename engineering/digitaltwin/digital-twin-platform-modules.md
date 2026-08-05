@@ -1,26 +1,3 @@
-#### M01 — Platform Build & Module Boundaries
-
-| | |
-|---|---|
-| **Responsibility** | Maven reactor, dependency governance, and mechanically-enforced module boundaries. |
-| **Owns** | Root POM, BOM, module graph, architecture tests. |
-| **Source** | **[not in book]** — book uses Python/AWS SAM. §10.3.5 motivates dependency discipline. |
-
-**Must do**
-- Multi-module Maven reactor; one Maven module per catalogue module (or per bounded group).
-- Internal BOM importing `spring-boot-dependencies`; **all** third-party versions pinned, no ranges (§10.3.5).
-- Enforce the dependency direction of §2 — L4/L5 must not reach past `M27` into L2 stores.
-- Fail the build on boundary violation, not review comment.
-- Produce an SBOM per artifact (feeds `M47`).
-
-**JVM notes** — Spring Modulith for boundary enforcement + generated module documentation.
-ArchUnit for the L4→L2 rules Modulith doesn't cover. Java 25 module import declarations (JEP 511,
-final) tidy up the `module-info` story if you go JPMS; most teams won't.
-
-**Build vs buy** — build (it's your topology), using off-the-shelf enforcement.
-
----
-
 #### M02 — Identity (Device, Service, Human, Agent)
 
 | | |
@@ -29,14 +6,12 @@ final) tidy up the `module-info` story if you go JPMS; most teams won't.
 | **Owns** | Device credentials/certs, service principals, agent identities, human identity federation. |
 | **Consumes** | `M08` device registry (which device *should* exist). |
 | **Produces** | Authenticated principal for `M03`. |
-| **Source** | §10.2.2, §4.5.3, §3.6 (security row), App. B (mTLS), App. A (OTAA/DevEUI/AppKey). |
 
 **Must do**
 - High-capability devices: X.509 client certs + mutual TLS (App. B).
 - Constrained LPWAN devices: unique identifier + secure join yielding session keys — LoRaWAN OTAA `DevEUI`/`AppEUI`/`AppKey` (App. A.6).
 - Services authenticate to each other; **no network-location trust** (zero trust, §10.2.2).
 - Humans: OIDC federation with role separation.
-- **AI agents are first-class identities with explicit, narrow permissions** (§10.2.2) — not a shared service account.
 - Key/cert lifecycle: rotation, renewal before expiry, and fast isolation of a compromised device (§3.6).
 
 **JVM notes** — Spring Security 7 / Spring Authorization Server. mTLS terminates at the broker
@@ -44,7 +19,7 @@ final) tidy up the `module-info` story if you go JPMS; most teams won't.
 Java 25) so it survives virtual-thread hops. Java 25's KDF API (JEP 510, final) is a clean fit for
 deriving per-session device keys.
 
-**Traps** — every sensor is an attack vector (§3.6). §10.2.1: an attacker can spoof a sensor or
+**Traps** — every sensor is an attack vector: an attacker can spoof a sensor or
 replay old telemetry without ever touching your cloud — identity at the edge is not optional.
 
 ---
@@ -57,7 +32,6 @@ replay old telemetry without ever touching your cloud — identity at the edge i
 | **Owns** | Policy documents, versioned; decision log entries. |
 | **Consumes** | Principal from `M02`; proposed command + sensor context from `M40`/`M37`. |
 | **Produces** | ALLOW/DENY + reason → `M06` audit, and gates command dispatch. |
-| **Source** | §10.2.3, §10.5.1, §4.5.3, §7.6.1. |
 
 **Must do**
 - RBAC as the floor; ABAC where context matters — time of access, location, data age (§4.5.3).
@@ -174,7 +148,6 @@ environments.
 | **Responsibility** | Know what is deployed, where, measuring what, in what health. |
 | **Owns** | Device inventory, firmware state, calibration schedule, battery history, logical↔physical mapping. |
 | **Produces** | Device metadata to `M12` (which codec), `M24` (graph nodes), `M04` (health metrics). |
-| **Source** | §3.6, §3.2, App. A.4–A.6. |
 
 **Must do**
 - Maintain **both** the logical location (what the sensor measures) and the physical location, *with photographs of the exact mounting position* (§3.6). Without this, the data stream is meaningless or misleading.
