@@ -1,0 +1,13 @@
+server:
+  port: 8101
+
+spring:
+  application:
+    name: orion-engineering-digital-twin-sensor-simulator
+  main:
+    banner-mode: off
+
+#logging:
+#  level:
+#    root: INFO
+#    platform.application: DEBUG
