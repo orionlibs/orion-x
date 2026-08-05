@@ -51,12 +51,11 @@ deployed independently of the app.
 
 #### M04 — Observability
 
-| | |
-|---|---|
-| **Responsibility** | Explain system behaviour, not merely detect failure (§10.3.1). |
-| **Owns** | Log/metric/trace pipelines, dashboards for twin health. |
-| **Consumes** | Instrumentation from every module. |
-| **Source** | §10.3.1, §3.6 (automated monitoring), §10.3.4 (cost as a signal). |
+| |                                                                   |
+|---|-------------------------------------------------------------------|
+| **Responsibility** | Explain system behaviour, not merely detect failure.              |
+| **Owns** | Log/metric/trace pipelines, dashboards for twin health.           |
+| **Consumes** | Instrumentation from every module.                                |
 
 **Must do**
 - Structured logs, queryable by attribute, with deliberate levels (§10.3.1).
@@ -65,8 +64,7 @@ deployed independently of the app.
 - Sensor-network health: message frequency, battery voltage, missed-transmission alerts (§3.6).
 - Expose **cost** as an observable signal, attributable per model/asset/simulation/tenant (§10.3.4 note).
 
-**JVM notes** — Micrometer + Micrometer Tracing + OpenTelemetry (the book names OTel as the
-standard, §10.3.1). Spring Boot 4 ships Micrometer 1.16-era autoconfiguration and OTel support.
+**JVM notes** — Micrometer + Micrometer Tracing + OpenTelemetry. Spring Boot 4 ships Micrometer 1.16-era autoconfiguration and OTel support.
 Carry `trace_id` across virtual threads with `ScopedValue`, not `ThreadLocal` — `ThreadLocal`
 plus thousands of virtual threads is a memory-footprint mistake.
 
