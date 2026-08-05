@@ -43,8 +43,7 @@ replay old telemetry without ever touching your cloud — identity at the edge i
 - Row/field-level masking for visualisation consumers — engineers see raw sensor data, executives see aggregates (§7.6.1).
 
 **JVM notes** — Open Policy Agent as a sidecar, called over HTTP/gRPC from a Spring
-`@HttpExchange` client (book uses OPA + Rego for exactly this, §10.5.1). Cedar is the alternative
-the book also demonstrates (§10.2.3) and has Java bindings. In-process coarse checks via Spring
+`@HttpExchange` client. In-process coarse checks via Spring
 Security `AuthorizationManager`; keep *physical-action* policy external so it can be reviewed and
 deployed independently of the app.
 
