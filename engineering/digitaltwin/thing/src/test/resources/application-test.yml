@@ -1,0 +1,13 @@
+server:
+  port: 8103
+
+spring:
+  application:
+    name: orion-engineering-digital-twin-thing
+  main:
+    banner-mode: off
+
+#logging:
+#  level:
+#    root: INFO
+#    platform.application: DEBUG
