@@ -4,5 +4,5 @@ import java.time.format.DateTimeFormatter;
 
 public class CalendarUtils
 {
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD'T'HH:MM:SS.###Z");
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 }
