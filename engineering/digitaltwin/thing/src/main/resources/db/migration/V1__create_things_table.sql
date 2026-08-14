@@ -2,7 +2,7 @@ CREATE TABLE things (
     id                   UUID PRIMARY KEY,
     name                 TEXT NOT NULL,
     description          TEXT NOT NULL,
-    thing_type           TEXT NOT NULL CHECK (thing_type IN ('device', 'sensor', 'gateway', 'actuator', 'object')),
+    thing_type           TEXT NOT NULL CHECK (thing_type IN ('device', 'sensor', 'gateway', 'actuator', 'object', 'building', 'machine')),
     parent_id            UUID REFERENCES things(id) ON DELETE CASCADE,
     uns_topic            TEXT NOT NULL UNIQUE, -- e.g. 'site1/area2/line3/thing4'
     status               TEXT NOT NULL DEFAULT 'inactive' CHECK (status IN ('active', 'inactive', 'offline', 'decommissioned')),

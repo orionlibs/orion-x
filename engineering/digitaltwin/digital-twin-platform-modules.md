@@ -1,3 +1,31 @@
+1--gather all info, digital or not
+2--digitalise the non-digital info
+3--establish metrics of twin success
+4--you need to know what you are measuring so that you know what sensors to use
+4a----how frequently does each sensor provide measurements?
+4b----what is each sensor's measurement range (min/max values)?
+4c----what is each sensor's sensitivity (smallest detectable change)?
+4d----what is each sensor's accuracy (closeness to true value)?
+4e----what is each sensor's precision (min diff between 2 consecutive measurements)?
+4f----what is each sensor's environmental tolerance?
+4g----what is each sensor's power consumption?
+5--sensors need to connect to a network so that they can transmit measurements
+6--MQTT
+7--see if some stuff can be processed at the edge before transmission with MQTT (edge computing)
+8--is fog computing required before cloud computing?
+9--when no sensor exists for something, then do manual data recording using some interface
+10-we need to decode the MQTT payloads. The decoder subscribed to all MQTT topics and triggers decoding
+11-use sensor fusion (Kalman filter) to combine different sensor data
+12-use spatial GIS data if needed
+13-define data derived from senor data. E.g. using temperature we can find rate of temprature change or duration since the last time temperature exceeded some threshold
+14-operational technology (OT), IT, sensors
+
+
+
+
+
+
+
 #### M02 — Identity (Device, Service, Human, Agent)
 
 | | |
