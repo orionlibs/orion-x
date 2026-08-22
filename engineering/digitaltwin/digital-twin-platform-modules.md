@@ -1,24 +1,143 @@
-1--gather all info, digital or not
-2--digitalise the non-digital info
-3--establish metrics of twin success
-4--you need to know what you are measuring so that you know what sensors to use
-4a----how frequently does each sensor provide measurements?
-4b----what is each sensor's measurement range (min/max values)?
-4c----what is each sensor's sensitivity (smallest detectable change)?
-4d----what is each sensor's accuracy (closeness to true value)?
-4e----what is each sensor's precision (min diff between 2 consecutive measurements)?
-4f----what is each sensor's environmental tolerance?
-4g----what is each sensor's power consumption?
-5--sensors need to connect to a network so that they can transmit measurements
-6--MQTT
-7--see if some stuff can be processed at the edge before transmission with MQTT (edge computing)
-8--is fog computing required before cloud computing?
-9--when no sensor exists for something, then do manual data recording using some interface
-10-we need to decode the MQTT payloads. The decoder subscribed to all MQTT topics and triggers decoding
-11-use sensor fusion (Kalman filter) to combine different sensor data
-12-use spatial GIS data if needed
-13-define data derived from senor data. E.g. using temperature we can find rate of temprature change or duration since the last time temperature exceeded some threshold
-14-operational technology (OT), IT, sensors
+Identity (Device, Service, Human, Agent)
+Every entity that touches the twin has a verifiable identity
+
+Authorization & Policy-as-Code
+Decide whether a principal may perform an action on a resource — including whether an automated action is *allowed to reach the physical world
+
+Observability
+Explain system behaviour, not merely detect failure
+
+Configuration & Secrets
+Environment-specific configuration and credential material, versioned and auditable
+
+Audit & Command Sourcing
+Make every decision the twin makes or recommends replayable
+
+Data Governance, Classification & Retention
+Classify data, enforce handling rules, and bound how long and for what purpose it is kept
+
+Device & Sensor Registry, Fleet Management
+Know what is deployed, where, measuring what, in what health
+
+Edge Runtime / Gateway Agent
+Process, filter and buffer close to the asset; survive disconnection
+
+Protocol Adapters
+Terminate every wire protocol and normalise onto the ingest bus
+
+Ingest Bus & Topic Taxonomy
+One decoupled message bus that all acquisition paths converge on
+
+Payload Codec Service
+Turn device-specific encoded payloads into canonical, unit-bearing, contextualised readings
+
+Manual Data Capture
+Make human-collected measurements a first-class, systematic input
+
+Sensor Fusion & State Estimation
+Produce the best single estimate of true state from multiple imperfect sensors
+
+Canonical Model & Schema Registry
+Define and version the shapes that cross module boundaries
+
+Streaming Ingest & Windowed Processing
+Continuous ingest with in-stream aggregation and threshold detection
+
+Batch Ingest & ETL/ELT
+Scheduled bulk ingest with transformation, for slow-moving and historical data
+
+External Data Connectors
+Integrate third-party and cross-organisation data the twin doesn't own
+
+OT Integration & IT/OT Boundary
+Get OT data into the twin without letting the twin endanger the OT system
+
+Polyglot Persistence
+Store each data type in a technology suited to its access pattern
+
+Data Lifecycle & Tiering
+Move data across cost/latency tiers as it ages; delete when policy says so
+
+Data Quality
+Detect and flag bad data before it corrupts models and decisions
+
+Ontology & Model Definition
+Formally define the concepts, properties, relationships and rules of your domain
+
+Knowledge Graph
+Hold the interconnected model of entities and relationships, and answer traversal queries over it
+
+Entity Resolution & Contextualisation
+Discover that differently-identified records across systems refer to the same real-world thing
+
+Spatial Reference & Geometry
+Position everything correctly in space and convert between reference frames
+
+Twin Query & Orchestration API
+Answer relational, context-dependent questions by routing across every store — the single seam between the twin and its consumers
+
+Standards & Interoperability Adapters
+Exchange models and data with external systems in industry-standard formats
+
+Dashboards & Charting
+Timeseries and KPI visualisation for monitoring and analysis
+
+2D Spatial & Schematic Views
+Show data in the topological or floorplan context that makes it interpretable
+
+3D Visualisation Serving
+Serve and render georeferenced 3D scenes with live data anchored in them
+
+3D Asset Pipeline & Reality Capture
+Produce, convert, version and georeference the geometric assets the twin renders and simulates against
+
+Realtime Push & Subscriptions
+Deliver state changes to connected clients with minimal delay
+
+Notification & Alerting
+Get the right signal to the right person or system without training them to ignore it
+
+ML Data Pipeline & Feature Engineering
+Turn raw multi-source telemetry into a clean, aligned, feature-rich matrix for training and inference
+
+Anomaly & Fault Detection
+Identify behaviour that is statistically improbable, and distinguish it from outright failure
+
+Rule Engine
+Deterministic, cheap, auditable decisions — the default, not the fallback
+
+Prediction, Model Serving & MLOps
+Train, version, serve and monitor predictive models
+
+RAG & Knowledge Retrieval
+Ground LLM responses in the twin's own documents and data
+
+Agent Runtime, Tool Registry & Actuation
+Let the twin perceive, reason, plan and act — under governance
+
+Simulation Orchestration & Scenario Management
+Define, execute, track and store simulation runs and what-if scenarios
+
+Continuous Simulation & FMI Co-simulation
+Simulate smoothly-evolving physical state — thermal, fluid, electrical
+
+Discrete Event Simulation
+Simulate systems that change at events rather than continuously
+
+Reduced-Order Models, Virtual Sensing & Calibration
+Deliver physics-grade estimates in real time, where no sensor exists
+
+Change Management
+Change the twin without breaking the physical world
+
+Cost Management & Attribution
+Apply the minimum compute, storage and intelligence that delivers the value
+
+Dependency & Supply Chain Management
+Keep the composite system from breaking because something you didn't write changed
+
+Value Measurement & Adoption Analytics
+Prove the twin still earns its place
 
 
 
