@@ -1,3 +1,6 @@
+-- CREATE DATABASE "digital-twin";
+
+
 CREATE TABLE things (
     id                   UUID PRIMARY KEY,
     name                 TEXT NOT NULL,
