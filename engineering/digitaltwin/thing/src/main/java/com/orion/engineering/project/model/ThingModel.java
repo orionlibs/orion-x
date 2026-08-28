@@ -39,8 +39,9 @@ public class ThingModel
     @Convert(converter = ThingStatusConverter.class)
     @Column(name = "status", nullable = false)
     private ThingStatus status;
+    @Convert(converter = ThingRegistrationMethodConverter.class)
     @Column(name = "registration_method", nullable = false)
-    private String registrationMethod;
+    private ThingRegistrationMethod registrationMethod;
     @Column(name = "mqtt_client_id", unique = true)
     private String mqttClientId;
     @JdbcTypeCode(SqlTypes.JSON)
@@ -92,7 +93,7 @@ public class ThingModel
     }
 
 
-    public void setRegistrationMethod(String registrationMethod)
+    public void setRegistrationMethod(ThingRegistrationMethod registrationMethod)
     {
         this.registrationMethod = registrationMethod;
     }

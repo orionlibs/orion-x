@@ -22,4 +22,10 @@ public class Things
     {
         return thingsDAO.count();
     }
+
+
+    public ThingModel createThing(ThingModel thing)
+    {
+        return thingsDAO.save(thing);
+    }
 }

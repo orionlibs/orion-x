@@ -1,5 +1,8 @@
 package com.orion.engineering.project.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ThingStatus
 {
     ACTIVE("active"),
@@ -15,12 +18,14 @@ public enum ThingStatus
     }
 
 
+    @JsonValue
     public String getValue()
     {
         return value;
     }
 
 
+    @JsonCreator
     public static ThingStatus fromValue(String value)
     {
         for(ThingStatus thingStatus : values())

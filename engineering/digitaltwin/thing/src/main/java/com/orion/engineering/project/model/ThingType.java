@@ -1,5 +1,8 @@
 package com.orion.engineering.project.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ThingType
 {
     DEVICE("device"),
@@ -18,12 +21,14 @@ public enum ThingType
     }
 
 
+    @JsonValue
     public String getValue()
     {
         return value;
     }
 
 
+    @JsonCreator
     public static ThingType fromValue(String value)
     {
         for(ThingType thingType : values())
