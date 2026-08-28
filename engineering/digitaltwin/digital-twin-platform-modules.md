@@ -11,7 +11,7 @@ Configuration & Secrets
 Environment-specific configuration and credential material, versioned and auditable
 
 Audit & Command Sourcing
-Make every decision the twin makes or recommends replayable
+record every decision the twin makes or recommends replayable
 
 Data Governance, Classification & Retention
 Classify data, enforce handling rules, and bound how long and for what purpose it is kept
