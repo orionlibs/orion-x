@@ -1,6 +1,7 @@
 package com.orion.engineering.project.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,14 +29,16 @@ public class ThingModel
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
+    @Convert(converter = ThingTypeConverter.class)
     @Column(name = "thing_type", nullable = false)
-    private String thingType;
+    private ThingType thingType;
     @Column(name = "parent_id")
     private UUID parentId;
     @Column(name = "uns_topic", nullable = false, unique = true)
     private String unsTopic;
+    @Convert(converter = ThingStatusConverter.class)
     @Column(name = "status", nullable = false)
-    private String status;
+    private ThingStatus status;
     @Column(name = "registration_method", nullable = false)
     private String registrationMethod;
     @Column(name = "mqtt_client_id", unique = true)
@@ -65,7 +68,7 @@ public class ThingModel
     }
 
 
-    public void setThingType(String thingType)
+    public void setThingType(ThingType thingType)
     {
         this.thingType = thingType;
     }
@@ -83,7 +86,7 @@ public class ThingModel
     }
 
 
-    public void setStatus(String status)
+    public void setStatus(ThingStatus status)
     {
         this.status = status;
     }
