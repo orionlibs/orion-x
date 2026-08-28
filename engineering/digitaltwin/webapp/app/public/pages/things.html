@@ -14,6 +14,8 @@
     <link href="assets/css/styles.css" rel="stylesheet" >
     <link href="assets/css/icons.css" rel="stylesheet" >
     <link href="assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/datatables.min.css">
+    <script src="assets/js/plugins/datatables.min.js"></script>
     <script src="assets/js/plugins/sevenSeg.js"></script>
     <script src="assets/js/orion.js"></script>
     <link href="assets/css/orion.css" rel="stylesheet">
@@ -34,6 +36,36 @@
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
                         <div class="card custom-card" data-page-title="Things"></div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    All Things
+                                </div>
+                            </div>
+
+
+                            <div class="card-body">
+                                <div id="things-table-area" class="table-responsive">
+                                    <table id="things-table" class="table table-bordered table-sm text-nowrap w-100 overflow-auto">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Created At</th>
+                                            <th>Updated At</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="things-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
