@@ -7,10 +7,37 @@ $(window).on('resize', function () {
 });
 
 
+$(document).ready(function()
+{
+    orionCommon.renderCardChrome();
+});
+
+
 let alarmIDsShownToUser = {};
 
 
 let orionCommon = {
+    renderCardChrome : function()
+    {
+        $('.custom-card').each(function()
+        {
+            let $card = $(this);
+
+            if($card.children('.top-left').length === 0)
+            {
+                $card.prepend('<div class="top-left"></div><div class="top-right"></div><div class="bottom-left"></div><div class="bottom-right"></div>');
+            }
+
+            let pageTitle = $card.data('page-title');
+
+            if(pageTitle !== undefined && $card.children('.card-header').length === 0)
+            {
+                $card.append('<div class="card-header"><h1 class="page-title fw-medium fs-18 mb-0">' + pageTitle + '</h1></div><div class="card-body"></div>');
+            }
+        });
+    },
+
+
     handleAlarm : function(message)
     {
         if(alarmIDsShownToUser[message.alarmID])
