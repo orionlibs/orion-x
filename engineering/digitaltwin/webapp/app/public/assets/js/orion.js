@@ -32,7 +32,16 @@ let orionCommon = {
 
             if(pageTitle !== undefined && $card.children('.card-header').length === 0)
             {
-                $card.append('<div class="card-header"><h1 class="page-title fw-medium fs-18 mb-0">' + pageTitle + '</h1></div><div class="card-body"></div>');
+                let buttonLabel = $card.data('page-title-button-label');
+                let buttonHref = $card.data('page-title-button-href');
+                let buttonHTML = '';
+
+                if(buttonLabel !== undefined)
+                {
+                    buttonHTML = '<a href="' + buttonHref + '" class="btn btn-primary btn-sm btn-rounded px-3 fw-600 rounded">' + buttonLabel + '</a>';
+                }
+
+                $card.append('<div class="card-header d-flex align-items-center justify-content-between"><h1 class="page-title fw-medium fs-18 mb-0">' + pageTitle + '</h1>' + buttonHTML + '</div><div class="card-body"></div>');
             }
         });
     },
@@ -856,7 +865,7 @@ let orionCommon = {
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 256 256">
                         <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v32A8,8,0,0,1,144,176ZM128,80a12,12,0,1,1,12-12A12,12,0,0,1,128,80Z"></path>
                     </svg>
-                    ${message}
+                    <div>${title ? '<strong>' + title + '</strong><br>' : ''}${message}</div>
                 </div>
                 <br>
                 <button type="button" data-bs-dismiss="alert" aria-label="Close">Close</button>

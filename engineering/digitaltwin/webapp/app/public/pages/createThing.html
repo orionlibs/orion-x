@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="dark" data-vertical-style="detached" data-toggled="detached-open" data-card-style="style1" data-card-background="background1">
+<head id="html-header">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet" >
+    <link href="assets/css/jquery-ui.structure.css" rel="stylesheet" >
+    <link href="assets/css/jquery-ui.theme.css" rel="stylesheet" >
+    <script src="assets/js/plugins/jquery.min.js"></script>
+    <script src="assets/js/plugins/jquery-ui.min.js"></script>
+    <script src="assets/libs/@popperjs/core/umd/popper.min.js"></script>
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/main.js"></script>
+    <link id="style" href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
+    <link href="assets/css/styles.css" rel="stylesheet" >
+    <link href="assets/css/icons.css" rel="stylesheet" >
+    <link href="assets/libs/simplebar/simplebar.min.css" rel="stylesheet">
+    <script src="assets/js/plugins/sevenSeg.js"></script>
+    <script src="assets/js/orion.js"></script>
+    <link href="assets/css/orion.css" rel="stylesheet">
+</head>
+<body id="orion">
+    <div id="loader" >
+        <img src="assets/images/media/loader.svg" alt="">
+    </div>
+
+
+    <div class="page">
+        <header id="header" class="app-header sticky"></header>
+        <aside id="sidebar" class="app-sidebar sticky sticky-pin"></aside>
+
+
+        <div class="main-content app-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xxl-12 col-xl-12">
+                        <div class="card custom-card" data-page-title="Create Thing"></div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    New Thing
+                                </div>
+                            </div>
+
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input id="input-name" type="text" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">UNS Topic</label>
+                                            <input id="input-uns-topic" type="text" class="form-control" placeholder="e.g. site1/area2/line3/thing4" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Thing Type</label>
+                                            <select id="input-thing-type" class="form-select">
+                                                <option value="device">Device</option>
+                                                <option value="sensor">Sensor</option>
+                                                <option value="gateway">Gateway</option>
+                                                <option value="actuator">Actuator</option>
+                                                <option value="object">Object</option>
+                                                <option value="building">Building</option>
+                                                <option value="machine">Machine</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Status</label>
+                                            <select id="input-status" class="form-select">
+                                                <option value="active">Active</option>
+                                                <option value="inactive" selected>Inactive</option>
+                                                <option value="offline">Offline</option>
+                                                <option value="decommissioned">Decommissioned</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Registration Method</label>
+                                            <select id="input-registration-method" class="form-select">
+                                                <option value="manual">Manual</option>
+                                                <option value="mqtt_auto">MQTT Auto</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">MQTT Client ID</label>
+                                            <input id="input-mqtt-client-id" type="text" class="form-control" placeholder="Optional">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Parent Thing ID</label>
+                                            <input id="input-parent-id" type="text" class="form-control" placeholder="Optional — UUID of parent thing">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="input-description" class="form-control" rows="3"></textarea>
+                                </div>
+
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Metadata (JSON)</label>
+                                    <textarea id="input-metadata" class="form-control" rows="4">{}</textarea>
+                                </div>
+
+
+                                <a id="create-thing-button" href="#" class="btn btn-primary btn-sm btn-rounded px-3 fw-600 rounded">Create Thing</a>
+                                &nbsp;&nbsp;
+                                <a href="/things" class="btn btn-secondary btn-sm btn-rounded px-3 fw-600 rounded">Back to Things</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="scrollToTop"><span class="arrow"><i class="ti ti-arrow-narrow-up fs-20"></i></span></div>
+        <div id="responsive-overlay"></div>
+        <div id="floating-alarms-container" class="floating-alarms"></div>
+        <div id="floating-notification-container"></div>
+	</div>
+
+
+    <footer id="footer" class="footer mt-auto py-3 text-center"></footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="assets/js/plugins/sticky.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/js/plugins/custom.js"></script>
+    <script src="assets/js/header/header.js"></script>
+    <script src="assets/js/sidebar/sidebar.js"></script>
+    <script src="assets/js/createThing/createThing.js"></script>
+</body>
+</html>
