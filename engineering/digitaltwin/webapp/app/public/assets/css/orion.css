@@ -182,17 +182,17 @@ body.modal-open {
 
 
 /* Ensure the label is visible and has space next to the icon */
-#yapily-admin .side-menu__item {
+#orion .side-menu__item {
     display: flex !important;
     align-items: center;
     text-decoration: none;
 }
 
-#yapily-admin .sidebar-menu-subitem {
+#orion .sidebar-menu-subitem {
     margin-bottom: -1rem !important;
 }
 
-#yapily-admin .side-menu__label {
+#orion .side-menu__label {
     display: inline-block !important; /* Force visibility */
     opacity: 1 !important;           /* Force opacity */
     visibility: visible !important;  /* Force visibility */
@@ -201,7 +201,7 @@ body.modal-open {
 }
 
 /* Ensure the SVG has a fixed size so it doesn't squash the text */
-#yapily-admin .side-menu__icon {
+#orion .side-menu__icon {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
@@ -378,24 +378,24 @@ body.modal-open {
     color: lightblue;
 }
 
-#yapily-admin .fc-popover {
+#orion .fc-popover {
     background: black;
 }
 
 /* 1. Allow the popover to expand based on content */
-#yapily-admin .fc-popover.fc-more-popover {
+#orion .fc-popover.fc-more-popover {
     width: max-content !important;
     height: max-content !important;
 }
 
 /* 2. Prevent the event titles from wrapping to a new line */
-#yapily-admin .fc-popover-body .fc-event-title {
+#orion .fc-popover-body .fc-event-title {
     white-space: nowrap !important;
     overflow: visible !important;
 }
 
 /* 3. Ensure the event harness (container) also expands */
-#yapily-admin .fc-popover-body .fc-daygrid-event-harness {
+#orion .fc-popover-body .fc-daygrid-event-harness {
     width: 100% !important;
 }
 

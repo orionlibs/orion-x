@@ -90,7 +90,7 @@ and `imports/sample-imports/` was `git mv`'d into those folders without updating
 `simplebar.min.css` — then per-page opt-ins, then always `sevenSeg.js`, `orion.js`, and **`orion.css` last**
 (it is the override layer and only wins because it loads last).
 
-`<body id="yapily-admin">` (six `orion.css` rules are scoped to that id) must contain, in order:
+`<body id="orion">` (six `orion.css` rules are scoped to that id) must contain, in order:
 `#loader`, then `.page` wrapping `<header id="header" class="app-header sticky">`,
 `<aside id="sidebar" class="app-sidebar sticky sticky-pin">`, `.main-content.app-content > .container-fluid > .row`,
 `.scrollToTop`, `#responsive-overlay`, `#floating-alarms-container`, `#floating-notification-container`;
@@ -279,7 +279,7 @@ Use `class="hidden"` for JS-toggled visibility; Bootstrap's `d-none` appears zer
 
 1. Copy **`app/public/pages/index.html`** (not any `sample-pages/*.html`) to `app/public/pages/<page>.html`,
    at depth 0 — all asset hrefs are document-relative and only depth 0 resolves.
-2. Keep the `<html data-*>` block, `<body id="yapily-admin">`, and all eight shell elements verbatim.
+2. Keep the `<html data-*>` block, `<body id="orion">`, and all eight shell elements verbatim.
 3. Add page-specific libs to the head opt-in slot and to the script tail before `plugins/custom.js`; keep
    `orion.css` as the last `<link>`.
 4. Swap the last `<script>` to `assets/js/<page>/<page>.js`.
