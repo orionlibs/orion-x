@@ -12,21 +12,10 @@ let stompClient = null;
 
 $(document).ready(function()
 {
-    orionCommon.makeGetAJAXCall('/api/things/count', homePage.showNumberOfThings);
     stompClient = orionCommon.connectToWebsocket('/websocket', '/topic/alarms', reconnectAttempts, maxReconnectAttempts, reconnectDelay, reconnectTimer, orionCommon.handleAlarm);
 });
 
 
-let homePage =
+let thingsPage =
 {
-    showNumberOfThings : function(response)
-    {
-        $("#number-of-things-LED-gauge").sevenSeg({
-            digits:Math.abs(response.count).toString().length,
-            value:response.count,
-            colorOff: "#003200",
-            colorOn: "Lime",
-            slant: 0
-        });
-    }
 };
