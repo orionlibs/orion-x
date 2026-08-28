@@ -65,7 +65,14 @@ let createThingPage =
         {
             responseOrError.json().then(function(errorBody)
             {
-                orionCommon.showNotification('Error!', errorBody.error, 6000);
+                let errorMessage = 'Unknown error';
+
+                if(errorBody.error && errorBody.error.issues && errorBody.error.issues.length > 0)
+                {
+                    errorMessage = errorBody.error.issues.map(function(issue) { return issue.message; }).join(', ');
+                }
+
+                orionCommon.showNotification('Error!', errorMessage, 6000);
             }).catch(function()
             {
                 orionCommon.showNotification('Error!', 'Unknown error', 6000);
